@@ -4,7 +4,7 @@
 #
 Name     : llvm
 Version  : 3.6.0
-Release  : 3
+Release  : 4
 URL      : http://llvm.org/releases/3.6.0/llvm-3.6.0.src.tar.xz
 Source0  : http://llvm.org/releases/3.6.0/llvm-3.6.0.src.tar.xz
 Summary  : No detailed summary available
