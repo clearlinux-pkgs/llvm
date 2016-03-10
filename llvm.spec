@@ -4,7 +4,7 @@
 #
 Name     : llvm
 Version  : 3.8.0
-Release  : 6
+Release  : 7
 URL      : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source0  : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source1  : http://llvm.org/releases/3.8.0/cfe-3.8.0.src.tar.xz
@@ -81,7 +81,7 @@ mv %{_topdir}/BUILD/cfe-3.8.0.src/* %{_topdir}/BUILD/llvm-3.8.0.src/tools/clang
 %build
 mkdir clr-build
 pushd clr-build
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir}
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DLLVM_LIBDIR_SUFFIX=64
 make V=1  %{?_smp_mflags}
 popd
 
@@ -93,7 +93,7 @@ popd
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/clang/3.8.0/include/module.modulemap
+/usr/lib64/clang/3.8.0/include/module.modulemap
 
 %files bin
 %defattr(-,root,root,-)
@@ -1443,81 +1443,81 @@ popd
 /usr/include/llvm/Transforms/Utils/UnrollLoop.h
 /usr/include/llvm/Transforms/Utils/ValueMapper.h
 /usr/include/llvm/Transforms/Vectorize.h
-/usr/lib/*.so
-/usr/lib/clang/3.8.0/include/Intrin.h
-/usr/lib/clang/3.8.0/include/__clang_cuda_runtime_wrapper.h
-/usr/lib/clang/3.8.0/include/__stddef_max_align_t.h
-/usr/lib/clang/3.8.0/include/__wmmintrin_aes.h
-/usr/lib/clang/3.8.0/include/__wmmintrin_pclmul.h
-/usr/lib/clang/3.8.0/include/adxintrin.h
-/usr/lib/clang/3.8.0/include/altivec.h
-/usr/lib/clang/3.8.0/include/ammintrin.h
-/usr/lib/clang/3.8.0/include/arm_acle.h
-/usr/lib/clang/3.8.0/include/arm_neon.h
-/usr/lib/clang/3.8.0/include/avx2intrin.h
-/usr/lib/clang/3.8.0/include/avx512bwintrin.h
-/usr/lib/clang/3.8.0/include/avx512cdintrin.h
-/usr/lib/clang/3.8.0/include/avx512dqintrin.h
-/usr/lib/clang/3.8.0/include/avx512erintrin.h
-/usr/lib/clang/3.8.0/include/avx512fintrin.h
-/usr/lib/clang/3.8.0/include/avx512vlbwintrin.h
-/usr/lib/clang/3.8.0/include/avx512vldqintrin.h
-/usr/lib/clang/3.8.0/include/avx512vlintrin.h
-/usr/lib/clang/3.8.0/include/avxintrin.h
-/usr/lib/clang/3.8.0/include/bmi2intrin.h
-/usr/lib/clang/3.8.0/include/bmiintrin.h
-/usr/lib/clang/3.8.0/include/cpuid.h
-/usr/lib/clang/3.8.0/include/cuda_builtin_vars.h
-/usr/lib/clang/3.8.0/include/emmintrin.h
-/usr/lib/clang/3.8.0/include/f16cintrin.h
-/usr/lib/clang/3.8.0/include/float.h
-/usr/lib/clang/3.8.0/include/fma4intrin.h
-/usr/lib/clang/3.8.0/include/fmaintrin.h
-/usr/lib/clang/3.8.0/include/fxsrintrin.h
-/usr/lib/clang/3.8.0/include/htmintrin.h
-/usr/lib/clang/3.8.0/include/htmxlintrin.h
-/usr/lib/clang/3.8.0/include/ia32intrin.h
-/usr/lib/clang/3.8.0/include/immintrin.h
-/usr/lib/clang/3.8.0/include/inttypes.h
-/usr/lib/clang/3.8.0/include/iso646.h
-/usr/lib/clang/3.8.0/include/limits.h
-/usr/lib/clang/3.8.0/include/lzcntintrin.h
-/usr/lib/clang/3.8.0/include/mm3dnow.h
-/usr/lib/clang/3.8.0/include/mm_malloc.h
-/usr/lib/clang/3.8.0/include/mmintrin.h
-/usr/lib/clang/3.8.0/include/nmmintrin.h
-/usr/lib/clang/3.8.0/include/pkuintrin.h
-/usr/lib/clang/3.8.0/include/pmmintrin.h
-/usr/lib/clang/3.8.0/include/popcntintrin.h
-/usr/lib/clang/3.8.0/include/prfchwintrin.h
-/usr/lib/clang/3.8.0/include/rdseedintrin.h
-/usr/lib/clang/3.8.0/include/rtmintrin.h
-/usr/lib/clang/3.8.0/include/s390intrin.h
-/usr/lib/clang/3.8.0/include/shaintrin.h
-/usr/lib/clang/3.8.0/include/smmintrin.h
-/usr/lib/clang/3.8.0/include/stdalign.h
-/usr/lib/clang/3.8.0/include/stdarg.h
-/usr/lib/clang/3.8.0/include/stdatomic.h
-/usr/lib/clang/3.8.0/include/stdbool.h
-/usr/lib/clang/3.8.0/include/stddef.h
-/usr/lib/clang/3.8.0/include/stdint.h
-/usr/lib/clang/3.8.0/include/stdnoreturn.h
-/usr/lib/clang/3.8.0/include/tbmintrin.h
-/usr/lib/clang/3.8.0/include/tgmath.h
-/usr/lib/clang/3.8.0/include/tmmintrin.h
-/usr/lib/clang/3.8.0/include/unwind.h
-/usr/lib/clang/3.8.0/include/vadefs.h
-/usr/lib/clang/3.8.0/include/varargs.h
-/usr/lib/clang/3.8.0/include/vecintrin.h
-/usr/lib/clang/3.8.0/include/wmmintrin.h
-/usr/lib/clang/3.8.0/include/x86intrin.h
-/usr/lib/clang/3.8.0/include/xmmintrin.h
-/usr/lib/clang/3.8.0/include/xopintrin.h
-/usr/lib/clang/3.8.0/include/xsavecintrin.h
-/usr/lib/clang/3.8.0/include/xsaveintrin.h
-/usr/lib/clang/3.8.0/include/xsaveoptintrin.h
-/usr/lib/clang/3.8.0/include/xsavesintrin.h
-/usr/lib/clang/3.8.0/include/xtestintrin.h
+/usr/lib64/*.so
+/usr/lib64/clang/3.8.0/include/Intrin.h
+/usr/lib64/clang/3.8.0/include/__clang_cuda_runtime_wrapper.h
+/usr/lib64/clang/3.8.0/include/__stddef_max_align_t.h
+/usr/lib64/clang/3.8.0/include/__wmmintrin_aes.h
+/usr/lib64/clang/3.8.0/include/__wmmintrin_pclmul.h
+/usr/lib64/clang/3.8.0/include/adxintrin.h
+/usr/lib64/clang/3.8.0/include/altivec.h
+/usr/lib64/clang/3.8.0/include/ammintrin.h
+/usr/lib64/clang/3.8.0/include/arm_acle.h
+/usr/lib64/clang/3.8.0/include/arm_neon.h
+/usr/lib64/clang/3.8.0/include/avx2intrin.h
+/usr/lib64/clang/3.8.0/include/avx512bwintrin.h
+/usr/lib64/clang/3.8.0/include/avx512cdintrin.h
+/usr/lib64/clang/3.8.0/include/avx512dqintrin.h
+/usr/lib64/clang/3.8.0/include/avx512erintrin.h
+/usr/lib64/clang/3.8.0/include/avx512fintrin.h
+/usr/lib64/clang/3.8.0/include/avx512vlbwintrin.h
+/usr/lib64/clang/3.8.0/include/avx512vldqintrin.h
+/usr/lib64/clang/3.8.0/include/avx512vlintrin.h
+/usr/lib64/clang/3.8.0/include/avxintrin.h
+/usr/lib64/clang/3.8.0/include/bmi2intrin.h
+/usr/lib64/clang/3.8.0/include/bmiintrin.h
+/usr/lib64/clang/3.8.0/include/cpuid.h
+/usr/lib64/clang/3.8.0/include/cuda_builtin_vars.h
+/usr/lib64/clang/3.8.0/include/emmintrin.h
+/usr/lib64/clang/3.8.0/include/f16cintrin.h
+/usr/lib64/clang/3.8.0/include/float.h
+/usr/lib64/clang/3.8.0/include/fma4intrin.h
+/usr/lib64/clang/3.8.0/include/fmaintrin.h
+/usr/lib64/clang/3.8.0/include/fxsrintrin.h
+/usr/lib64/clang/3.8.0/include/htmintrin.h
+/usr/lib64/clang/3.8.0/include/htmxlintrin.h
+/usr/lib64/clang/3.8.0/include/ia32intrin.h
+/usr/lib64/clang/3.8.0/include/immintrin.h
+/usr/lib64/clang/3.8.0/include/inttypes.h
+/usr/lib64/clang/3.8.0/include/iso646.h
+/usr/lib64/clang/3.8.0/include/limits.h
+/usr/lib64/clang/3.8.0/include/lzcntintrin.h
+/usr/lib64/clang/3.8.0/include/mm3dnow.h
+/usr/lib64/clang/3.8.0/include/mm_malloc.h
+/usr/lib64/clang/3.8.0/include/mmintrin.h
+/usr/lib64/clang/3.8.0/include/nmmintrin.h
+/usr/lib64/clang/3.8.0/include/pkuintrin.h
+/usr/lib64/clang/3.8.0/include/pmmintrin.h
+/usr/lib64/clang/3.8.0/include/popcntintrin.h
+/usr/lib64/clang/3.8.0/include/prfchwintrin.h
+/usr/lib64/clang/3.8.0/include/rdseedintrin.h
+/usr/lib64/clang/3.8.0/include/rtmintrin.h
+/usr/lib64/clang/3.8.0/include/s390intrin.h
+/usr/lib64/clang/3.8.0/include/shaintrin.h
+/usr/lib64/clang/3.8.0/include/smmintrin.h
+/usr/lib64/clang/3.8.0/include/stdalign.h
+/usr/lib64/clang/3.8.0/include/stdarg.h
+/usr/lib64/clang/3.8.0/include/stdatomic.h
+/usr/lib64/clang/3.8.0/include/stdbool.h
+/usr/lib64/clang/3.8.0/include/stddef.h
+/usr/lib64/clang/3.8.0/include/stdint.h
+/usr/lib64/clang/3.8.0/include/stdnoreturn.h
+/usr/lib64/clang/3.8.0/include/tbmintrin.h
+/usr/lib64/clang/3.8.0/include/tgmath.h
+/usr/lib64/clang/3.8.0/include/tmmintrin.h
+/usr/lib64/clang/3.8.0/include/unwind.h
+/usr/lib64/clang/3.8.0/include/vadefs.h
+/usr/lib64/clang/3.8.0/include/varargs.h
+/usr/lib64/clang/3.8.0/include/vecintrin.h
+/usr/lib64/clang/3.8.0/include/wmmintrin.h
+/usr/lib64/clang/3.8.0/include/x86intrin.h
+/usr/lib64/clang/3.8.0/include/xmmintrin.h
+/usr/lib64/clang/3.8.0/include/xopintrin.h
+/usr/lib64/clang/3.8.0/include/xsavecintrin.h
+/usr/lib64/clang/3.8.0/include/xsaveintrin.h
+/usr/lib64/clang/3.8.0/include/xsaveoptintrin.h
+/usr/lib64/clang/3.8.0/include/xsavesintrin.h
+/usr/lib64/clang/3.8.0/include/xtestintrin.h
 
 %files doc
 %defattr(-,root,root,-)
@@ -1525,4 +1525,4 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib/*.so.*
+/usr/lib64/*.so.*
