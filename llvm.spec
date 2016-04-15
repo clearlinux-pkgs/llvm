@@ -4,7 +4,7 @@
 #
 Name     : llvm
 Version  : 3.8.0
-Release  : 7
+Release  : 8
 URL      : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source0  : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source1  : http://llvm.org/releases/3.8.0/cfe-3.8.0.src.tar.xz
@@ -15,11 +15,14 @@ Requires: llvm-bin
 Requires: llvm-lib
 Requires: llvm-data
 Requires: llvm-doc
+BuildRequires : Sphinx
 BuildRequires : cmake
+BuildRequires : libffi-dev
 BuildRequires : pbr
 BuildRequires : pip
 BuildRequires : python-dev
 BuildRequires : setuptools
+BuildRequires : zlib-dev
 
 %description
 These are tests for instrumentation based profiling.  This specifically means
@@ -81,7 +84,10 @@ mv %{_topdir}/BUILD/cfe-3.8.0.src/* %{_topdir}/BUILD/llvm-3.8.0.src/tools/clang
 %build
 mkdir clr-build
 pushd clr-build
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DLLVM_LIBDIR_SUFFIX=64
+export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=32 -Wformat -Wformat-security -Wno-error -Wl,-z -Wl,now -Wl,-z -Wl,relro -Wl,-z,max-page-size=0x1000 -m64 -march=westmere -mtune=haswell"
+export CXXFLAGS=$CFLAGS
+unset LDFLAGS
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64
 make V=1  %{?_smp_mflags}
 popd
 
