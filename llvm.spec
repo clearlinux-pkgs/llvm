@@ -4,7 +4,7 @@
 #
 Name     : llvm
 Version  : 3.8.0
-Release  : 8
+Release  : 9
 URL      : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source0  : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source1  : http://llvm.org/releases/3.8.0/cfe-3.8.0.src.tar.xz
@@ -16,6 +16,7 @@ Requires: llvm-lib
 Requires: llvm-data
 Requires: llvm-doc
 BuildRequires : Sphinx
+BuildRequires : binutils-dev
 BuildRequires : cmake
 BuildRequires : libffi-dev
 BuildRequires : pbr
@@ -87,7 +88,7 @@ pushd clr-build
 export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=32 -Wformat -Wformat-security -Wno-error -Wl,-z -Wl,now -Wl,-z -Wl,relro -Wl,-z,max-page-size=0x1000 -m64 -march=westmere -mtune=haswell"
 export CXXFLAGS=$CFLAGS
 unset LDFLAGS
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF;CppBackend"
 make V=1  %{?_smp_mflags}
 popd
 
