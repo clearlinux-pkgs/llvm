@@ -4,7 +4,7 @@
 #
 Name     : llvm
 Version  : 3.8.0
-Release  : 9
+Release  : 10
 URL      : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source0  : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source1  : http://llvm.org/releases/3.8.0/cfe-3.8.0.src.tar.xz
