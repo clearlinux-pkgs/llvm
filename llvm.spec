@@ -4,7 +4,7 @@
 #
 Name     : llvm
 Version  : 3.8.0
-Release  : 11
+Release  : 12
 URL      : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source0  : http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz
 Source1  : http://llvm.org/releases/3.8.0/cfe-3.8.0.src.tar.xz
@@ -83,12 +83,10 @@ mkdir -p %{_topdir}/BUILD/llvm-3.8.0.src/tools/clang
 mv %{_topdir}/BUILD/cfe-3.8.0.src/* %{_topdir}/BUILD/llvm-3.8.0.src/tools/clang
 
 %build
+export LANG=C
 mkdir clr-build
 pushd clr-build
-export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=32 -Wformat -Wformat-security -Wno-error -Wl,-z -Wl,now -Wl,-z -Wl,relro -Wl,-z,max-page-size=0x1000 -m64 -march=westmere -mtune=haswell"
-export CXXFLAGS=$CFLAGS
-unset LDFLAGS
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF;CppBackend"
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF;CppBackend" -DLLVM_INSTALL_UTILS=ON
 make V=1  %{?_smp_mflags}
 popd
 
@@ -104,6 +102,7 @@ popd
 
 %files bin
 %defattr(-,root,root,-)
+/usr/bin/FileCheck
 /usr/bin/bugpoint
 /usr/bin/c-index-test
 /usr/bin/clang
@@ -112,9 +111,12 @@ popd
 /usr/bin/clang-check
 /usr/bin/clang-cl
 /usr/bin/clang-format
+/usr/bin/clang-tblgen
+/usr/bin/count
 /usr/bin/git-clang-format
 /usr/bin/llc
 /usr/bin/lli
+/usr/bin/llvm-PerfectShuffle
 /usr/bin/llvm-ar
 /usr/bin/llvm-as
 /usr/bin/llvm-bcanalyzer
@@ -145,12 +147,14 @@ popd
 /usr/bin/llvm-stress
 /usr/bin/llvm-symbolizer
 /usr/bin/llvm-tblgen
+/usr/bin/not
 /usr/bin/obj2yaml
 /usr/bin/opt
 /usr/bin/sancov
 /usr/bin/scan-build
 /usr/bin/scan-view
 /usr/bin/verify-uselistorder
+/usr/bin/yaml-bench
 /usr/bin/yaml2obj
 /usr/libexec/c++-analyzer
 /usr/libexec/ccc-analyzer
