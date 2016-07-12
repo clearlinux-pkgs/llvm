@@ -4,3 +4,6 @@ libffi-dev
 Sphinx
 zlib-dev
 binutils-dev
+ncurses-dev
+valgrind-dev
+googletest-dev

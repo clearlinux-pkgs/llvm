@@ -4,7 +4,7 @@
 #
 Name     : llvm
 Version  : 3.8.1
-Release  : 13
+Release  : 14
 URL      : http://llvm.org/releases/3.8.1/llvm-3.8.1.src.tar.xz
 Source0  : http://llvm.org/releases/3.8.1/llvm-3.8.1.src.tar.xz
 Source1  : http://llvm.org/releases/3.8.1/cfe-3.8.1.src.tar.xz
@@ -18,11 +18,14 @@ Requires: llvm-doc
 BuildRequires : Sphinx
 BuildRequires : binutils-dev
 BuildRequires : cmake
+BuildRequires : googletest-dev
 BuildRequires : libffi-dev
+BuildRequires : ncurses-dev
 BuildRequires : pbr
 BuildRequires : pip
 BuildRequires : python-dev
 BuildRequires : setuptools
+BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
 
 %description
