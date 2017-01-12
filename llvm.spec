@@ -4,7 +4,7 @@
 #
 Name     : llvm
 Version  : 3.9.1
-Release  : 17
+Release  : 18
 URL      : http://llvm.org/releases/3.9.1/llvm-3.9.1.src.tar.xz
 Source0  : http://llvm.org/releases/3.9.1/llvm-3.9.1.src.tar.xz
 Source1  : http://llvm.org/releases/3.9.1/cfe-3.9.1.src.tar.xz
@@ -92,7 +92,7 @@ mv %{_topdir}/BUILD/cfe-3.9.1.src/* %{_topdir}/BUILD/llvm-3.9.1.src/tools/clang
 export LANG=C
 mkdir clr-build
 pushd clr-build
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DC_INCLUDE_DIRSC_INCLUDE_DIRS="/usr/include:/usr/include/c++:/usr/include/c++/x86_64-generic-linux"
 make VERBOSE=1  %{?_smp_mflags}
 popd
 
