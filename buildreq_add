@@ -7,3 +7,5 @@ binutils-dev
 ncurses-dev
 valgrind-dev
 googletest-dev
+libstdc++-dev
+llvm-dev

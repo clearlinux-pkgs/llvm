@@ -4,7 +4,7 @@
 #
 Name     : llvm
 Version  : 3.9.1
-Release  : 16
+Release  : 17
 URL      : http://llvm.org/releases/3.9.1/llvm-3.9.1.src.tar.xz
 Source0  : http://llvm.org/releases/3.9.1/llvm-3.9.1.src.tar.xz
 Source1  : http://llvm.org/releases/3.9.1/cfe-3.9.1.src.tar.xz
@@ -20,10 +20,13 @@ BuildRequires : binutils-dev
 BuildRequires : cmake
 BuildRequires : googletest-dev
 BuildRequires : libffi-dev
+BuildRequires : libstdc++-dev
+BuildRequires : llvm-dev
 BuildRequires : ncurses-dev
 BuildRequires : pbr
 BuildRequires : pip
 BuildRequires : python-dev
+BuildRequires : python3-dev
 BuildRequires : setuptools
 BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
@@ -89,7 +92,7 @@ mv %{_topdir}/BUILD/cfe-3.9.1.src/* %{_topdir}/BUILD/llvm-3.9.1.src/tools/clang
 export LANG=C
 mkdir clr-build
 pushd clr-build
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full
 make VERBOSE=1  %{?_smp_mflags}
 popd
 
