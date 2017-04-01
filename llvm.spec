@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 4.0.0
-Release  : 21
+Release  : 22
 URL      : http://releases.llvm.org/4.0.0/llvm-4.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/4.0.0/llvm-4.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/4.0.0/cfe-4.0.0.src.tar.xz
@@ -94,13 +94,13 @@ mv %{_topdir}/BUILD/cfe-4.0.0.src/* %{_topdir}/BUILD/llvm-4.0.0.src/tools/clang
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1489512262
+export SOURCE_DATE_EPOCH=1491065650
 mkdir clr-build
 pushd clr-build
 export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=32 -Wformat -Wformat-security -Wno-error -Wl,-z -Wl,now -Wl,-z -Wl,relro -Wl,-z,max-page-size=0x1000 -m64 -march=westmere -mtune=haswell"
 export CXXFLAGS=$CFLAGS
 unset LDFLAGS
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux"
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DLLVM_BUILD_LLVM_DYLIB:BOOL=ON -DLLVM_DYLIB_EXPORT_ALL:BOOL=ON -DLLVM_LINK_LLVM_DYLIB:BOOL=ON  -DBUILD_SHARED_LIBS:BOOL=OFF
 make VERBOSE=1  %{?_smp_mflags}
 popd
 
@@ -112,7 +112,7 @@ export no_proxy=localhost
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1489512262
+export SOURCE_DATE_EPOCH=1491065650
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
@@ -1854,91 +1854,11 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/lib64/clang/4.0.0/include/xsaveoptintrin.h
 /usr/lib64/clang/4.0.0/include/xsavesintrin.h
 /usr/lib64/clang/4.0.0/include/xtestintrin.h
-/usr/lib64/libLLVMAnalysis.so
-/usr/lib64/libLLVMAsmParser.so
-/usr/lib64/libLLVMAsmPrinter.so
-/usr/lib64/libLLVMBPFAsmPrinter.so
-/usr/lib64/libLLVMBPFCodeGen.so
-/usr/lib64/libLLVMBPFDesc.so
-/usr/lib64/libLLVMBPFDisassembler.so
-/usr/lib64/libLLVMBPFInfo.so
-/usr/lib64/libLLVMBitReader.so
-/usr/lib64/libLLVMBitWriter.so
-/usr/lib64/libLLVMCodeGen.so
-/usr/lib64/libLLVMCore.so
-/usr/lib64/libLLVMCoroutines.so
-/usr/lib64/libLLVMCoverage.so
-/usr/lib64/libLLVMDebugInfoCodeView.so
-/usr/lib64/libLLVMDebugInfoDWARF.so
-/usr/lib64/libLLVMDebugInfoMSF.so
-/usr/lib64/libLLVMDebugInfoPDB.so
-/usr/lib64/libLLVMDemangle.so
-/usr/lib64/libLLVMExecutionEngine.so
-/usr/lib64/libLLVMGlobalISel.so
-/usr/lib64/libLLVMIRReader.so
-/usr/lib64/libLLVMInstCombine.so
-/usr/lib64/libLLVMInstrumentation.so
-/usr/lib64/libLLVMInterpreter.so
-/usr/lib64/libLLVMLTO.so
-/usr/lib64/libLLVMLibDriver.so
-/usr/lib64/libLLVMLineEditor.so
-/usr/lib64/libLLVMLinker.so
-/usr/lib64/libLLVMMC.so
-/usr/lib64/libLLVMMCDisassembler.so
-/usr/lib64/libLLVMMCJIT.so
-/usr/lib64/libLLVMMCParser.so
-/usr/lib64/libLLVMMIRParser.so
-/usr/lib64/libLLVMObjCARCOpts.so
-/usr/lib64/libLLVMObject.so
-/usr/lib64/libLLVMObjectYAML.so
-/usr/lib64/libLLVMOption.so
-/usr/lib64/libLLVMOrcJIT.so
-/usr/lib64/libLLVMPasses.so
-/usr/lib64/libLLVMProfileData.so
-/usr/lib64/libLLVMRuntimeDyld.so
-/usr/lib64/libLLVMScalarOpts.so
-/usr/lib64/libLLVMSelectionDAG.so
-/usr/lib64/libLLVMSupport.so
-/usr/lib64/libLLVMSymbolize.so
-/usr/lib64/libLLVMTableGen.so
-/usr/lib64/libLLVMTarget.so
-/usr/lib64/libLLVMTransformUtils.so
-/usr/lib64/libLLVMVectorize.so
-/usr/lib64/libLLVMX86AsmParser.so
-/usr/lib64/libLLVMX86AsmPrinter.so
-/usr/lib64/libLLVMX86CodeGen.so
-/usr/lib64/libLLVMX86Desc.so
-/usr/lib64/libLLVMX86Disassembler.so
-/usr/lib64/libLLVMX86Info.so
-/usr/lib64/libLLVMX86Utils.so
-/usr/lib64/libLLVMXRay.so
-/usr/lib64/libLLVMipo.so
+/usr/lib64/libLLVM-4.0.0.so
+/usr/lib64/libLLVM-4.0.so
+/usr/lib64/libLLVM.so
 /usr/lib64/libLTO.so
 /usr/lib64/libclang.so
-/usr/lib64/libclangARCMigrate.so
-/usr/lib64/libclangAST.so
-/usr/lib64/libclangASTMatchers.so
-/usr/lib64/libclangAnalysis.so
-/usr/lib64/libclangBasic.so
-/usr/lib64/libclangCodeGen.so
-/usr/lib64/libclangDriver.so
-/usr/lib64/libclangDynamicASTMatchers.so
-/usr/lib64/libclangEdit.so
-/usr/lib64/libclangFormat.so
-/usr/lib64/libclangFrontend.so
-/usr/lib64/libclangFrontendTool.so
-/usr/lib64/libclangIndex.so
-/usr/lib64/libclangLex.so
-/usr/lib64/libclangParse.so
-/usr/lib64/libclangRewrite.so
-/usr/lib64/libclangRewriteFrontend.so
-/usr/lib64/libclangSema.so
-/usr/lib64/libclangSerialization.so
-/usr/lib64/libclangStaticAnalyzerCheckers.so
-/usr/lib64/libclangStaticAnalyzerCore.so
-/usr/lib64/libclangStaticAnalyzerFrontend.so
-/usr/lib64/libclangTooling.so
-/usr/lib64/libclangToolingCore.so
 
 %files doc
 %defattr(-,root,root,-)
@@ -1946,173 +1866,7 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libLLVMAnalysis.so.4
-/usr/lib64/libLLVMAnalysis.so.4.0.0
-/usr/lib64/libLLVMAsmParser.so.4
-/usr/lib64/libLLVMAsmParser.so.4.0.0
-/usr/lib64/libLLVMAsmPrinter.so.4
-/usr/lib64/libLLVMAsmPrinter.so.4.0.0
-/usr/lib64/libLLVMBPFAsmPrinter.so.4
-/usr/lib64/libLLVMBPFAsmPrinter.so.4.0.0
-/usr/lib64/libLLVMBPFCodeGen.so.4
-/usr/lib64/libLLVMBPFCodeGen.so.4.0.0
-/usr/lib64/libLLVMBPFDesc.so.4
-/usr/lib64/libLLVMBPFDesc.so.4.0.0
-/usr/lib64/libLLVMBPFDisassembler.so.4
-/usr/lib64/libLLVMBPFDisassembler.so.4.0.0
-/usr/lib64/libLLVMBPFInfo.so.4
-/usr/lib64/libLLVMBPFInfo.so.4.0.0
-/usr/lib64/libLLVMBitReader.so.4
-/usr/lib64/libLLVMBitReader.so.4.0.0
-/usr/lib64/libLLVMBitWriter.so.4
-/usr/lib64/libLLVMBitWriter.so.4.0.0
-/usr/lib64/libLLVMCodeGen.so.4
-/usr/lib64/libLLVMCodeGen.so.4.0.0
-/usr/lib64/libLLVMCore.so.4
-/usr/lib64/libLLVMCore.so.4.0.0
-/usr/lib64/libLLVMCoroutines.so.4
-/usr/lib64/libLLVMCoroutines.so.4.0.0
-/usr/lib64/libLLVMCoverage.so.4
-/usr/lib64/libLLVMCoverage.so.4.0.0
-/usr/lib64/libLLVMDebugInfoCodeView.so.4
-/usr/lib64/libLLVMDebugInfoCodeView.so.4.0.0
-/usr/lib64/libLLVMDebugInfoDWARF.so.4
-/usr/lib64/libLLVMDebugInfoDWARF.so.4.0.0
-/usr/lib64/libLLVMDebugInfoMSF.so.4
-/usr/lib64/libLLVMDebugInfoMSF.so.4.0.0
-/usr/lib64/libLLVMDebugInfoPDB.so.4
-/usr/lib64/libLLVMDebugInfoPDB.so.4.0.0
-/usr/lib64/libLLVMDemangle.so.4
-/usr/lib64/libLLVMDemangle.so.4.0.0
-/usr/lib64/libLLVMExecutionEngine.so.4
-/usr/lib64/libLLVMExecutionEngine.so.4.0.0
-/usr/lib64/libLLVMGlobalISel.so.4
-/usr/lib64/libLLVMGlobalISel.so.4.0.0
-/usr/lib64/libLLVMIRReader.so.4
-/usr/lib64/libLLVMIRReader.so.4.0.0
-/usr/lib64/libLLVMInstCombine.so.4
-/usr/lib64/libLLVMInstCombine.so.4.0.0
-/usr/lib64/libLLVMInstrumentation.so.4
-/usr/lib64/libLLVMInstrumentation.so.4.0.0
-/usr/lib64/libLLVMInterpreter.so.4
-/usr/lib64/libLLVMInterpreter.so.4.0.0
-/usr/lib64/libLLVMLTO.so.4
-/usr/lib64/libLLVMLTO.so.4.0.0
-/usr/lib64/libLLVMLibDriver.so.4
-/usr/lib64/libLLVMLibDriver.so.4.0.0
-/usr/lib64/libLLVMLineEditor.so.4
-/usr/lib64/libLLVMLineEditor.so.4.0.0
-/usr/lib64/libLLVMLinker.so.4
-/usr/lib64/libLLVMLinker.so.4.0.0
-/usr/lib64/libLLVMMC.so.4
-/usr/lib64/libLLVMMC.so.4.0.0
-/usr/lib64/libLLVMMCDisassembler.so.4
-/usr/lib64/libLLVMMCDisassembler.so.4.0.0
-/usr/lib64/libLLVMMCJIT.so.4
-/usr/lib64/libLLVMMCJIT.so.4.0.0
-/usr/lib64/libLLVMMCParser.so.4
-/usr/lib64/libLLVMMCParser.so.4.0.0
-/usr/lib64/libLLVMMIRParser.so.4
-/usr/lib64/libLLVMMIRParser.so.4.0.0
-/usr/lib64/libLLVMObjCARCOpts.so.4
-/usr/lib64/libLLVMObjCARCOpts.so.4.0.0
-/usr/lib64/libLLVMObject.so.4
-/usr/lib64/libLLVMObject.so.4.0.0
-/usr/lib64/libLLVMObjectYAML.so.4
-/usr/lib64/libLLVMObjectYAML.so.4.0.0
-/usr/lib64/libLLVMOption.so.4
-/usr/lib64/libLLVMOption.so.4.0.0
-/usr/lib64/libLLVMOrcJIT.so.4
-/usr/lib64/libLLVMOrcJIT.so.4.0.0
-/usr/lib64/libLLVMPasses.so.4
-/usr/lib64/libLLVMPasses.so.4.0.0
-/usr/lib64/libLLVMProfileData.so.4
-/usr/lib64/libLLVMProfileData.so.4.0.0
-/usr/lib64/libLLVMRuntimeDyld.so.4
-/usr/lib64/libLLVMRuntimeDyld.so.4.0.0
-/usr/lib64/libLLVMScalarOpts.so.4
-/usr/lib64/libLLVMScalarOpts.so.4.0.0
-/usr/lib64/libLLVMSelectionDAG.so.4
-/usr/lib64/libLLVMSelectionDAG.so.4.0.0
-/usr/lib64/libLLVMSupport.so.4
-/usr/lib64/libLLVMSupport.so.4.0.0
-/usr/lib64/libLLVMSymbolize.so.4
-/usr/lib64/libLLVMSymbolize.so.4.0.0
-/usr/lib64/libLLVMTableGen.so.4
-/usr/lib64/libLLVMTableGen.so.4.0.0
-/usr/lib64/libLLVMTarget.so.4
-/usr/lib64/libLLVMTarget.so.4.0.0
-/usr/lib64/libLLVMTransformUtils.so.4
-/usr/lib64/libLLVMTransformUtils.so.4.0.0
-/usr/lib64/libLLVMVectorize.so.4
-/usr/lib64/libLLVMVectorize.so.4.0.0
-/usr/lib64/libLLVMX86AsmParser.so.4
-/usr/lib64/libLLVMX86AsmParser.so.4.0.0
-/usr/lib64/libLLVMX86AsmPrinter.so.4
-/usr/lib64/libLLVMX86AsmPrinter.so.4.0.0
-/usr/lib64/libLLVMX86CodeGen.so.4
-/usr/lib64/libLLVMX86CodeGen.so.4.0.0
-/usr/lib64/libLLVMX86Desc.so.4
-/usr/lib64/libLLVMX86Desc.so.4.0.0
-/usr/lib64/libLLVMX86Disassembler.so.4
-/usr/lib64/libLLVMX86Disassembler.so.4.0.0
-/usr/lib64/libLLVMX86Info.so.4
-/usr/lib64/libLLVMX86Info.so.4.0.0
-/usr/lib64/libLLVMX86Utils.so.4
-/usr/lib64/libLLVMX86Utils.so.4.0.0
-/usr/lib64/libLLVMXRay.so.4
-/usr/lib64/libLLVMXRay.so.4.0.0
-/usr/lib64/libLLVMipo.so.4
-/usr/lib64/libLLVMipo.so.4.0.0
 /usr/lib64/libLTO.so.4
 /usr/lib64/libLTO.so.4.0.0
 /usr/lib64/libclang.so.4
 /usr/lib64/libclang.so.4.0
-/usr/lib64/libclangARCMigrate.so.4
-/usr/lib64/libclangARCMigrate.so.4.0.0
-/usr/lib64/libclangAST.so.4
-/usr/lib64/libclangAST.so.4.0.0
-/usr/lib64/libclangASTMatchers.so.4
-/usr/lib64/libclangASTMatchers.so.4.0.0
-/usr/lib64/libclangAnalysis.so.4
-/usr/lib64/libclangAnalysis.so.4.0.0
-/usr/lib64/libclangBasic.so.4
-/usr/lib64/libclangBasic.so.4.0.0
-/usr/lib64/libclangCodeGen.so.4
-/usr/lib64/libclangCodeGen.so.4.0.0
-/usr/lib64/libclangDriver.so.4
-/usr/lib64/libclangDriver.so.4.0.0
-/usr/lib64/libclangDynamicASTMatchers.so.4
-/usr/lib64/libclangDynamicASTMatchers.so.4.0.0
-/usr/lib64/libclangEdit.so.4
-/usr/lib64/libclangEdit.so.4.0.0
-/usr/lib64/libclangFormat.so.4
-/usr/lib64/libclangFormat.so.4.0.0
-/usr/lib64/libclangFrontend.so.4
-/usr/lib64/libclangFrontend.so.4.0.0
-/usr/lib64/libclangFrontendTool.so.4
-/usr/lib64/libclangFrontendTool.so.4.0.0
-/usr/lib64/libclangIndex.so.4
-/usr/lib64/libclangIndex.so.4.0.0
-/usr/lib64/libclangLex.so.4
-/usr/lib64/libclangLex.so.4.0.0
-/usr/lib64/libclangParse.so.4
-/usr/lib64/libclangParse.so.4.0.0
-/usr/lib64/libclangRewrite.so.4
-/usr/lib64/libclangRewrite.so.4.0.0
-/usr/lib64/libclangRewriteFrontend.so.4
-/usr/lib64/libclangRewriteFrontend.so.4.0.0
-/usr/lib64/libclangSema.so.4
-/usr/lib64/libclangSema.so.4.0.0
-/usr/lib64/libclangSerialization.so.4
-/usr/lib64/libclangSerialization.so.4.0.0
-/usr/lib64/libclangStaticAnalyzerCheckers.so.4
-/usr/lib64/libclangStaticAnalyzerCheckers.so.4.0.0
-/usr/lib64/libclangStaticAnalyzerCore.so.4
-/usr/lib64/libclangStaticAnalyzerCore.so.4.0.0
-/usr/lib64/libclangStaticAnalyzerFrontend.so.4
-/usr/lib64/libclangStaticAnalyzerFrontend.so.4.0.0
-/usr/lib64/libclangTooling.so.4
-/usr/lib64/libclangTooling.so.4.0.0
-/usr/lib64/libclangToolingCore.so.4
-/usr/lib64/libclangToolingCore.so.4.0.0

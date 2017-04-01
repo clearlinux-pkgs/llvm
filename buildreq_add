@@ -9,3 +9,5 @@ valgrind-dev
 googletest-dev
 libstdc++-dev
 llvm-dev
+python3-dev
+llvm-dev
