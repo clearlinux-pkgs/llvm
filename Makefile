@@ -1,5 +1,5 @@
 PKG_NAME := llvm
-URL := http://releases.llvm.org/3.9.1/llvm-3.9.1.src.tar.xz
-ARCHIVES := http://releases.llvm.org/3.9.1/cfe-3.9.1.src.tar.xz tools/clang
+URL := http://releases.llvm.org/4.0.0/llvm-4.0.0.src.tar.xz
+ARCHIVES := http://releases.llvm.org/4.0.0/cfe-4.0.0.src.tar.xz tools/clang
 
 include ../common/Makefile.common
