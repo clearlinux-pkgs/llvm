@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 4.0.0
-Release  : 24
+Release  : 25
 URL      : http://releases.llvm.org/4.0.0/llvm-4.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/4.0.0/llvm-4.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/4.0.0/cfe-4.0.0.src.tar.xz
@@ -94,13 +94,13 @@ mv %{_topdir}/BUILD/cfe-4.0.0.src/* %{_topdir}/BUILD/llvm-4.0.0.src/tools/clang
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1492092716
+export SOURCE_DATE_EPOCH=1492187874
 mkdir clr-build
 pushd clr-build
 export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=32 -Wformat -Wformat-security -Wno-error -Wl,-z -Wl,now -Wl,-z -Wl,relro -Wl,-z,max-page-size=0x1000 -m64 -march=westmere -mtune=haswell"
 export CXXFLAGS=$CFLAGS
 unset LDFLAGS
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux"-DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux"
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF;AMDGPU" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux"-DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux"
 make VERBOSE=1  %{?_smp_mflags}
 popd
 
@@ -112,7 +112,7 @@ export no_proxy=localhost
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1492092716
+export SOURCE_DATE_EPOCH=1492187874
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
