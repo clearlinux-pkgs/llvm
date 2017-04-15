@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 4.0.0
-Release  : 25
+Release  : 26
 URL      : http://releases.llvm.org/4.0.0/llvm-4.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/4.0.0/llvm-4.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/4.0.0/cfe-4.0.0.src.tar.xz
@@ -94,13 +94,13 @@ mv %{_topdir}/BUILD/cfe-4.0.0.src/* %{_topdir}/BUILD/llvm-4.0.0.src/tools/clang
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1492187874
+export SOURCE_DATE_EPOCH=1492292399
 mkdir clr-build
 pushd clr-build
 export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=32 -Wformat -Wformat-security -Wno-error -Wl,-z -Wl,now -Wl,-z -Wl,relro -Wl,-z,max-page-size=0x1000 -m64 -march=westmere -mtune=haswell"
 export CXXFLAGS=$CFLAGS
 unset LDFLAGS
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF;AMDGPU" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux"-DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux"
+cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF;AMDGPU;NVPTX" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux"-DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include  -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DCMAKE_C_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux" -DCMAKE_CXX_FLAGS=" -I/usr/include -I/usr/include/c++ -I/usr/include/c++/x86_64-generic-linux"
 make VERBOSE=1  %{?_smp_mflags}
 popd
 
@@ -112,7 +112,7 @@ export no_proxy=localhost
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1492187874
+export SOURCE_DATE_EPOCH=1492292399
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
@@ -1854,6 +1854,13 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/lib64/clang/4.0.0/include/xsaveoptintrin.h
 /usr/lib64/clang/4.0.0/include/xsavesintrin.h
 /usr/lib64/clang/4.0.0/include/xtestintrin.h
+/usr/lib64/libLLVMAMDGPUAsmParser.so
+/usr/lib64/libLLVMAMDGPUAsmPrinter.so
+/usr/lib64/libLLVMAMDGPUCodeGen.so
+/usr/lib64/libLLVMAMDGPUDesc.so
+/usr/lib64/libLLVMAMDGPUDisassembler.so
+/usr/lib64/libLLVMAMDGPUInfo.so
+/usr/lib64/libLLVMAMDGPUUtils.so
 /usr/lib64/libLLVMAnalysis.so
 /usr/lib64/libLLVMAsmParser.so
 /usr/lib64/libLLVMAsmPrinter.so
@@ -1888,6 +1895,10 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/lib64/libLLVMMCJIT.so
 /usr/lib64/libLLVMMCParser.so
 /usr/lib64/libLLVMMIRParser.so
+/usr/lib64/libLLVMNVPTXAsmPrinter.so
+/usr/lib64/libLLVMNVPTXCodeGen.so
+/usr/lib64/libLLVMNVPTXDesc.so
+/usr/lib64/libLLVMNVPTXInfo.so
 /usr/lib64/libLLVMObjCARCOpts.so
 /usr/lib64/libLLVMObject.so
 /usr/lib64/libLLVMObjectYAML.so
@@ -1946,6 +1957,20 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 
 %files lib
 %defattr(-,root,root,-)
+/usr/lib64/libLLVMAMDGPUAsmParser.so.4
+/usr/lib64/libLLVMAMDGPUAsmParser.so.4.0.0
+/usr/lib64/libLLVMAMDGPUAsmPrinter.so.4
+/usr/lib64/libLLVMAMDGPUAsmPrinter.so.4.0.0
+/usr/lib64/libLLVMAMDGPUCodeGen.so.4
+/usr/lib64/libLLVMAMDGPUCodeGen.so.4.0.0
+/usr/lib64/libLLVMAMDGPUDesc.so.4
+/usr/lib64/libLLVMAMDGPUDesc.so.4.0.0
+/usr/lib64/libLLVMAMDGPUDisassembler.so.4
+/usr/lib64/libLLVMAMDGPUDisassembler.so.4.0.0
+/usr/lib64/libLLVMAMDGPUInfo.so.4
+/usr/lib64/libLLVMAMDGPUInfo.so.4.0.0
+/usr/lib64/libLLVMAMDGPUUtils.so.4
+/usr/lib64/libLLVMAMDGPUUtils.so.4.0.0
 /usr/lib64/libLLVMAnalysis.so.4
 /usr/lib64/libLLVMAnalysis.so.4.0.0
 /usr/lib64/libLLVMAsmParser.so.4
@@ -2014,6 +2039,14 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/lib64/libLLVMMCParser.so.4.0.0
 /usr/lib64/libLLVMMIRParser.so.4
 /usr/lib64/libLLVMMIRParser.so.4.0.0
+/usr/lib64/libLLVMNVPTXAsmPrinter.so.4
+/usr/lib64/libLLVMNVPTXAsmPrinter.so.4.0.0
+/usr/lib64/libLLVMNVPTXCodeGen.so.4
+/usr/lib64/libLLVMNVPTXCodeGen.so.4.0.0
+/usr/lib64/libLLVMNVPTXDesc.so.4
+/usr/lib64/libLLVMNVPTXDesc.so.4.0.0
+/usr/lib64/libLLVMNVPTXInfo.so.4
+/usr/lib64/libLLVMNVPTXInfo.so.4.0.0
 /usr/lib64/libLLVMObjCARCOpts.so.4
 /usr/lib64/libLLVMObjCARCOpts.so.4.0.0
 /usr/lib64/libLLVMObject.so.4
