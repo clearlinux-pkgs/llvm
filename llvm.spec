@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 4.0.0
-Release  : 30
+Release  : 31
 URL      : http://releases.llvm.org/4.0.0/llvm-4.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/4.0.0/llvm-4.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/4.0.0/cfe-4.0.0.src.tar.xz
