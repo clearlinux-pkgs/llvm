@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 5.0.0
-Release  : 35
+Release  : 36
 URL      : http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/5.0.0/cfe-5.0.0.src.tar.xz
@@ -98,7 +98,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1504813558
+export SOURCE_DATE_EPOCH=1505788472
 mkdir clr-build
 pushd clr-build
 export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=32 -Wformat -Wformat-security -Wno-error   -Wl,-z,max-page-size=0x1000 -m64 -march=westmere -mtune=haswell"
@@ -116,7 +116,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1504813558
+export SOURCE_DATE_EPOCH=1505788472
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
