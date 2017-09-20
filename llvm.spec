@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 5.0.0
-Release  : 40
+Release  : 41
 URL      : http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/5.0.0/cfe-5.0.0.src.tar.xz
@@ -98,12 +98,16 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1505859735
+export SOURCE_DATE_EPOCH=1505922180
 mkdir clr-build
 pushd clr-build
 export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=32 -Wformat -Wformat-security -Wno-error   -Wl,-z,max-page-size=0x1000 -m64 -march=westmere -mtune=haswell"
 export CXXFLAGS=$CFLAGS
 unset LDFLAGS
+export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF;AMDGPU;NVPTX" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON  -DLLVM_ENABLE_LTO=Full -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include"
 make VERBOSE=1  %{?_smp_mflags}
 popd
@@ -116,7 +120,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1505859735
+export SOURCE_DATE_EPOCH=1505922180
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
