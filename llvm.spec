@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 5.0.0
-Release  : 44
+Release  : 45
 URL      : http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/5.0.0/cfe-5.0.0.src.tar.xz
