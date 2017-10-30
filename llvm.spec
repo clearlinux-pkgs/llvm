@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 5.0.0
-Release  : 45
+Release  : 46
 URL      : http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/5.0.0/cfe-5.0.0.src.tar.xz
@@ -101,7 +101,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1506445165
+export SOURCE_DATE_EPOCH=1509397912
 unset LD_AS_NEEDED
 mkdir clr-build
 pushd clr-build
@@ -120,7 +120,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1506445165
+export SOURCE_DATE_EPOCH=1509397912
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
@@ -246,33 +246,24 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/share/clang/clang-format-bbedit.applescript
 /usr/share/clang/clang-format-diff.py
 /usr/share/clang/clang-format-diff.pyc
-/usr/share/clang/clang-format-diff.pyo
 /usr/share/clang/clang-format-sublime.py
 /usr/share/clang/clang-format-sublime.pyc
-/usr/share/clang/clang-format-sublime.pyo
 /usr/share/clang/clang-format.el
 /usr/share/clang/clang-format.py
 /usr/share/clang/clang-format.pyc
-/usr/share/clang/clang-format.pyo
 /usr/share/clang/clang-rename.el
 /usr/share/clang/clang-rename.py
 /usr/share/clang/clang-rename.pyc
-/usr/share/clang/clang-rename.pyo
 /usr/share/opt-viewer/opt-diff.py
 /usr/share/opt-viewer/opt-diff.pyc
-/usr/share/opt-viewer/opt-diff.pyo
 /usr/share/opt-viewer/opt-stats.py
 /usr/share/opt-viewer/opt-stats.pyc
-/usr/share/opt-viewer/opt-stats.pyo
 /usr/share/opt-viewer/opt-viewer.py
 /usr/share/opt-viewer/opt-viewer.pyc
-/usr/share/opt-viewer/opt-viewer.pyo
 /usr/share/opt-viewer/optpmap.py
 /usr/share/opt-viewer/optpmap.pyc
-/usr/share/opt-viewer/optpmap.pyo
 /usr/share/opt-viewer/optrecord.py
 /usr/share/opt-viewer/optrecord.pyc
-/usr/share/opt-viewer/optrecord.pyo
 /usr/share/opt-viewer/style.css
 /usr/share/scan-build/scanview.css
 /usr/share/scan-build/sorttable.js
@@ -280,14 +271,11 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/share/scan-view/GetRadarVersion.scpt
 /usr/share/scan-view/Reporter.py
 /usr/share/scan-view/Reporter.pyc
-/usr/share/scan-view/Reporter.pyo
 /usr/share/scan-view/ScanView.py
 /usr/share/scan-view/ScanView.pyc
-/usr/share/scan-view/ScanView.pyo
 /usr/share/scan-view/bugcatcher.ico
 /usr/share/scan-view/startfile.py
 /usr/share/scan-view/startfile.pyc
-/usr/share/scan-view/startfile.pyo
 
 %files dev
 %defattr(-,root,root,-)
