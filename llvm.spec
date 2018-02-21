@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 5.0.1
-Release  : 53
+Release  : 54
 URL      : http://releases.llvm.org/5.0.1/llvm-5.0.1.src.tar.xz
 Source0  : http://releases.llvm.org/5.0.1/llvm-5.0.1.src.tar.xz
 Source1  : http://releases.llvm.org/5.0.1/cfe-5.0.1.src.tar.xz
@@ -35,9 +35,6 @@ BuildRequires : python3-dev
 BuildRequires : setuptools
 BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
-# Suppress stripping binaries
-%define __strip /bin/true
-%define debug_package %{nil}
 
 %description
 See docs/CMake.html for instructions on how to build LLVM with CMake.
@@ -100,7 +97,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1517705702
+export SOURCE_DATE_EPOCH=1519234065
 unset LD_AS_NEEDED
 mkdir clr-build
 pushd clr-build
@@ -112,7 +109,7 @@ export CXXFLAGS=$CFLAGS
 unset LDFLAGS
 unset LDFLAGS
 cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib -DLLVM_ENABLE_ZLIB:BOOL=ON  -DLLVM_LIBDIR_SUFFIX=64   -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF;AMDGPU;NVPTX" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include"
-make VERBOSE=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 popd
 
 %check
@@ -123,7 +120,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1517705702
+export SOURCE_DATE_EPOCH=1519234065
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
@@ -138,35 +135,6 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/lib64/clang/5.0.1/include/cuda_wrappers/complex
 /usr/lib64/clang/5.0.1/include/cuda_wrappers/new
 /usr/lib64/clang/5.0.1/include/module.modulemap
-/usr/lib64/cmake/clang/ClangConfig.cmake
-/usr/lib64/cmake/clang/ClangTargets-relwithdebinfo.cmake
-/usr/lib64/cmake/clang/ClangTargets.cmake
-/usr/lib64/cmake/llvm/AddLLVM.cmake
-/usr/lib64/cmake/llvm/AddLLVMDefinitions.cmake
-/usr/lib64/cmake/llvm/AddOCaml.cmake
-/usr/lib64/cmake/llvm/AddSphinxTarget.cmake
-/usr/lib64/cmake/llvm/CheckAtomic.cmake
-/usr/lib64/cmake/llvm/CheckCompilerVersion.cmake
-/usr/lib64/cmake/llvm/CheckLinkerFlag.cmake
-/usr/lib64/cmake/llvm/ChooseMSVCCRT.cmake
-/usr/lib64/cmake/llvm/CrossCompile.cmake
-/usr/lib64/cmake/llvm/DetermineGCCCompatible.cmake
-/usr/lib64/cmake/llvm/FindOCaml.cmake
-/usr/lib64/cmake/llvm/FindSphinx.cmake
-/usr/lib64/cmake/llvm/GenerateVersionFromCVS.cmake
-/usr/lib64/cmake/llvm/GetSVN.cmake
-/usr/lib64/cmake/llvm/HandleLLVMOptions.cmake
-/usr/lib64/cmake/llvm/HandleLLVMStdlib.cmake
-/usr/lib64/cmake/llvm/LLVM-Config.cmake
-/usr/lib64/cmake/llvm/LLVMConfig.cmake
-/usr/lib64/cmake/llvm/LLVMConfigVersion.cmake
-/usr/lib64/cmake/llvm/LLVMExports-relwithdebinfo.cmake
-/usr/lib64/cmake/llvm/LLVMExports.cmake
-/usr/lib64/cmake/llvm/LLVMExternalProjectUtils.cmake
-/usr/lib64/cmake/llvm/LLVMInstallSymlink.cmake
-/usr/lib64/cmake/llvm/LLVMProcessSources.cmake
-/usr/lib64/cmake/llvm/TableGen.cmake
-/usr/lib64/cmake/llvm/VersionFromVCS.cmake
 
 %files bin
 %defattr(-,root,root,-)
@@ -1983,6 +1951,35 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/lib64/clang/5.0.1/include/xsaveoptintrin.h
 /usr/lib64/clang/5.0.1/include/xsavesintrin.h
 /usr/lib64/clang/5.0.1/include/xtestintrin.h
+/usr/lib64/cmake/clang/ClangConfig.cmake
+/usr/lib64/cmake/clang/ClangTargets-relwithdebinfo.cmake
+/usr/lib64/cmake/clang/ClangTargets.cmake
+/usr/lib64/cmake/llvm/AddLLVM.cmake
+/usr/lib64/cmake/llvm/AddLLVMDefinitions.cmake
+/usr/lib64/cmake/llvm/AddOCaml.cmake
+/usr/lib64/cmake/llvm/AddSphinxTarget.cmake
+/usr/lib64/cmake/llvm/CheckAtomic.cmake
+/usr/lib64/cmake/llvm/CheckCompilerVersion.cmake
+/usr/lib64/cmake/llvm/CheckLinkerFlag.cmake
+/usr/lib64/cmake/llvm/ChooseMSVCCRT.cmake
+/usr/lib64/cmake/llvm/CrossCompile.cmake
+/usr/lib64/cmake/llvm/DetermineGCCCompatible.cmake
+/usr/lib64/cmake/llvm/FindOCaml.cmake
+/usr/lib64/cmake/llvm/FindSphinx.cmake
+/usr/lib64/cmake/llvm/GenerateVersionFromCVS.cmake
+/usr/lib64/cmake/llvm/GetSVN.cmake
+/usr/lib64/cmake/llvm/HandleLLVMOptions.cmake
+/usr/lib64/cmake/llvm/HandleLLVMStdlib.cmake
+/usr/lib64/cmake/llvm/LLVM-Config.cmake
+/usr/lib64/cmake/llvm/LLVMConfig.cmake
+/usr/lib64/cmake/llvm/LLVMConfigVersion.cmake
+/usr/lib64/cmake/llvm/LLVMExports-relwithdebinfo.cmake
+/usr/lib64/cmake/llvm/LLVMExports.cmake
+/usr/lib64/cmake/llvm/LLVMExternalProjectUtils.cmake
+/usr/lib64/cmake/llvm/LLVMInstallSymlink.cmake
+/usr/lib64/cmake/llvm/LLVMProcessSources.cmake
+/usr/lib64/cmake/llvm/TableGen.cmake
+/usr/lib64/cmake/llvm/VersionFromVCS.cmake
 /usr/lib64/libLLVMAMDGPUAsmParser.so
 /usr/lib64/libLLVMAMDGPUAsmPrinter.so
 /usr/lib64/libLLVMAMDGPUCodeGen.so
