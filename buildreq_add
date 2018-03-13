@@ -1,14 +1,15 @@
 # This file contains additional build requirements that did not get
 # picked up automatically. One name per line, no whitespace.
-libffi-dev
 Sphinx
-zlib-dev
+Z3-dev
 binutils-dev
-ncurses-dev
-valgrind-dev
 googletest-dev
+libffi-dev
 libstdc++-dev
-llvm-dev
-python3-dev
-llvm-dev
 llvm
+llvm-dev
+llvm-dev
+ncurses-dev
+python3-dev
+valgrind-dev
+zlib-dev

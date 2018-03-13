@@ -7,4 +7,5 @@ libpthread.so.0
 librt.so.1
 libstdc++.so.6
 libtinfo.so.6
+libxml2.so.2
 libz.so.1
