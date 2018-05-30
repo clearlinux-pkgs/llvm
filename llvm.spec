@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 6.0.0
-Release  : 58
+Release  : 59
 URL      : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/6.0.0/cfe-6.0.0.src.tar.xz
@@ -37,6 +37,7 @@ BuildRequires : python3-dev
 BuildRequires : setuptools
 BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
+Patch1: python2-shebangs.patch
 
 %description
 These are tests for instrumentation based profiling.  This specifically means
@@ -94,13 +95,14 @@ cd ..
 %setup -q -n llvm-6.0.0.src
 mkdir -p %{_topdir}/BUILD/llvm-6.0.0.src/tools/clang
 mv %{_topdir}/BUILD/cfe-6.0.0.src/* %{_topdir}/BUILD/llvm-6.0.0.src/tools/clang
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1520969595
+export SOURCE_DATE_EPOCH=1527697480
 unset LD_AS_NEEDED
 mkdir clr-build
 pushd clr-build
@@ -123,7 +125,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1520969595
+export SOURCE_DATE_EPOCH=1527697480
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
