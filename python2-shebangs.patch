@@ -1,0 +1,14 @@
+diff --git a/tools/clang/tools/clang-format/clang-format-diff.py b/tools/clang/tools/clang-format/clang-format-diff.py
+index ffa30e70..a6b59b42 100755
+--- a/tools/clang/tools/clang-format/clang-format-diff.py
++++ b/tools/clang/tools/clang-format/clang-format-diff.py
+@@ -1 +1 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python2
+diff --git a/tools/clang/tools/scan-view/bin/scan-view b/tools/clang/tools/scan-view/bin/scan-view
+index 1b6e8ba9..7c5867d1 100755
+--- a/tools/clang/tools/scan-view/bin/scan-view
++++ b/tools/clang/tools/scan-view/bin/scan-view
+@@ -1 +1 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python2
