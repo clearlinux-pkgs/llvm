@@ -1,1 +1,3 @@
 install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckAtomic.cmake
+chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
+

@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 6.0.0
-Release  : 59
+Release  : 60
 URL      : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/6.0.0/cfe-6.0.0.src.tar.xz
@@ -17,7 +17,7 @@ License  : BSD-3-Clause MIT NCSA
 Requires: llvm-bin
 Requires: llvm-lib
 Requires: llvm-data
-Requires: llvm-doc
+Requires: llvm-man
 BuildRequires : Sphinx
 BuildRequires : Z3-dev
 BuildRequires : binutils-dev
@@ -47,6 +47,7 @@ the -fprofile-instr-generate and -fprofile-instr-use driver flags.
 Summary: bin components for the llvm package.
 Group: Binaries
 Requires: llvm-data
+Requires: llvm-man
 
 %description bin
 bin components for the llvm package.
@@ -72,14 +73,6 @@ Provides: llvm-devel
 dev components for the llvm package.
 
 
-%package doc
-Summary: doc components for the llvm package.
-Group: Documentation
-
-%description doc
-doc components for the llvm package.
-
-
 %package lib
 Summary: lib components for the llvm package.
 Group: Libraries
@@ -87,6 +80,14 @@ Requires: llvm-data
 
 %description lib
 lib components for the llvm package.
+
+
+%package man
+Summary: man components for the llvm package.
+Group: Default
+
+%description man
+man components for the llvm package.
 
 
 %prep
@@ -102,7 +103,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1527697480
+export SOURCE_DATE_EPOCH=1528393623
 unset LD_AS_NEEDED
 mkdir clr-build
 pushd clr-build
@@ -125,13 +126,14 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1527697480
+export SOURCE_DATE_EPOCH=1528393623
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
 popd
 ## make_install_append content
 install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckAtomic.cmake
+chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 ## make_install_append end
 
 %files
@@ -2188,10 +2190,6 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/lib64/libclangToolingCore.so
 /usr/lib64/libclangToolingRefactor.so
 
-%files doc
-%defattr(-,root,root,-)
-%doc /usr/share/man/man1/*
-
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libLLVMAMDGPUAsmParser.so.6
@@ -2404,3 +2402,7 @@ install cmake/modules/CheckAtomic.cmake %{buildroot}/usr/lib64/cmake/llvm/CheckA
 /usr/lib64/libclangToolingCore.so.6.0.0
 /usr/lib64/libclangToolingRefactor.so.6
 /usr/lib64/libclangToolingRefactor.so.6.0.0
+
+%files man
+%defattr(-,root,root,-)
+/usr/share/man/man1/scan-build.1
