@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 6.0.0
-Release  : 60
+Release  : 61
 URL      : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/6.0.0/cfe-6.0.0.src.tar.xz
