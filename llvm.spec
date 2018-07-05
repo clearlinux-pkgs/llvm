@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 6.0.0
-Release  : 62
+Release  : 63
 URL      : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/6.0.0/cfe-6.0.0.src.tar.xz
@@ -125,7 +125,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1530810898
+export SOURCE_DATE_EPOCH=1530821607
 unset LD_AS_NEEDED
 mkdir clr-build
 pushd clr-build
@@ -148,7 +148,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1530810898
+export SOURCE_DATE_EPOCH=1530821607
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/doc/llvm/LICENSE.TXT
@@ -171,7 +171,6 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 
 %files
 %defattr(-,root,root,-)
-
 /usr/lib64/clang/6.0.0/include/cuda_wrappers/algorithm
 /usr/lib64/clang/6.0.0/include/cuda_wrappers/complex
 /usr/lib64/clang/6.0.0/include/cuda_wrappers/new
@@ -303,6 +302,7 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 
 %files dev
 %defattr(-,root,root,-)
+%exclude /usr/lib64/libgomp.so
 /usr/include/clang-c/BuildSystem.h
 /usr/include/clang-c/CXCompilationDatabase.h
 /usr/include/clang-c/CXErrorCode.h
@@ -2294,7 +2294,6 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/libclangToolingCore.so
 /usr/lib64/libclangToolingRefactor.so
 /usr/lib64/libfindAllSymbols.so
-/usr/lib64/libgomp.so
 /usr/lib64/libiomp5.so
 /usr/lib64/liblldCOFF.so
 /usr/lib64/liblldCommon.so
