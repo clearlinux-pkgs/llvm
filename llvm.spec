@@ -6,10 +6,13 @@
 #
 Name     : llvm
 Version  : 6.0.0
-Release  : 61
+Release  : 62
 URL      : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/6.0.0/cfe-6.0.0.src.tar.xz
+Source2  : https://releases.llvm.org/6.0.0/clang-tools-extra-6.0.0.src.tar.xz
+Source3  : https://releases.llvm.org/6.0.0/lld-6.0.0.src.tar.xz
+Source4  : https://releases.llvm.org/6.0.0/openmp-6.0.0.src.tar.xz
 Source99 : http://releases.llvm.org/6.0.0/llvm-6.0.0.src.tar.xz.sig
 Summary  : No detailed summary available
 Group    : Development/Tools
@@ -17,6 +20,7 @@ License  : BSD-3-Clause MIT NCSA
 Requires: llvm-bin
 Requires: llvm-lib
 Requires: llvm-data
+Requires: llvm-license
 Requires: llvm-man
 BuildRequires : Sphinx
 BuildRequires : Z3-dev
@@ -32,7 +36,6 @@ BuildRequires : llvm-dev
 BuildRequires : ncurses-dev
 BuildRequires : pbr
 BuildRequires : pip
-
 BuildRequires : python3-dev
 BuildRequires : setuptools
 BuildRequires : valgrind-dev
@@ -47,6 +50,7 @@ the -fprofile-instr-generate and -fprofile-instr-use driver flags.
 Summary: bin components for the llvm package.
 Group: Binaries
 Requires: llvm-data
+Requires: llvm-license
 Requires: llvm-man
 
 %description bin
@@ -77,9 +81,18 @@ dev components for the llvm package.
 Summary: lib components for the llvm package.
 Group: Libraries
 Requires: llvm-data
+Requires: llvm-license
 
 %description lib
 lib components for the llvm package.
+
+
+%package license
+Summary: license components for the llvm package.
+Group: Default
+
+%description license
+license components for the llvm package.
 
 
 %package man
@@ -92,10 +105,19 @@ man components for the llvm package.
 
 %prep
 tar -xf %{SOURCE1}
+tar -xf %{SOURCE2}
+tar -xf %{SOURCE3}
+tar -xf %{SOURCE4}
 cd ..
 %setup -q -n llvm-6.0.0.src
 mkdir -p %{_topdir}/BUILD/llvm-6.0.0.src/tools/clang
 mv %{_topdir}/BUILD/cfe-6.0.0.src/* %{_topdir}/BUILD/llvm-6.0.0.src/tools/clang
+mkdir -p %{_topdir}/BUILD/llvm-6.0.0.src/tools/extra
+mv %{_topdir}/BUILD/clang-tools-extra-6.0.0.src/* %{_topdir}/BUILD/llvm-6.0.0.src/tools/extra
+mkdir -p %{_topdir}/BUILD/llvm-6.0.0.src/tools/lld
+mv %{_topdir}/BUILD/lld-6.0.0.src/* %{_topdir}/BUILD/llvm-6.0.0.src/tools/lld
+mkdir -p %{_topdir}/BUILD/llvm-6.0.0.src/projects/openmp
+mv %{_topdir}/BUILD/openmp-6.0.0.src/* %{_topdir}/BUILD/llvm-6.0.0.src/projects/openmp
 %patch1 -p1
 
 %build
@@ -103,7 +125,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1528393623
+export SOURCE_DATE_EPOCH=1530810898
 unset LD_AS_NEEDED
 mkdir clr-build
 pushd clr-build
@@ -126,8 +148,19 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1528393623
+export SOURCE_DATE_EPOCH=1530810898
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/doc/llvm
+cp LICENSE.TXT %{buildroot}/usr/share/doc/llvm/LICENSE.TXT
+cp tools/lld/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_lld_LICENSE.TXT
+cp tools/extra/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_extra_LICENSE.TXT
+cp tools/extra/clangd/clients/clangd-vscode/LICENSE %{buildroot}/usr/share/doc/llvm/tools_extra_clangd_clients_clangd-vscode_LICENSE
+cp tools/extra/clang-tidy-vs/ClangTidy/license.txt %{buildroot}/usr/share/doc/llvm/tools_extra_clang-tidy-vs_ClangTidy_license.txt
+cp tools/clang/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_clang_LICENSE.TXT
+cp tools/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/doc/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
+cp utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/doc/llvm/utils_unittest_googlemock_LICENSE.txt
+cp utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/utils_unittest_googletest_LICENSE.TXT
+cp test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/doc/llvm/test_YAMLParser_LICENSE.txt
 pushd clr-build
 %make_install
 popd
@@ -138,6 +171,7 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 
 %files
 %defattr(-,root,root,-)
+
 /usr/lib64/clang/6.0.0/include/cuda_wrappers/algorithm
 /usr/lib64/clang/6.0.0/include/cuda_wrappers/complex
 /usr/lib64/clang/6.0.0/include/cuda_wrappers/new
@@ -151,18 +185,30 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/bin/clang
 /usr/bin/clang++
 /usr/bin/clang-6.0
+/usr/bin/clang-apply-replacements
+/usr/bin/clang-change-namespace
 /usr/bin/clang-check
 /usr/bin/clang-cl
 /usr/bin/clang-cpp
 /usr/bin/clang-format
 /usr/bin/clang-func-mapping
 /usr/bin/clang-import-test
+/usr/bin/clang-include-fixer
 /usr/bin/clang-offload-bundler
+/usr/bin/clang-query
 /usr/bin/clang-refactor
 /usr/bin/clang-rename
+/usr/bin/clang-reorder-fields
+/usr/bin/clang-tidy
+/usr/bin/clangd
 /usr/bin/count
+/usr/bin/find-all-symbols
 /usr/bin/git-clang-format
+/usr/bin/ld.lld
+/usr/bin/ld64.lld
 /usr/bin/llc
+/usr/bin/lld
+/usr/bin/lld-link
 /usr/bin/lli
 /usr/bin/lli-child-target
 /usr/bin/llvm-PerfectShuffle
@@ -210,6 +256,7 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/bin/llvm-symbolizer
 /usr/bin/llvm-tblgen
 /usr/bin/llvm-xray
+/usr/bin/modularize
 /usr/bin/not
 /usr/bin/obj2yaml
 /usr/bin/opt
@@ -218,6 +265,7 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/bin/scan-build
 /usr/bin/scan-view
 /usr/bin/verify-uselistorder
+/usr/bin/wasm-ld
 /usr/bin/yaml-bench
 /usr/bin/yaml2obj
 /usr/libexec/c++-analyzer
@@ -225,21 +273,19 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 
 %files data
 %defattr(-,root,root,-)
-/usr/share/clang/__pycache__/clang-format-sublime.cpython-36.pyc
-/usr/share/clang/__pycache__/clang-format.cpython-36.pyc
 /usr/share/clang/bash-autocomplete.sh
 /usr/share/clang/clang-format-bbedit.applescript
 /usr/share/clang/clang-format-diff.py
 /usr/share/clang/clang-format-sublime.py
 /usr/share/clang/clang-format.el
 /usr/share/clang/clang-format.py
+/usr/share/clang/clang-include-fixer.el
+/usr/share/clang/clang-include-fixer.py
 /usr/share/clang/clang-rename.el
 /usr/share/clang/clang-rename.py
-/usr/share/opt-viewer/__pycache__/opt-diff.cpython-36.pyc
-/usr/share/opt-viewer/__pycache__/opt-stats.cpython-36.pyc
-/usr/share/opt-viewer/__pycache__/opt-viewer.cpython-36.pyc
-/usr/share/opt-viewer/__pycache__/optpmap.cpython-36.pyc
-/usr/share/opt-viewer/__pycache__/optrecord.cpython-36.pyc
+/usr/share/clang/clang-tidy-diff.py
+/usr/share/clang/run-clang-tidy.py
+/usr/share/clang/run-find-all-symbols.py
 /usr/share/opt-viewer/opt-diff.py
 /usr/share/opt-viewer/opt-stats.py
 /usr/share/opt-viewer/opt-viewer.py
@@ -252,8 +298,6 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/share/scan-view/GetRadarVersion.scpt
 /usr/share/scan-view/Reporter.py
 /usr/share/scan-view/ScanView.py
-/usr/share/scan-view/__pycache__/Reporter.cpython-36.pyc
-/usr/share/scan-view/__pycache__/startfile.cpython-36.pyc
 /usr/share/scan-view/bugcatcher.ico
 /usr/share/scan-view/startfile.py
 
@@ -783,6 +827,38 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/include/clang/Tooling/StandaloneExecution.h
 /usr/include/clang/Tooling/ToolExecutorPluginRegistry.h
 /usr/include/clang/Tooling/Tooling.h
+/usr/include/lld/Common/Args.h
+/usr/include/lld/Common/Driver.h
+/usr/include/lld/Common/ErrorHandler.h
+/usr/include/lld/Common/LLVM.h
+/usr/include/lld/Common/Memory.h
+/usr/include/lld/Common/Reproduce.h
+/usr/include/lld/Common/Strings.h
+/usr/include/lld/Common/TargetOptionsCommandFlags.h
+/usr/include/lld/Common/Threads.h
+/usr/include/lld/Common/Version.h
+/usr/include/lld/Core/AbsoluteAtom.h
+/usr/include/lld/Core/ArchiveLibraryFile.h
+/usr/include/lld/Core/Atom.h
+/usr/include/lld/Core/DefinedAtom.h
+/usr/include/lld/Core/Error.h
+/usr/include/lld/Core/File.h
+/usr/include/lld/Core/Instrumentation.h
+/usr/include/lld/Core/LinkingContext.h
+/usr/include/lld/Core/Node.h
+/usr/include/lld/Core/Pass.h
+/usr/include/lld/Core/PassManager.h
+/usr/include/lld/Core/Reader.h
+/usr/include/lld/Core/Reference.h
+/usr/include/lld/Core/Resolver.h
+/usr/include/lld/Core/SharedLibraryAtom.h
+/usr/include/lld/Core/SharedLibraryFile.h
+/usr/include/lld/Core/Simple.h
+/usr/include/lld/Core/SymbolTable.h
+/usr/include/lld/Core/UndefinedAtom.h
+/usr/include/lld/Core/Writer.h
+/usr/include/lld/ReaderWriter/MachOLinkingContext.h
+/usr/include/lld/ReaderWriter/YamlContext.h
 /usr/include/llvm-c/Analysis.h
 /usr/include/llvm-c/BitReader.h
 /usr/include/llvm-c/BitWriter.h
@@ -2020,6 +2096,8 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/clang/6.0.0/include/msa.h
 /usr/lib64/clang/6.0.0/include/mwaitxintrin.h
 /usr/lib64/clang/6.0.0/include/nmmintrin.h
+/usr/lib64/clang/6.0.0/include/omp.h
+/usr/lib64/clang/6.0.0/include/ompt.h
 /usr/lib64/clang/6.0.0/include/opencl-c.h
 /usr/lib64/clang/6.0.0/include/pkuintrin.h
 /usr/lib64/clang/6.0.0/include/pmmintrin.h
@@ -2165,9 +2243,12 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/libclangAST.so
 /usr/lib64/libclangASTMatchers.so
 /usr/lib64/libclangAnalysis.so
+/usr/lib64/libclangApplyReplacements.so
 /usr/lib64/libclangBasic.so
+/usr/lib64/libclangChangeNamespace.so
 /usr/lib64/libclangCodeGen.so
 /usr/lib64/libclangCrossTU.so
+/usr/lib64/libclangDaemon.so
 /usr/lib64/libclangDriver.so
 /usr/lib64/libclangDynamicASTMatchers.so
 /usr/lib64/libclangEdit.so
@@ -2175,9 +2256,14 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/libclangFrontend.so
 /usr/lib64/libclangFrontendTool.so
 /usr/lib64/libclangHandleCXX.so
+/usr/lib64/libclangIncludeFixer.so
+/usr/lib64/libclangIncludeFixerPlugin.so
 /usr/lib64/libclangIndex.so
 /usr/lib64/libclangLex.so
+/usr/lib64/libclangMove.so
 /usr/lib64/libclangParse.so
+/usr/lib64/libclangQuery.so
+/usr/lib64/libclangReorderFields.so
 /usr/lib64/libclangRewrite.so
 /usr/lib64/libclangRewriteFrontend.so
 /usr/lib64/libclangSema.so
@@ -2185,10 +2271,43 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/libclangStaticAnalyzerCheckers.so
 /usr/lib64/libclangStaticAnalyzerCore.so
 /usr/lib64/libclangStaticAnalyzerFrontend.so
+/usr/lib64/libclangTidy.so
+/usr/lib64/libclangTidyAndroidModule.so
+/usr/lib64/libclangTidyBoostModule.so
+/usr/lib64/libclangTidyBugproneModule.so
+/usr/lib64/libclangTidyCERTModule.so
+/usr/lib64/libclangTidyCppCoreGuidelinesModule.so
+/usr/lib64/libclangTidyFuchsiaModule.so
+/usr/lib64/libclangTidyGoogleModule.so
+/usr/lib64/libclangTidyHICPPModule.so
+/usr/lib64/libclangTidyLLVMModule.so
+/usr/lib64/libclangTidyMPIModule.so
+/usr/lib64/libclangTidyMiscModule.so
+/usr/lib64/libclangTidyModernizeModule.so
+/usr/lib64/libclangTidyObjCModule.so
+/usr/lib64/libclangTidyPerformanceModule.so
+/usr/lib64/libclangTidyPlugin.so
+/usr/lib64/libclangTidyReadabilityModule.so
+/usr/lib64/libclangTidyUtils.so
 /usr/lib64/libclangTooling.so
 /usr/lib64/libclangToolingASTDiff.so
 /usr/lib64/libclangToolingCore.so
 /usr/lib64/libclangToolingRefactor.so
+/usr/lib64/libfindAllSymbols.so
+/usr/lib64/libgomp.so
+/usr/lib64/libiomp5.so
+/usr/lib64/liblldCOFF.so
+/usr/lib64/liblldCommon.so
+/usr/lib64/liblldCore.so
+/usr/lib64/liblldDriver.so
+/usr/lib64/liblldELF.so
+/usr/lib64/liblldMachO.so
+/usr/lib64/liblldMinGW.so
+/usr/lib64/liblldReaderWriter.so
+/usr/lib64/liblldWasm.so
+/usr/lib64/liblldYAML.so
+/usr/lib64/libomp.so
+/usr/lib64/libomptarget.so
 
 %files lib
 %defattr(-,root,root,-)
@@ -2354,12 +2473,18 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/libclangASTMatchers.so.6.0.0
 /usr/lib64/libclangAnalysis.so.6
 /usr/lib64/libclangAnalysis.so.6.0.0
+/usr/lib64/libclangApplyReplacements.so.6
+/usr/lib64/libclangApplyReplacements.so.6.0.0
 /usr/lib64/libclangBasic.so.6
 /usr/lib64/libclangBasic.so.6.0.0
+/usr/lib64/libclangChangeNamespace.so.6
+/usr/lib64/libclangChangeNamespace.so.6.0.0
 /usr/lib64/libclangCodeGen.so.6
 /usr/lib64/libclangCodeGen.so.6.0.0
 /usr/lib64/libclangCrossTU.so.6
 /usr/lib64/libclangCrossTU.so.6.0.0
+/usr/lib64/libclangDaemon.so.6
+/usr/lib64/libclangDaemon.so.6.0.0
 /usr/lib64/libclangDriver.so.6
 /usr/lib64/libclangDriver.so.6.0.0
 /usr/lib64/libclangDynamicASTMatchers.so.6
@@ -2374,12 +2499,22 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/libclangFrontendTool.so.6.0.0
 /usr/lib64/libclangHandleCXX.so.6
 /usr/lib64/libclangHandleCXX.so.6.0.0
+/usr/lib64/libclangIncludeFixer.so.6
+/usr/lib64/libclangIncludeFixer.so.6.0.0
+/usr/lib64/libclangIncludeFixerPlugin.so.6
+/usr/lib64/libclangIncludeFixerPlugin.so.6.0.0
 /usr/lib64/libclangIndex.so.6
 /usr/lib64/libclangIndex.so.6.0.0
 /usr/lib64/libclangLex.so.6
 /usr/lib64/libclangLex.so.6.0.0
+/usr/lib64/libclangMove.so.6
+/usr/lib64/libclangMove.so.6.0.0
 /usr/lib64/libclangParse.so.6
 /usr/lib64/libclangParse.so.6.0.0
+/usr/lib64/libclangQuery.so.6
+/usr/lib64/libclangQuery.so.6.0.0
+/usr/lib64/libclangReorderFields.so.6
+/usr/lib64/libclangReorderFields.so.6.0.0
 /usr/lib64/libclangRewrite.so.6
 /usr/lib64/libclangRewrite.so.6.0.0
 /usr/lib64/libclangRewriteFrontend.so.6
@@ -2394,6 +2529,42 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/libclangStaticAnalyzerCore.so.6.0.0
 /usr/lib64/libclangStaticAnalyzerFrontend.so.6
 /usr/lib64/libclangStaticAnalyzerFrontend.so.6.0.0
+/usr/lib64/libclangTidy.so.6
+/usr/lib64/libclangTidy.so.6.0.0
+/usr/lib64/libclangTidyAndroidModule.so.6
+/usr/lib64/libclangTidyAndroidModule.so.6.0.0
+/usr/lib64/libclangTidyBoostModule.so.6
+/usr/lib64/libclangTidyBoostModule.so.6.0.0
+/usr/lib64/libclangTidyBugproneModule.so.6
+/usr/lib64/libclangTidyBugproneModule.so.6.0.0
+/usr/lib64/libclangTidyCERTModule.so.6
+/usr/lib64/libclangTidyCERTModule.so.6.0.0
+/usr/lib64/libclangTidyCppCoreGuidelinesModule.so.6
+/usr/lib64/libclangTidyCppCoreGuidelinesModule.so.6.0.0
+/usr/lib64/libclangTidyFuchsiaModule.so.6
+/usr/lib64/libclangTidyFuchsiaModule.so.6.0.0
+/usr/lib64/libclangTidyGoogleModule.so.6
+/usr/lib64/libclangTidyGoogleModule.so.6.0.0
+/usr/lib64/libclangTidyHICPPModule.so.6
+/usr/lib64/libclangTidyHICPPModule.so.6.0.0
+/usr/lib64/libclangTidyLLVMModule.so.6
+/usr/lib64/libclangTidyLLVMModule.so.6.0.0
+/usr/lib64/libclangTidyMPIModule.so.6
+/usr/lib64/libclangTidyMPIModule.so.6.0.0
+/usr/lib64/libclangTidyMiscModule.so.6
+/usr/lib64/libclangTidyMiscModule.so.6.0.0
+/usr/lib64/libclangTidyModernizeModule.so.6
+/usr/lib64/libclangTidyModernizeModule.so.6.0.0
+/usr/lib64/libclangTidyObjCModule.so.6
+/usr/lib64/libclangTidyObjCModule.so.6.0.0
+/usr/lib64/libclangTidyPerformanceModule.so.6
+/usr/lib64/libclangTidyPerformanceModule.so.6.0.0
+/usr/lib64/libclangTidyPlugin.so.6
+/usr/lib64/libclangTidyPlugin.so.6.0.0
+/usr/lib64/libclangTidyReadabilityModule.so.6
+/usr/lib64/libclangTidyReadabilityModule.so.6.0.0
+/usr/lib64/libclangTidyUtils.so.6
+/usr/lib64/libclangTidyUtils.so.6.0.0
 /usr/lib64/libclangTooling.so.6
 /usr/lib64/libclangTooling.so.6.0.0
 /usr/lib64/libclangToolingASTDiff.so.6
@@ -2402,6 +2573,41 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/libclangToolingCore.so.6.0.0
 /usr/lib64/libclangToolingRefactor.so.6
 /usr/lib64/libclangToolingRefactor.so.6.0.0
+/usr/lib64/libfindAllSymbols.so.6
+/usr/lib64/libfindAllSymbols.so.6.0.0
+/usr/lib64/liblldCOFF.so.6
+/usr/lib64/liblldCOFF.so.6.0.0
+/usr/lib64/liblldCommon.so.6
+/usr/lib64/liblldCommon.so.6.0.0
+/usr/lib64/liblldCore.so.6
+/usr/lib64/liblldCore.so.6.0.0
+/usr/lib64/liblldDriver.so.6
+/usr/lib64/liblldDriver.so.6.0.0
+/usr/lib64/liblldELF.so.6
+/usr/lib64/liblldELF.so.6.0.0
+/usr/lib64/liblldMachO.so.6
+/usr/lib64/liblldMachO.so.6.0.0
+/usr/lib64/liblldMinGW.so.6
+/usr/lib64/liblldMinGW.so.6.0.0
+/usr/lib64/liblldReaderWriter.so.6
+/usr/lib64/liblldReaderWriter.so.6.0.0
+/usr/lib64/liblldWasm.so.6
+/usr/lib64/liblldWasm.so.6.0.0
+/usr/lib64/liblldYAML.so.6
+/usr/lib64/liblldYAML.so.6.0.0
+
+%files license
+%defattr(-,root,root,-)
+/usr/share/doc/llvm/LICENSE.TXT
+/usr/share/doc/llvm/test_YAMLParser_LICENSE.txt
+/usr/share/doc/llvm/tools_clang_LICENSE.TXT
+/usr/share/doc/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
+/usr/share/doc/llvm/tools_extra_LICENSE.TXT
+/usr/share/doc/llvm/tools_extra_clang-tidy-vs_ClangTidy_license.txt
+/usr/share/doc/llvm/tools_extra_clangd_clients_clangd-vscode_LICENSE
+/usr/share/doc/llvm/tools_lld_LICENSE.TXT
+/usr/share/doc/llvm/utils_unittest_googlemock_LICENSE.txt
+/usr/share/doc/llvm/utils_unittest_googletest_LICENSE.TXT
 
 %files man
 %defattr(-,root,root,-)
