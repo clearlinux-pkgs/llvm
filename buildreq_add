@@ -13,3 +13,4 @@ ncurses-dev
 python3-dev
 valgrind-dev
 zlib-dev
+libelf-dev
