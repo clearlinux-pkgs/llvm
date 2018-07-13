@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 6.0.1
-Release  : 64
+Release  : 65
 URL      : http://releases.llvm.org/6.0.1/llvm-6.0.1.src.tar.xz
 Source0  : http://releases.llvm.org/6.0.1/llvm-6.0.1.src.tar.xz
 Source1  : http://releases.llvm.org/6.0.1/cfe-6.0.1.src.tar.xz
@@ -26,6 +26,7 @@ BuildRequires : Sphinx
 BuildRequires : Z3-dev
 BuildRequires : binutils-dev
 BuildRequires : cmake
+BuildRequires : elfutils-dev
 BuildRequires : go
 BuildRequires : googletest-dev
 BuildRequires : libffi-dev
@@ -41,6 +42,7 @@ BuildRequires : setuptools
 BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
 Patch1: python2-shebangs.patch
+Patch2: more-fma.patch
 
 %description
 These inputs were pre-generated to allow for easier testing of llvm-cov.
@@ -120,13 +122,14 @@ mv %{_topdir}/BUILD/lld-6.0.1.src/* %{_topdir}/BUILD/llvm-6.0.1.src/tools/lld
 mkdir -p %{_topdir}/BUILD/llvm-6.0.1.src/projects/openmp
 mv %{_topdir}/BUILD/openmp-6.0.1.src/* %{_topdir}/BUILD/llvm-6.0.1.src/projects/openmp
 %patch1 -p1
+%patch2 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1530931427
+export SOURCE_DATE_EPOCH=1531501653
 unset LD_AS_NEEDED
 mkdir clr-build
 pushd clr-build
@@ -149,14 +152,16 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1530931427
+export SOURCE_DATE_EPOCH=1531501653
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/doc/llvm/LICENSE.TXT
 cp test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/doc/llvm/test_YAMLParser_LICENSE.txt
+cp projects/openmp/LICENSE.txt %{buildroot}/usr/share/doc/llvm/projects_openmp_LICENSE.txt
 cp tools/lld/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_lld_LICENSE.TXT
 cp tools/extra/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_extra_LICENSE.TXT
 cp tools/extra/clang-tidy-vs/ClangTidy/license.txt %{buildroot}/usr/share/doc/llvm/tools_extra_clang-tidy-vs_ClangTidy_license.txt
+cp tools/extra/clang-tidy/cert/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_extra_clang-tidy_cert_LICENSE.TXT
 cp tools/extra/clang-tidy/hicpp/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_extra_clang-tidy_hicpp_LICENSE.TXT
 cp tools/extra/clangd/clients/clangd-vscode/LICENSE %{buildroot}/usr/share/doc/llvm/tools_extra_clangd_clients_clangd-vscode_LICENSE
 cp tools/clang/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_clang_LICENSE.TXT
@@ -2308,6 +2313,7 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 /usr/lib64/liblldWasm.so
 /usr/lib64/liblldYAML.so
 /usr/lib64/libomp.so
+/usr/lib64/libomptarget.rtl.x86_64.so
 /usr/lib64/libomptarget.so
 
 %files lib
@@ -2600,11 +2606,13 @@ chmod a-x %{buildroot}/usr/share/man/man1/scan-build.1
 %files license
 %defattr(-,root,root,-)
 /usr/share/doc/llvm/LICENSE.TXT
+/usr/share/doc/llvm/projects_openmp_LICENSE.txt
 /usr/share/doc/llvm/test_YAMLParser_LICENSE.txt
 /usr/share/doc/llvm/tools_clang_LICENSE.TXT
 /usr/share/doc/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
 /usr/share/doc/llvm/tools_extra_LICENSE.TXT
 /usr/share/doc/llvm/tools_extra_clang-tidy-vs_ClangTidy_license.txt
+/usr/share/doc/llvm/tools_extra_clang-tidy_cert_LICENSE.TXT
 /usr/share/doc/llvm/tools_extra_clang-tidy_hicpp_LICENSE.TXT
 /usr/share/doc/llvm/tools_extra_clangd_clients_clangd-vscode_LICENSE
 /usr/share/doc/llvm/tools_lld_LICENSE.TXT

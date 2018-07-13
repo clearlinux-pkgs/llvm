@@ -33484,6 +33484,17 @@ libomp.so:ompc_set_max_active_levels
 libomp.so:ompc_set_nested
 libomp.so:ompc_set_num_threads
 libomp.so:ompc_set_schedule
+libomptarget.rtl.x86_64.so:VERS1.0
+libomptarget.rtl.x86_64.so:__tgt_rtl_data_alloc
+libomptarget.rtl.x86_64.so:__tgt_rtl_data_delete
+libomptarget.rtl.x86_64.so:__tgt_rtl_data_retrieve
+libomptarget.rtl.x86_64.so:__tgt_rtl_data_submit
+libomptarget.rtl.x86_64.so:__tgt_rtl_init_device
+libomptarget.rtl.x86_64.so:__tgt_rtl_is_valid_binary
+libomptarget.rtl.x86_64.so:__tgt_rtl_load_binary
+libomptarget.rtl.x86_64.so:__tgt_rtl_number_of_devices
+libomptarget.rtl.x86_64.so:__tgt_rtl_run_target_region
+libomptarget.rtl.x86_64.so:__tgt_rtl_run_target_team_region
 libomptarget.so:VERS1.0
 libomptarget.so:__kmpc_push_target_tripcount
 libomptarget.so:__tgt_register_lib

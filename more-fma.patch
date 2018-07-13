@@ -1,0 +1,13 @@
+--- llvm-6.0.1.src/lib/Target/X86/X86ISelLowering.h~	2018-05-22 02:46:36.000000000 +0000
++++ llvm-6.0.1.src/lib/Target/X86/X86ISelLowering.h	2018-07-13 16:32:42.450407645 +0000
+@@ -829,6 +829,10 @@
+     /// Vector-sized comparisons are fast using PCMPEQ + PMOVMSK or PTEST.
+     MVT hasFastEqualityCompare(unsigned NumBits) const override;
+ 
++
++    /// Force aggressive FMA fusion.
++    bool enableAggressiveFMAFusion(EVT VT) const override { return true; }
++
+     /// Return the value type to use for ISD::SETCC.
+     EVT getSetCCResultType(const DataLayout &DL, LLVMContext &Context,
+                            EVT VT) const override;
