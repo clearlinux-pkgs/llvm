@@ -11,3 +11,14 @@
      /// Return the value type to use for ISD::SETCC.
      EVT getSetCCResultType(const DataLayout &DL, LLVMContext &Context,
                             EVT VT) const override;
+--- llvm-6.0.1.src/include/llvm/CodeGen/CommandFlags.def~	2017-11-30 13:05:14.000000000 +0000
++++ llvm-6.0.1.src/include/llvm/CodeGen/CommandFlags.def	2018-07-14 02:15:34.760920733 +0000
+@@ -171,7 +171,7 @@
+ 
+ static cl::opt<llvm::FPOpFusion::FPOpFusionMode> FuseFPOps(
+     "fp-contract", cl::desc("Enable aggressive formation of fused FP ops"),
+-    cl::init(FPOpFusion::Standard),
++    cl::init(FPOpFusion::Fast),
+     cl::values(
+         clEnumValN(FPOpFusion::Fast, "fast", "Fuse FP ops whenever profitable"),
+         clEnumValN(FPOpFusion::Standard, "on", "Only fuse 'blessed' FP ops."),
