@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 7.0.0
-Release  : 68
+Release  : 69
 URL      : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz
