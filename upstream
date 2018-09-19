@@ -1,5 +1,4 @@
-09a6316c5225cab255ba12391e7abe5ff4d28935/llvm-6.0.1.src.tar.xz
-d93d8f3e3d7eb549ac58507383f7fcbdd78804d7/cfe-6.0.1.src.tar.xz
-0e4077e46dba66f9db17eb55b1e913b44cb19fd3/clang-tools-extra-6.0.1.src.tar.xz
-2d132743a795292f5e688e5bb1f61c654b4314f4/lld-6.0.1.src.tar.xz
-4cd2af91aa734078cfb0e8aac213483e765b81fc/openmp-6.0.1.src.tar.xz
+27503a22614626e935a05b609ab4211be72cd78b/llvm-7.0.0.src.tar.xz
+a4eb0b33f6a201e97ac62eb1b519e2476e56c794/cfe-7.0.0.src.tar.xz
+248a14f0dac24bf0fe13f8ad35a5106879c494a3/lld-7.0.0.src.tar.xz
+cf553ce1acb1c043728e118c876703accf161276/openmp-7.0.0.src.tar.xz

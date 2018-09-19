@@ -6,9 +6,6 @@ binutils-dev
 googletest-dev
 libffi-dev
 libstdc++-dev
-llvm
-llvm-dev
-llvm-dev
 ncurses-dev
 python3-dev
 valgrind-dev
