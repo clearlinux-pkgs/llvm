@@ -1,3 +1,4 @@
 # This file contains the output files that need %exclude. Full path
 # names, one per line.
 /usr/lib64/libgomp.so
+/usr/lib64/TestPlugin.so
