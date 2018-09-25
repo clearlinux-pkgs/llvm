@@ -1,6 +1,7 @@
 /usr/lib64/BugpointPasses.so
 /usr/lib64/LLVMHello.so
 /usr/lib64/LLVMgold.so
+/usr/lib64/TestPlugin.so
 /usr/lib64/clang/7.0.0/include/cuda_wrappers/algorithm
 /usr/lib64/clang/7.0.0/include/cuda_wrappers/complex
 /usr/lib64/clang/7.0.0/include/cuda_wrappers/new

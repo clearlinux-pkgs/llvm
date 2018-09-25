@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 7.0.0
-Release  : 71
+Release  : 72
 URL      : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz
@@ -19,8 +19,8 @@ License  : BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
 Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-data = %{version}-%{release}
-Requires: llvm-license = %{version}-%{release}
 Requires: llvm-man = %{version}-%{release}
+Requires: llvm-license = %{version}-%{release}
 Requires: llvm-extras = %{version}-%{release}
 BuildRequires : Sphinx
 BuildRequires : Z3-dev
@@ -36,7 +36,7 @@ BuildRequires : googletest-dev
 BuildRequires : libffi-dev
 BuildRequires : libstdc++-dev
 BuildRequires : libxml2-dev
-BuildRequires : llvm-dev
+BuildRequires : llvm
 BuildRequires : ncurses-dev
 BuildRequires : perl
 BuildRequires : pkg-config
@@ -55,9 +55,9 @@ the -fprofile-instr-generate and -fprofile-instr-use driver flags.
 %package bin
 Summary: bin components for the llvm package.
 Group: Binaries
-Requires: llvm-data
-Requires: llvm-license
-Requires: llvm-man
+Requires: llvm-data = %{version}-%{release}
+Requires: llvm-license = %{version}-%{release}
+Requires: llvm-man = %{version}-%{release}
 
 %description bin
 bin components for the llvm package.
@@ -74,10 +74,10 @@ data components for the llvm package.
 %package dev
 Summary: dev components for the llvm package.
 Group: Development
-Requires: llvm-lib
-Requires: llvm-bin
-Requires: llvm-data
-Provides: llvm-devel
+Requires: llvm-lib = %{version}-%{release}
+Requires: llvm-bin = %{version}-%{release}
+Requires: llvm-data = %{version}-%{release}
+Provides: llvm-devel = %{version}-%{release}
 
 %description dev
 dev components for the llvm package.
@@ -94,8 +94,8 @@ extras components for the llvm package.
 %package lib
 Summary: lib components for the llvm package.
 Group: Libraries
-Requires: llvm-data
-Requires: llvm-license
+Requires: llvm-data = %{version}-%{release}
+Requires: llvm-license = %{version}-%{release}
 
 %description lib
 lib components for the llvm package.
@@ -138,7 +138,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1537843263
+export SOURCE_DATE_EPOCH=1537903723
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -161,18 +161,18 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1537843263
+export SOURCE_DATE_EPOCH=1537903723
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/llvm
-cp LICENSE.TXT %{buildroot}/usr/share/doc/llvm/LICENSE.TXT
-cp projects/openmp/LICENSE.txt %{buildroot}/usr/share/doc/llvm/projects_openmp_LICENSE.txt
-cp test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/doc/llvm/test_YAMLParser_LICENSE.txt
-cp tools/clang/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_clang_LICENSE.TXT
-cp tools/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/doc/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
-cp tools/lld/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/tools_lld_LICENSE.TXT
-cp tools/msbuild/license.txt %{buildroot}/usr/share/doc/llvm/tools_msbuild_license.txt
-cp utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/doc/llvm/utils_unittest_googlemock_LICENSE.txt
-cp utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/doc/llvm/utils_unittest_googletest_LICENSE.TXT
+mkdir -p %{buildroot}/usr/share/package-licenses/llvm
+cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
+cp projects/openmp/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
+cp test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
+cp tools/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
+cp tools/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/package-licenses/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
+cp tools/lld/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/tools_lld_LICENSE.TXT
+cp tools/msbuild/license.txt %{buildroot}/usr/share/package-licenses/llvm/tools_msbuild_license.txt
+cp utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/utils_unittest_googlemock_LICENSE.txt
+cp utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/utils_unittest_googletest_LICENSE.TXT
 pushd clr-build
 %make_install
 popd
@@ -2378,6 +2378,7 @@ popd
 /usr/lib64/BugpointPasses.so
 /usr/lib64/LLVMHello.so
 /usr/lib64/LLVMgold.so
+/usr/lib64/TestPlugin.so
 /usr/lib64/clang/7.0.0/include/__clang_cuda_builtin_vars.h
 /usr/lib64/clang/7.0.0/include/__clang_cuda_cmath.h
 /usr/lib64/clang/7.0.0/include/__clang_cuda_complex_builtins.h
@@ -2624,15 +2625,15 @@ popd
 
 %files license
 %defattr(-,root,root,-)
-/usr/share/doc/llvm/LICENSE.TXT
-/usr/share/doc/llvm/projects_openmp_LICENSE.txt
-/usr/share/doc/llvm/test_YAMLParser_LICENSE.txt
-/usr/share/doc/llvm/tools_clang_LICENSE.TXT
-/usr/share/doc/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
-/usr/share/doc/llvm/tools_lld_LICENSE.TXT
-/usr/share/doc/llvm/tools_msbuild_license.txt
-/usr/share/doc/llvm/utils_unittest_googlemock_LICENSE.txt
-/usr/share/doc/llvm/utils_unittest_googletest_LICENSE.TXT
+/usr/share/package-licenses/llvm/LICENSE.TXT
+/usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
+/usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
+/usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
+/usr/share/package-licenses/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
+/usr/share/package-licenses/llvm/tools_lld_LICENSE.TXT
+/usr/share/package-licenses/llvm/tools_msbuild_license.txt
+/usr/share/package-licenses/llvm/utils_unittest_googlemock_LICENSE.txt
+/usr/share/package-licenses/llvm/utils_unittest_googletest_LICENSE.TXT
 
 %files man
 %defattr(-,root,root,-)
