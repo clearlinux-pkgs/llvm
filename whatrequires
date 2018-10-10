@@ -1,3 +1,5 @@
 # This file contains recursive sources that require this package
 aeon
+clamav
 darktable
+llvm

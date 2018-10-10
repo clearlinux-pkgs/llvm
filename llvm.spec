@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 7.0.0
-Release  : 72
+Release  : 73
 URL      : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz
@@ -17,10 +17,11 @@ Summary  : No detailed summary available
 Group    : Development/Tools
 License  : BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
-Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-data = %{version}-%{release}
-Requires: llvm-man = %{version}-%{release}
+Requires: llvm-lib = %{version}-%{release}
+Requires: llvm-libexec = %{version}-%{release}
 Requires: llvm-license = %{version}-%{release}
+Requires: llvm-man = %{version}-%{release}
 Requires: llvm-extras = %{version}-%{release}
 BuildRequires : Sphinx
 BuildRequires : Z3-dev
@@ -56,6 +57,7 @@ the -fprofile-instr-generate and -fprofile-instr-use driver flags.
 Summary: bin components for the llvm package.
 Group: Binaries
 Requires: llvm-data = %{version}-%{release}
+Requires: llvm-libexec = %{version}-%{release}
 Requires: llvm-license = %{version}-%{release}
 Requires: llvm-man = %{version}-%{release}
 
@@ -95,10 +97,20 @@ extras components for the llvm package.
 Summary: lib components for the llvm package.
 Group: Libraries
 Requires: llvm-data = %{version}-%{release}
+Requires: llvm-libexec = %{version}-%{release}
 Requires: llvm-license = %{version}-%{release}
 
 %description lib
 lib components for the llvm package.
+
+
+%package libexec
+Summary: libexec components for the llvm package.
+Group: Default
+Requires: llvm-license = %{version}-%{release}
+
+%description libexec
+libexec components for the llvm package.
 
 
 %package license
@@ -138,7 +150,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1537903723
+export SOURCE_DATE_EPOCH=1539204609
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -149,7 +161,7 @@ export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --p
 export CXXFLAGS=$CFLAGS
 unset LDFLAGS
 unset LDFLAGS
-%cmake .. -DLLVM_ENABLE_ZLIB:BOOL=ON -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_TARGETS_TO_BUILD="X86;BPF;AMDGPU;NVPTX" -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include"
+%cmake .. -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_ZLIB:BOOL=ON -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include"
 make  %{?_smp_mflags}
 popd
 
@@ -161,7 +173,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1537903723
+export SOURCE_DATE_EPOCH=1539204609
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -271,8 +283,6 @@ popd
 /usr/bin/wasm-ld
 /usr/bin/yaml-bench
 /usr/bin/yaml2obj
-/usr/libexec/c++-analyzer
-/usr/libexec/ccc-analyzer
 
 %files data
 %defattr(-,root,root,-)
@@ -2250,6 +2260,13 @@ popd
 /usr/lib64/cmake/llvm/LLVMProcessSources.cmake
 /usr/lib64/cmake/llvm/TableGen.cmake
 /usr/lib64/cmake/llvm/VersionFromVCS.cmake
+/usr/lib64/libLLVMAArch64AsmParser.so
+/usr/lib64/libLLVMAArch64AsmPrinter.so
+/usr/lib64/libLLVMAArch64CodeGen.so
+/usr/lib64/libLLVMAArch64Desc.so
+/usr/lib64/libLLVMAArch64Disassembler.so
+/usr/lib64/libLLVMAArch64Info.so
+/usr/lib64/libLLVMAArch64Utils.so
 /usr/lib64/libLLVMAMDGPUAsmParser.so
 /usr/lib64/libLLVMAMDGPUAsmPrinter.so
 /usr/lib64/libLLVMAMDGPUCodeGen.so
@@ -2257,6 +2274,13 @@ popd
 /usr/lib64/libLLVMAMDGPUDisassembler.so
 /usr/lib64/libLLVMAMDGPUInfo.so
 /usr/lib64/libLLVMAMDGPUUtils.so
+/usr/lib64/libLLVMARMAsmParser.so
+/usr/lib64/libLLVMARMAsmPrinter.so
+/usr/lib64/libLLVMARMCodeGen.so
+/usr/lib64/libLLVMARMDesc.so
+/usr/lib64/libLLVMARMDisassembler.so
+/usr/lib64/libLLVMARMInfo.so
+/usr/lib64/libLLVMARMUtils.so
 /usr/lib64/libLLVMAggressiveInstCombine.so
 /usr/lib64/libLLVMAnalysis.so
 /usr/lib64/libLLVMAsmParser.so
@@ -2283,11 +2307,22 @@ popd
 /usr/lib64/libLLVMExecutionEngine.so
 /usr/lib64/libLLVMFuzzMutate.so
 /usr/lib64/libLLVMGlobalISel.so
+/usr/lib64/libLLVMHexagonAsmParser.so
+/usr/lib64/libLLVMHexagonCodeGen.so
+/usr/lib64/libLLVMHexagonDesc.so
+/usr/lib64/libLLVMHexagonDisassembler.so
+/usr/lib64/libLLVMHexagonInfo.so
 /usr/lib64/libLLVMIRReader.so
 /usr/lib64/libLLVMInstCombine.so
 /usr/lib64/libLLVMInstrumentation.so
 /usr/lib64/libLLVMInterpreter.so
 /usr/lib64/libLLVMLTO.so
+/usr/lib64/libLLVMLanaiAsmParser.so
+/usr/lib64/libLLVMLanaiAsmPrinter.so
+/usr/lib64/libLLVMLanaiCodeGen.so
+/usr/lib64/libLLVMLanaiDesc.so
+/usr/lib64/libLLVMLanaiDisassembler.so
+/usr/lib64/libLLVMLanaiInfo.so
 /usr/lib64/libLLVMLibDriver.so
 /usr/lib64/libLLVMLineEditor.so
 /usr/lib64/libLLVMLinker.so
@@ -2296,6 +2331,16 @@ popd
 /usr/lib64/libLLVMMCJIT.so
 /usr/lib64/libLLVMMCParser.so
 /usr/lib64/libLLVMMIRParser.so
+/usr/lib64/libLLVMMSP430AsmPrinter.so
+/usr/lib64/libLLVMMSP430CodeGen.so
+/usr/lib64/libLLVMMSP430Desc.so
+/usr/lib64/libLLVMMSP430Info.so
+/usr/lib64/libLLVMMipsAsmParser.so
+/usr/lib64/libLLVMMipsAsmPrinter.so
+/usr/lib64/libLLVMMipsCodeGen.so
+/usr/lib64/libLLVMMipsDesc.so
+/usr/lib64/libLLVMMipsDisassembler.so
+/usr/lib64/libLLVMMipsInfo.so
 /usr/lib64/libLLVMNVPTXAsmPrinter.so
 /usr/lib64/libLLVMNVPTXCodeGen.so
 /usr/lib64/libLLVMNVPTXDesc.so
@@ -2306,12 +2351,30 @@ popd
 /usr/lib64/libLLVMOption.so
 /usr/lib64/libLLVMOrcJIT.so
 /usr/lib64/libLLVMPasses.so
+/usr/lib64/libLLVMPowerPCAsmParser.so
+/usr/lib64/libLLVMPowerPCAsmPrinter.so
+/usr/lib64/libLLVMPowerPCCodeGen.so
+/usr/lib64/libLLVMPowerPCDesc.so
+/usr/lib64/libLLVMPowerPCDisassembler.so
+/usr/lib64/libLLVMPowerPCInfo.so
 /usr/lib64/libLLVMProfileData.so
 /usr/lib64/libLLVMRuntimeDyld.so
 /usr/lib64/libLLVMScalarOpts.so
 /usr/lib64/libLLVMSelectionDAG.so
+/usr/lib64/libLLVMSparcAsmParser.so
+/usr/lib64/libLLVMSparcAsmPrinter.so
+/usr/lib64/libLLVMSparcCodeGen.so
+/usr/lib64/libLLVMSparcDesc.so
+/usr/lib64/libLLVMSparcDisassembler.so
+/usr/lib64/libLLVMSparcInfo.so
 /usr/lib64/libLLVMSupport.so
 /usr/lib64/libLLVMSymbolize.so
+/usr/lib64/libLLVMSystemZAsmParser.so
+/usr/lib64/libLLVMSystemZAsmPrinter.so
+/usr/lib64/libLLVMSystemZCodeGen.so
+/usr/lib64/libLLVMSystemZDesc.so
+/usr/lib64/libLLVMSystemZDisassembler.so
+/usr/lib64/libLLVMSystemZInfo.so
 /usr/lib64/libLLVMTableGen.so
 /usr/lib64/libLLVMTarget.so
 /usr/lib64/libLLVMTransformUtils.so
@@ -2324,6 +2387,11 @@ popd
 /usr/lib64/libLLVMX86Disassembler.so
 /usr/lib64/libLLVMX86Info.so
 /usr/lib64/libLLVMX86Utils.so
+/usr/lib64/libLLVMXCoreAsmPrinter.so
+/usr/lib64/libLLVMXCoreCodeGen.so
+/usr/lib64/libLLVMXCoreDesc.so
+/usr/lib64/libLLVMXCoreDisassembler.so
+/usr/lib64/libLLVMXCoreInfo.so
 /usr/lib64/libLLVMXRay.so
 /usr/lib64/libLLVMipo.so
 /usr/lib64/libLTO.so
@@ -2504,6 +2572,13 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
+/usr/lib64/libLLVMAArch64AsmParser.so.7
+/usr/lib64/libLLVMAArch64AsmPrinter.so.7
+/usr/lib64/libLLVMAArch64CodeGen.so.7
+/usr/lib64/libLLVMAArch64Desc.so.7
+/usr/lib64/libLLVMAArch64Disassembler.so.7
+/usr/lib64/libLLVMAArch64Info.so.7
+/usr/lib64/libLLVMAArch64Utils.so.7
 /usr/lib64/libLLVMAMDGPUAsmParser.so.7
 /usr/lib64/libLLVMAMDGPUAsmPrinter.so.7
 /usr/lib64/libLLVMAMDGPUCodeGen.so.7
@@ -2511,6 +2586,13 @@ popd
 /usr/lib64/libLLVMAMDGPUDisassembler.so.7
 /usr/lib64/libLLVMAMDGPUInfo.so.7
 /usr/lib64/libLLVMAMDGPUUtils.so.7
+/usr/lib64/libLLVMARMAsmParser.so.7
+/usr/lib64/libLLVMARMAsmPrinter.so.7
+/usr/lib64/libLLVMARMCodeGen.so.7
+/usr/lib64/libLLVMARMDesc.so.7
+/usr/lib64/libLLVMARMDisassembler.so.7
+/usr/lib64/libLLVMARMInfo.so.7
+/usr/lib64/libLLVMARMUtils.so.7
 /usr/lib64/libLLVMAggressiveInstCombine.so.7
 /usr/lib64/libLLVMAnalysis.so.7
 /usr/lib64/libLLVMAsmParser.so.7
@@ -2537,11 +2619,22 @@ popd
 /usr/lib64/libLLVMExecutionEngine.so.7
 /usr/lib64/libLLVMFuzzMutate.so.7
 /usr/lib64/libLLVMGlobalISel.so.7
+/usr/lib64/libLLVMHexagonAsmParser.so.7
+/usr/lib64/libLLVMHexagonCodeGen.so.7
+/usr/lib64/libLLVMHexagonDesc.so.7
+/usr/lib64/libLLVMHexagonDisassembler.so.7
+/usr/lib64/libLLVMHexagonInfo.so.7
 /usr/lib64/libLLVMIRReader.so.7
 /usr/lib64/libLLVMInstCombine.so.7
 /usr/lib64/libLLVMInstrumentation.so.7
 /usr/lib64/libLLVMInterpreter.so.7
 /usr/lib64/libLLVMLTO.so.7
+/usr/lib64/libLLVMLanaiAsmParser.so.7
+/usr/lib64/libLLVMLanaiAsmPrinter.so.7
+/usr/lib64/libLLVMLanaiCodeGen.so.7
+/usr/lib64/libLLVMLanaiDesc.so.7
+/usr/lib64/libLLVMLanaiDisassembler.so.7
+/usr/lib64/libLLVMLanaiInfo.so.7
 /usr/lib64/libLLVMLibDriver.so.7
 /usr/lib64/libLLVMLineEditor.so.7
 /usr/lib64/libLLVMLinker.so.7
@@ -2550,6 +2643,16 @@ popd
 /usr/lib64/libLLVMMCJIT.so.7
 /usr/lib64/libLLVMMCParser.so.7
 /usr/lib64/libLLVMMIRParser.so.7
+/usr/lib64/libLLVMMSP430AsmPrinter.so.7
+/usr/lib64/libLLVMMSP430CodeGen.so.7
+/usr/lib64/libLLVMMSP430Desc.so.7
+/usr/lib64/libLLVMMSP430Info.so.7
+/usr/lib64/libLLVMMipsAsmParser.so.7
+/usr/lib64/libLLVMMipsAsmPrinter.so.7
+/usr/lib64/libLLVMMipsCodeGen.so.7
+/usr/lib64/libLLVMMipsDesc.so.7
+/usr/lib64/libLLVMMipsDisassembler.so.7
+/usr/lib64/libLLVMMipsInfo.so.7
 /usr/lib64/libLLVMNVPTXAsmPrinter.so.7
 /usr/lib64/libLLVMNVPTXCodeGen.so.7
 /usr/lib64/libLLVMNVPTXDesc.so.7
@@ -2560,12 +2663,30 @@ popd
 /usr/lib64/libLLVMOption.so.7
 /usr/lib64/libLLVMOrcJIT.so.7
 /usr/lib64/libLLVMPasses.so.7
+/usr/lib64/libLLVMPowerPCAsmParser.so.7
+/usr/lib64/libLLVMPowerPCAsmPrinter.so.7
+/usr/lib64/libLLVMPowerPCCodeGen.so.7
+/usr/lib64/libLLVMPowerPCDesc.so.7
+/usr/lib64/libLLVMPowerPCDisassembler.so.7
+/usr/lib64/libLLVMPowerPCInfo.so.7
 /usr/lib64/libLLVMProfileData.so.7
 /usr/lib64/libLLVMRuntimeDyld.so.7
 /usr/lib64/libLLVMScalarOpts.so.7
 /usr/lib64/libLLVMSelectionDAG.so.7
+/usr/lib64/libLLVMSparcAsmParser.so.7
+/usr/lib64/libLLVMSparcAsmPrinter.so.7
+/usr/lib64/libLLVMSparcCodeGen.so.7
+/usr/lib64/libLLVMSparcDesc.so.7
+/usr/lib64/libLLVMSparcDisassembler.so.7
+/usr/lib64/libLLVMSparcInfo.so.7
 /usr/lib64/libLLVMSupport.so.7
 /usr/lib64/libLLVMSymbolize.so.7
+/usr/lib64/libLLVMSystemZAsmParser.so.7
+/usr/lib64/libLLVMSystemZAsmPrinter.so.7
+/usr/lib64/libLLVMSystemZCodeGen.so.7
+/usr/lib64/libLLVMSystemZDesc.so.7
+/usr/lib64/libLLVMSystemZDisassembler.so.7
+/usr/lib64/libLLVMSystemZInfo.so.7
 /usr/lib64/libLLVMTableGen.so.7
 /usr/lib64/libLLVMTarget.so.7
 /usr/lib64/libLLVMTransformUtils.so.7
@@ -2578,6 +2699,11 @@ popd
 /usr/lib64/libLLVMX86Disassembler.so.7
 /usr/lib64/libLLVMX86Info.so.7
 /usr/lib64/libLLVMX86Utils.so.7
+/usr/lib64/libLLVMXCoreAsmPrinter.so.7
+/usr/lib64/libLLVMXCoreCodeGen.so.7
+/usr/lib64/libLLVMXCoreDesc.so.7
+/usr/lib64/libLLVMXCoreDisassembler.so.7
+/usr/lib64/libLLVMXCoreInfo.so.7
 /usr/lib64/libLLVMXRay.so.7
 /usr/lib64/libLLVMipo.so.7
 /usr/lib64/libLTO.so.7
@@ -2623,8 +2749,13 @@ popd
 /usr/lib64/liblldWasm.so.7
 /usr/lib64/liblldYAML.so.7
 
-%files license
+%files libexec
 %defattr(-,root,root,-)
+/usr/libexec/c++-analyzer
+/usr/libexec/ccc-analyzer
+
+%files license
+%defattr(0644,root,root,0755)
 /usr/share/package-licenses/llvm/LICENSE.TXT
 /usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
 /usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
@@ -2636,5 +2767,5 @@ popd
 /usr/share/package-licenses/llvm/utils_unittest_googletest_LICENSE.TXT
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man1/scan-build.1
