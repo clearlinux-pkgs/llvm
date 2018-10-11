@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 7.0.0
-Release  : 73
+Release  : 74
 URL      : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz
@@ -48,6 +48,11 @@ BuildRequires : subversion
 BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
 Patch1: python2-shebangs.patch
+Patch2: 0001-CMake-Split-static-library-exports-into-their-own-ex.patch
+Patch3: 0001-Allow-building-split-libclang-libraries-with-unified.patch
+Patch4: 0002-Remove-FeatureRTM-from-Skylake-processor-list.patch
+Patch5: 0003-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
+Patch6: 0004-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
 
 %description
 These are tests for instrumentation based profiling.  This specifically means
@@ -144,13 +149,18 @@ mv %{_topdir}/BUILD/lld-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/tools/lld
 mkdir -p projects/openmp
 mv %{_topdir}/BUILD/openmp-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/openmp
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1539204609
+export SOURCE_DATE_EPOCH=1539284004
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -161,19 +171,33 @@ export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --p
 export CXXFLAGS=$CFLAGS
 unset LDFLAGS
 unset LDFLAGS
-%cmake .. -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_ZLIB:BOOL=ON -DLLVM_LIBDIR_SUFFIX=64 -DLLVM_BINUTILS_INCDIR=/usr/include -DLLVM_INSTALL_UTILS=ON -DLLVM_ENABLE_CXX1Y=ON -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include"
-make  %{?_smp_mflags}
+%cmake .. -DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g' <<<$CFLAGS`" \
+-DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g' <<<$CXXFLAGS`" \
+-DCMAKE_EXE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
+-DCMAKE_MODULE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
+-DCMAKE_SHARED_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
+-DENABLE_LINKER_BUILD_ID=ON \
+-DBUILD_SHARED_LIBS:BOOL=OFF \
+-DLLVM_LINK_LLVM_DYLIB:BOOL=ON \
+-DCLANG_BUILD_SHARED_LIBS:BOOL=ON \
+-DLLVM_BUILD_RUNTIME:BOOL=ON \
+-DLLVM_BUILD_TOOLS:BOOL=ON \
+-DLLVM_ENABLE_CXX1Y=ON \
+-DLLVM_ENABLE_FFI:BOOL=ON -DFFI_INCLUDE_DIR=`pkg-config --variable=includedir libffi` \
+-DLLVM_ENABLE_LIBCXX:BOOL=OFF \
+-DLLVM_ENABLE_RTTI:BOOL=ON \
+-DLLVM_ENABLE_ZLIB:BOOL=ON \
+-DLLVM_INSTALL_UTILS:BOOL=ON \
+-DLLVM_REQUIRES_RTTI:BOOL=ON \
+-DLLVM_LIBDIR_SUFFIX=64 \
+-DLLVM_BINUTILS_INCDIR=/usr/include \
+-DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include" \
+-DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
+make  %{?_smp_mflags} VERBOSE=1
 popd
 
-%check
-export LANG=C
-export http_proxy=http://127.0.0.1:9/
-export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost,127.0.0.1,0.0.0.0
-make test
-
 %install
-export SOURCE_DATE_EPOCH=1539204609
+export SOURCE_DATE_EPOCH=1539284004
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -433,6 +457,8 @@ popd
 %exclude /usr/lib64/clang/7.0.0/include/xsaveoptintrin.h
 %exclude /usr/lib64/clang/7.0.0/include/xsavesintrin.h
 %exclude /usr/lib64/clang/7.0.0/include/xtestintrin.h
+%exclude /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
+%exclude /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
 %exclude /usr/lib64/libgomp.so
 /usr/include/clang-c/BuildSystem.h
 /usr/include/clang-c/CXCompilationDatabase.h
@@ -2260,140 +2286,9 @@ popd
 /usr/lib64/cmake/llvm/LLVMProcessSources.cmake
 /usr/lib64/cmake/llvm/TableGen.cmake
 /usr/lib64/cmake/llvm/VersionFromVCS.cmake
-/usr/lib64/libLLVMAArch64AsmParser.so
-/usr/lib64/libLLVMAArch64AsmPrinter.so
-/usr/lib64/libLLVMAArch64CodeGen.so
-/usr/lib64/libLLVMAArch64Desc.so
-/usr/lib64/libLLVMAArch64Disassembler.so
-/usr/lib64/libLLVMAArch64Info.so
-/usr/lib64/libLLVMAArch64Utils.so
-/usr/lib64/libLLVMAMDGPUAsmParser.so
-/usr/lib64/libLLVMAMDGPUAsmPrinter.so
-/usr/lib64/libLLVMAMDGPUCodeGen.so
-/usr/lib64/libLLVMAMDGPUDesc.so
-/usr/lib64/libLLVMAMDGPUDisassembler.so
-/usr/lib64/libLLVMAMDGPUInfo.so
-/usr/lib64/libLLVMAMDGPUUtils.so
-/usr/lib64/libLLVMARMAsmParser.so
-/usr/lib64/libLLVMARMAsmPrinter.so
-/usr/lib64/libLLVMARMCodeGen.so
-/usr/lib64/libLLVMARMDesc.so
-/usr/lib64/libLLVMARMDisassembler.so
-/usr/lib64/libLLVMARMInfo.so
-/usr/lib64/libLLVMARMUtils.so
-/usr/lib64/libLLVMAggressiveInstCombine.so
-/usr/lib64/libLLVMAnalysis.so
-/usr/lib64/libLLVMAsmParser.so
-/usr/lib64/libLLVMAsmPrinter.so
-/usr/lib64/libLLVMBPFAsmParser.so
-/usr/lib64/libLLVMBPFAsmPrinter.so
-/usr/lib64/libLLVMBPFCodeGen.so
-/usr/lib64/libLLVMBPFDesc.so
-/usr/lib64/libLLVMBPFDisassembler.so
-/usr/lib64/libLLVMBPFInfo.so
-/usr/lib64/libLLVMBinaryFormat.so
-/usr/lib64/libLLVMBitReader.so
-/usr/lib64/libLLVMBitWriter.so
-/usr/lib64/libLLVMCodeGen.so
-/usr/lib64/libLLVMCore.so
-/usr/lib64/libLLVMCoroutines.so
-/usr/lib64/libLLVMCoverage.so
-/usr/lib64/libLLVMDebugInfoCodeView.so
-/usr/lib64/libLLVMDebugInfoDWARF.so
-/usr/lib64/libLLVMDebugInfoMSF.so
-/usr/lib64/libLLVMDebugInfoPDB.so
-/usr/lib64/libLLVMDemangle.so
-/usr/lib64/libLLVMDlltoolDriver.so
-/usr/lib64/libLLVMExecutionEngine.so
-/usr/lib64/libLLVMFuzzMutate.so
-/usr/lib64/libLLVMGlobalISel.so
-/usr/lib64/libLLVMHexagonAsmParser.so
-/usr/lib64/libLLVMHexagonCodeGen.so
-/usr/lib64/libLLVMHexagonDesc.so
-/usr/lib64/libLLVMHexagonDisassembler.so
-/usr/lib64/libLLVMHexagonInfo.so
-/usr/lib64/libLLVMIRReader.so
-/usr/lib64/libLLVMInstCombine.so
-/usr/lib64/libLLVMInstrumentation.so
-/usr/lib64/libLLVMInterpreter.so
-/usr/lib64/libLLVMLTO.so
-/usr/lib64/libLLVMLanaiAsmParser.so
-/usr/lib64/libLLVMLanaiAsmPrinter.so
-/usr/lib64/libLLVMLanaiCodeGen.so
-/usr/lib64/libLLVMLanaiDesc.so
-/usr/lib64/libLLVMLanaiDisassembler.so
-/usr/lib64/libLLVMLanaiInfo.so
-/usr/lib64/libLLVMLibDriver.so
-/usr/lib64/libLLVMLineEditor.so
-/usr/lib64/libLLVMLinker.so
-/usr/lib64/libLLVMMC.so
-/usr/lib64/libLLVMMCDisassembler.so
-/usr/lib64/libLLVMMCJIT.so
-/usr/lib64/libLLVMMCParser.so
-/usr/lib64/libLLVMMIRParser.so
-/usr/lib64/libLLVMMSP430AsmPrinter.so
-/usr/lib64/libLLVMMSP430CodeGen.so
-/usr/lib64/libLLVMMSP430Desc.so
-/usr/lib64/libLLVMMSP430Info.so
-/usr/lib64/libLLVMMipsAsmParser.so
-/usr/lib64/libLLVMMipsAsmPrinter.so
-/usr/lib64/libLLVMMipsCodeGen.so
-/usr/lib64/libLLVMMipsDesc.so
-/usr/lib64/libLLVMMipsDisassembler.so
-/usr/lib64/libLLVMMipsInfo.so
-/usr/lib64/libLLVMNVPTXAsmPrinter.so
-/usr/lib64/libLLVMNVPTXCodeGen.so
-/usr/lib64/libLLVMNVPTXDesc.so
-/usr/lib64/libLLVMNVPTXInfo.so
-/usr/lib64/libLLVMObjCARCOpts.so
-/usr/lib64/libLLVMObject.so
-/usr/lib64/libLLVMObjectYAML.so
-/usr/lib64/libLLVMOption.so
-/usr/lib64/libLLVMOrcJIT.so
-/usr/lib64/libLLVMPasses.so
-/usr/lib64/libLLVMPowerPCAsmParser.so
-/usr/lib64/libLLVMPowerPCAsmPrinter.so
-/usr/lib64/libLLVMPowerPCCodeGen.so
-/usr/lib64/libLLVMPowerPCDesc.so
-/usr/lib64/libLLVMPowerPCDisassembler.so
-/usr/lib64/libLLVMPowerPCInfo.so
-/usr/lib64/libLLVMProfileData.so
-/usr/lib64/libLLVMRuntimeDyld.so
-/usr/lib64/libLLVMScalarOpts.so
-/usr/lib64/libLLVMSelectionDAG.so
-/usr/lib64/libLLVMSparcAsmParser.so
-/usr/lib64/libLLVMSparcAsmPrinter.so
-/usr/lib64/libLLVMSparcCodeGen.so
-/usr/lib64/libLLVMSparcDesc.so
-/usr/lib64/libLLVMSparcDisassembler.so
-/usr/lib64/libLLVMSparcInfo.so
-/usr/lib64/libLLVMSupport.so
-/usr/lib64/libLLVMSymbolize.so
-/usr/lib64/libLLVMSystemZAsmParser.so
-/usr/lib64/libLLVMSystemZAsmPrinter.so
-/usr/lib64/libLLVMSystemZCodeGen.so
-/usr/lib64/libLLVMSystemZDesc.so
-/usr/lib64/libLLVMSystemZDisassembler.so
-/usr/lib64/libLLVMSystemZInfo.so
-/usr/lib64/libLLVMTableGen.so
-/usr/lib64/libLLVMTarget.so
-/usr/lib64/libLLVMTransformUtils.so
-/usr/lib64/libLLVMVectorize.so
-/usr/lib64/libLLVMWindowsManifest.so
-/usr/lib64/libLLVMX86AsmParser.so
-/usr/lib64/libLLVMX86AsmPrinter.so
-/usr/lib64/libLLVMX86CodeGen.so
-/usr/lib64/libLLVMX86Desc.so
-/usr/lib64/libLLVMX86Disassembler.so
-/usr/lib64/libLLVMX86Info.so
-/usr/lib64/libLLVMX86Utils.so
-/usr/lib64/libLLVMXCoreAsmPrinter.so
-/usr/lib64/libLLVMXCoreCodeGen.so
-/usr/lib64/libLLVMXCoreDesc.so
-/usr/lib64/libLLVMXCoreDisassembler.so
-/usr/lib64/libLLVMXCoreInfo.so
-/usr/lib64/libLLVMXRay.so
-/usr/lib64/libLLVMipo.so
+/usr/lib64/libLLVM-7.0.0.so
+/usr/lib64/libLLVM-7.so
+/usr/lib64/libLLVM.so
 /usr/lib64/libLTO.so
 /usr/lib64/libclang.so
 /usr/lib64/libclangARCMigrate.so
@@ -2427,16 +2322,6 @@ popd
 /usr/lib64/libclangToolingInclusions.so
 /usr/lib64/libclangToolingRefactor.so
 /usr/lib64/libiomp5.so
-/usr/lib64/liblldCOFF.so
-/usr/lib64/liblldCommon.so
-/usr/lib64/liblldCore.so
-/usr/lib64/liblldDriver.so
-/usr/lib64/liblldELF.so
-/usr/lib64/liblldMachO.so
-/usr/lib64/liblldMinGW.so
-/usr/lib64/liblldReaderWriter.so
-/usr/lib64/liblldWasm.so
-/usr/lib64/liblldYAML.so
 /usr/lib64/libomp.so
 /usr/lib64/libomptarget.rtl.x86_64.so
 /usr/lib64/libomptarget.so
@@ -2572,140 +2457,6 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libLLVMAArch64AsmParser.so.7
-/usr/lib64/libLLVMAArch64AsmPrinter.so.7
-/usr/lib64/libLLVMAArch64CodeGen.so.7
-/usr/lib64/libLLVMAArch64Desc.so.7
-/usr/lib64/libLLVMAArch64Disassembler.so.7
-/usr/lib64/libLLVMAArch64Info.so.7
-/usr/lib64/libLLVMAArch64Utils.so.7
-/usr/lib64/libLLVMAMDGPUAsmParser.so.7
-/usr/lib64/libLLVMAMDGPUAsmPrinter.so.7
-/usr/lib64/libLLVMAMDGPUCodeGen.so.7
-/usr/lib64/libLLVMAMDGPUDesc.so.7
-/usr/lib64/libLLVMAMDGPUDisassembler.so.7
-/usr/lib64/libLLVMAMDGPUInfo.so.7
-/usr/lib64/libLLVMAMDGPUUtils.so.7
-/usr/lib64/libLLVMARMAsmParser.so.7
-/usr/lib64/libLLVMARMAsmPrinter.so.7
-/usr/lib64/libLLVMARMCodeGen.so.7
-/usr/lib64/libLLVMARMDesc.so.7
-/usr/lib64/libLLVMARMDisassembler.so.7
-/usr/lib64/libLLVMARMInfo.so.7
-/usr/lib64/libLLVMARMUtils.so.7
-/usr/lib64/libLLVMAggressiveInstCombine.so.7
-/usr/lib64/libLLVMAnalysis.so.7
-/usr/lib64/libLLVMAsmParser.so.7
-/usr/lib64/libLLVMAsmPrinter.so.7
-/usr/lib64/libLLVMBPFAsmParser.so.7
-/usr/lib64/libLLVMBPFAsmPrinter.so.7
-/usr/lib64/libLLVMBPFCodeGen.so.7
-/usr/lib64/libLLVMBPFDesc.so.7
-/usr/lib64/libLLVMBPFDisassembler.so.7
-/usr/lib64/libLLVMBPFInfo.so.7
-/usr/lib64/libLLVMBinaryFormat.so.7
-/usr/lib64/libLLVMBitReader.so.7
-/usr/lib64/libLLVMBitWriter.so.7
-/usr/lib64/libLLVMCodeGen.so.7
-/usr/lib64/libLLVMCore.so.7
-/usr/lib64/libLLVMCoroutines.so.7
-/usr/lib64/libLLVMCoverage.so.7
-/usr/lib64/libLLVMDebugInfoCodeView.so.7
-/usr/lib64/libLLVMDebugInfoDWARF.so.7
-/usr/lib64/libLLVMDebugInfoMSF.so.7
-/usr/lib64/libLLVMDebugInfoPDB.so.7
-/usr/lib64/libLLVMDemangle.so.7
-/usr/lib64/libLLVMDlltoolDriver.so.7
-/usr/lib64/libLLVMExecutionEngine.so.7
-/usr/lib64/libLLVMFuzzMutate.so.7
-/usr/lib64/libLLVMGlobalISel.so.7
-/usr/lib64/libLLVMHexagonAsmParser.so.7
-/usr/lib64/libLLVMHexagonCodeGen.so.7
-/usr/lib64/libLLVMHexagonDesc.so.7
-/usr/lib64/libLLVMHexagonDisassembler.so.7
-/usr/lib64/libLLVMHexagonInfo.so.7
-/usr/lib64/libLLVMIRReader.so.7
-/usr/lib64/libLLVMInstCombine.so.7
-/usr/lib64/libLLVMInstrumentation.so.7
-/usr/lib64/libLLVMInterpreter.so.7
-/usr/lib64/libLLVMLTO.so.7
-/usr/lib64/libLLVMLanaiAsmParser.so.7
-/usr/lib64/libLLVMLanaiAsmPrinter.so.7
-/usr/lib64/libLLVMLanaiCodeGen.so.7
-/usr/lib64/libLLVMLanaiDesc.so.7
-/usr/lib64/libLLVMLanaiDisassembler.so.7
-/usr/lib64/libLLVMLanaiInfo.so.7
-/usr/lib64/libLLVMLibDriver.so.7
-/usr/lib64/libLLVMLineEditor.so.7
-/usr/lib64/libLLVMLinker.so.7
-/usr/lib64/libLLVMMC.so.7
-/usr/lib64/libLLVMMCDisassembler.so.7
-/usr/lib64/libLLVMMCJIT.so.7
-/usr/lib64/libLLVMMCParser.so.7
-/usr/lib64/libLLVMMIRParser.so.7
-/usr/lib64/libLLVMMSP430AsmPrinter.so.7
-/usr/lib64/libLLVMMSP430CodeGen.so.7
-/usr/lib64/libLLVMMSP430Desc.so.7
-/usr/lib64/libLLVMMSP430Info.so.7
-/usr/lib64/libLLVMMipsAsmParser.so.7
-/usr/lib64/libLLVMMipsAsmPrinter.so.7
-/usr/lib64/libLLVMMipsCodeGen.so.7
-/usr/lib64/libLLVMMipsDesc.so.7
-/usr/lib64/libLLVMMipsDisassembler.so.7
-/usr/lib64/libLLVMMipsInfo.so.7
-/usr/lib64/libLLVMNVPTXAsmPrinter.so.7
-/usr/lib64/libLLVMNVPTXCodeGen.so.7
-/usr/lib64/libLLVMNVPTXDesc.so.7
-/usr/lib64/libLLVMNVPTXInfo.so.7
-/usr/lib64/libLLVMObjCARCOpts.so.7
-/usr/lib64/libLLVMObject.so.7
-/usr/lib64/libLLVMObjectYAML.so.7
-/usr/lib64/libLLVMOption.so.7
-/usr/lib64/libLLVMOrcJIT.so.7
-/usr/lib64/libLLVMPasses.so.7
-/usr/lib64/libLLVMPowerPCAsmParser.so.7
-/usr/lib64/libLLVMPowerPCAsmPrinter.so.7
-/usr/lib64/libLLVMPowerPCCodeGen.so.7
-/usr/lib64/libLLVMPowerPCDesc.so.7
-/usr/lib64/libLLVMPowerPCDisassembler.so.7
-/usr/lib64/libLLVMPowerPCInfo.so.7
-/usr/lib64/libLLVMProfileData.so.7
-/usr/lib64/libLLVMRuntimeDyld.so.7
-/usr/lib64/libLLVMScalarOpts.so.7
-/usr/lib64/libLLVMSelectionDAG.so.7
-/usr/lib64/libLLVMSparcAsmParser.so.7
-/usr/lib64/libLLVMSparcAsmPrinter.so.7
-/usr/lib64/libLLVMSparcCodeGen.so.7
-/usr/lib64/libLLVMSparcDesc.so.7
-/usr/lib64/libLLVMSparcDisassembler.so.7
-/usr/lib64/libLLVMSparcInfo.so.7
-/usr/lib64/libLLVMSupport.so.7
-/usr/lib64/libLLVMSymbolize.so.7
-/usr/lib64/libLLVMSystemZAsmParser.so.7
-/usr/lib64/libLLVMSystemZAsmPrinter.so.7
-/usr/lib64/libLLVMSystemZCodeGen.so.7
-/usr/lib64/libLLVMSystemZDesc.so.7
-/usr/lib64/libLLVMSystemZDisassembler.so.7
-/usr/lib64/libLLVMSystemZInfo.so.7
-/usr/lib64/libLLVMTableGen.so.7
-/usr/lib64/libLLVMTarget.so.7
-/usr/lib64/libLLVMTransformUtils.so.7
-/usr/lib64/libLLVMVectorize.so.7
-/usr/lib64/libLLVMWindowsManifest.so.7
-/usr/lib64/libLLVMX86AsmParser.so.7
-/usr/lib64/libLLVMX86AsmPrinter.so.7
-/usr/lib64/libLLVMX86CodeGen.so.7
-/usr/lib64/libLLVMX86Desc.so.7
-/usr/lib64/libLLVMX86Disassembler.so.7
-/usr/lib64/libLLVMX86Info.so.7
-/usr/lib64/libLLVMX86Utils.so.7
-/usr/lib64/libLLVMXCoreAsmPrinter.so.7
-/usr/lib64/libLLVMXCoreCodeGen.so.7
-/usr/lib64/libLLVMXCoreDesc.so.7
-/usr/lib64/libLLVMXCoreDisassembler.so.7
-/usr/lib64/libLLVMXCoreInfo.so.7
-/usr/lib64/libLLVMXRay.so.7
-/usr/lib64/libLLVMipo.so.7
 /usr/lib64/libLTO.so.7
 /usr/lib64/libclang.so.7
 /usr/lib64/libclangARCMigrate.so.7
@@ -2738,16 +2489,6 @@ popd
 /usr/lib64/libclangToolingCore.so.7
 /usr/lib64/libclangToolingInclusions.so.7
 /usr/lib64/libclangToolingRefactor.so.7
-/usr/lib64/liblldCOFF.so.7
-/usr/lib64/liblldCommon.so.7
-/usr/lib64/liblldCore.so.7
-/usr/lib64/liblldDriver.so.7
-/usr/lib64/liblldELF.so.7
-/usr/lib64/liblldMachO.so.7
-/usr/lib64/liblldMinGW.so.7
-/usr/lib64/liblldReaderWriter.so.7
-/usr/lib64/liblldWasm.so.7
-/usr/lib64/liblldYAML.so.7
 
 %files libexec
 %defattr(-,root,root,-)
