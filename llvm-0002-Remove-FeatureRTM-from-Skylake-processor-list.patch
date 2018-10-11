@@ -1,0 +1,34 @@
+From 2fb46c4de163cb54c815b4be02a23c3954a04b1b Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Tue, 9 Oct 2018 13:46:39 -0700
+Subject: [llvm] Remove FeatureRTM from Skylake processor list
+
+There are a LOT of Skylakes and later without TSX-NI. Examples:
+- SKL: https://ark.intel.com/products/136863/Intel-Core-i3-8121U-Processor-4M-Cache-up-to-3-20-GHz-
+- KBL: https://ark.intel.com/products/97540/Intel-Core-i7-7560U-Processor-4M-Cache-up-to-3-80-GHz-
+- KBL-R: https://ark.intel.com/products/149091/Intel-Core-i7-8565U-Processor-8M-Cache-up-to-4-60-GHz-
+- CNL: https://ark.intel.com/products/136863/Intel-Core-i3-8121U-Processor-4M-Cache-up-to-3_20-GHz
+
+This feature seems to be present only on high-end desktop and server
+chips (I can't find any SKX without). This commit leaves it disabled
+for all processors, but can be re-enabled for specific builds with
+-mrtm.
+---
+ lib/Target/X86/X86.td | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/lib/Target/X86/X86.td b/lib/Target/X86/X86.td
+index 63c2dc4da6c..e80f87dd978 100644
+--- a/lib/Target/X86/X86.td
++++ b/lib/Target/X86/X86.td
+@@ -763,7 +763,6 @@ def : BroadwellProc<"broadwell">;
+ 
+ def SKLFeatures : ProcessorFeatures<BDWFeatures.Value, [
+   FeatureMPX,
+-  FeatureRTM,
+   FeatureXSAVEC,
+   FeatureXSAVES,
+   FeatureCLFLUSHOPT,
+-- 
+2.19.1
+

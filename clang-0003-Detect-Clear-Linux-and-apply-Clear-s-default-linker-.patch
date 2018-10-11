@@ -1,0 +1,125 @@
+From c749290f800e6eaf72c63675f5841635b82f4ba5 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Wed, 10 Oct 2018 19:53:40 -0700
+Subject: [cfe] Detect Clear Linux and apply Clear's default linker options
+
+Enum placed at the end to avoid Binary Compatibility break when
+backporting this patch.
+
+Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
+---
+ include/clang/Driver/Distro.h   |  5 +++++
+ lib/Driver/Distro.cpp           | 13 +++++++++++++
+ lib/Driver/ToolChains/Linux.cpp |  9 ++++++---
+ unittests/Driver/DistroTest.cpp | 15 +++++++++++++++
+ 4 files changed, 39 insertions(+), 3 deletions(-)
+
+diff --git a/tools/clang/include/clang/Driver/Distro.h b/tools/clang/include/clang/Driver/Distro.h
+index 7b34a09256..71de14eea7 100644
+--- a/tools/clang/include/clang/Driver/Distro.h
++++ b/tools/clang/include/clang/Driver/Distro.h
+@@ -28,6 +28,7 @@ public:
+     // the first and last known member in the family, e.g. IsRedHat().
+     AlpineLinux,
+     ArchLinux,
++    ClearLinux,
+     DebianLenny,
+     DebianSqueeze,
+     DebianWheezy,
+@@ -122,6 +123,10 @@ public:
+     return DistroVal == AlpineLinux;
+   }
+ 
++  bool IsClearLinux() const {
++    return DistroVal == ClearLinux;
++  }
++
+   /// @}
+ };
+ 
+diff --git a/tools/clang/lib/Driver/Distro.cpp b/tools/clang/lib/Driver/Distro.cpp
+index 2c4d44faf8..437ceafc89 100644
+--- a/tools/clang/lib/Driver/Distro.cpp
++++ b/tools/clang/lib/Driver/Distro.cpp
+@@ -136,6 +136,19 @@ static Distro::DistroType DetectDistro(vfs::FileSystem &VFS) {
+   if (VFS.exists("/etc/arch-release"))
+     return Distro::ArchLinux;
+ 
++  File = VFS.getBufferForFile("/usr/lib/os-release");
++  if (File) {
++    StringRef Data = File.get()->getBuffer();
++    SmallVector<StringRef, 16> Lines;
++    Data.split(Lines, "\n");
++    Distro::DistroType Version = Distro::UnknownDistro;
++    for (StringRef Line : Lines)
++      if (Version == Distro::UnknownDistro && Line.startswith("ID="))
++        Version = llvm::StringSwitch<Distro::DistroType>(Line.substr(3))
++                      .Case("clear-linux-os", Distro::ClearLinux);
++    return Version;
++  }
++
+   return Distro::UnknownDistro;
+ }
+ 
+diff --git a/tools/clang/lib/Driver/ToolChains/Linux.cpp b/tools/clang/lib/Driver/ToolChains/Linux.cpp
+index f8f3623918..92d4bef323 100644
+--- a/tools/clang/lib/Driver/ToolChains/Linux.cpp
++++ b/tools/clang/lib/Driver/ToolChains/Linux.cpp
+@@ -228,16 +228,19 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+ 
+   Distro Distro(D.getVFS());
+ 
+-  if (Distro.IsAlpineLinux()) {
++  if (Distro.IsAlpineLinux() || Distro.IsClearLinux()) {
+     ExtraOpts.push_back("-z");
+     ExtraOpts.push_back("now");
+   }
+ 
+-  if (Distro.IsOpenSUSE() || Distro.IsUbuntu() || Distro.IsAlpineLinux()) {
++  if (Distro.IsOpenSUSE() || Distro.IsUbuntu() || Distro.IsAlpineLinux() || Distro.IsClearLinux()) {
+     ExtraOpts.push_back("-z");
+     ExtraOpts.push_back("relro");
+   }
+ 
++  if (Distro.IsClearLinux())
++    ExtraOpts.push_back("--copy-dt-needed-entries");
++
+   if (GCCInstallation.getParentLibPath().find("opt/rh/devtoolset") !=
+       StringRef::npos)
+     // With devtoolset on RHEL, we want to add a bin directory that is relative
+@@ -282,7 +285,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+   ExtraOpts.push_back("--build-id");
+ #endif
+ 
+-  if (IsAndroid || Distro.IsOpenSUSE())
++  if (IsAndroid || Distro.IsOpenSUSE() || Distro.IsClearLinux())
+     ExtraOpts.push_back("--enable-new-dtags");
+ 
+   // The selection of paths to try here is designed to match the patterns which
+diff --git a/tools/clang/unittests/Driver/DistroTest.cpp b/tools/clang/unittests/Driver/DistroTest.cpp
+index e3686e4980..ccda2171bd 100644
+--- a/tools/clang/unittests/Driver/DistroTest.cpp
++++ b/tools/clang/unittests/Driver/DistroTest.cpp
+@@ -302,4 +302,19 @@ TEST(DistroTest, DetectArchLinux) {
+   ASSERT_FALSE(ArchLinux.IsDebian());
+ }
+ 
++TEST(DistroTest, DetectClearLinux) {
++  vfs::InMemoryFileSystem ClearLinuxFileSystem;
++  ClearLinuxFileSystem.addFile("/usr/lib/os-release", 0,
++      llvm::MemoryBuffer::getMemBuffer("NAME=\"Clear Linux OS\"\n"
++                                       "VERSION=1\n"
++                                       "ID=clear-linux-os\n"
++                                       "VERSION_ID=25530\n"
++                                       "PRETTY_NAME=\"Clear Linux OS\"\n"
++                                       "ANSI_COLOR=\"1;35\"\n"
++                                       "HOME_URL=\"https://clearlinux.org\"\n"
++                                       "SUPPORT_URL=\"https://clearlinux.org\"\n"
++                                       "BUG_REPORT_URL=\"mailto:dev@lists.clearlinux.org\"\n"
++                                       "PRIVACY_POLICY_URL=\"http://www.intel.com/privacy\"\n"));
++}
++
+ } // end anonymous namespace
+-- 
+2.19.1
+

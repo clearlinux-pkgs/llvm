@@ -1,0 +1,151 @@
+From aaa073debbc03c4630de84b661d15d9b391ece26 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Tue, 9 Oct 2018 13:52:31 -0700
+Subject: [cfe] Remove FeatureRTM from Skylake processor list
+
+There are a LOT of Skylakes and later without TSX-NI. Examples:
+- SKL: https://ark.intel.com/products/136863/Intel-Core-i3-8121U-Processor-4M-Cache-up-to-3-20-GHz-
+- KBL: https://ark.intel.com/products/97540/Intel-Core-i7-7560U-Processor-4M-Cache-up-to-3-80-GHz-
+- KBL-R: https://ark.intel.com/products/149091/Intel-Core-i7-8565U-Processor-8M-Cache-up-to-4-60-GHz-
+- CNL: https://ark.intel.com/products/136863/Intel-Core-i3-8121U-Processor-4M-Cache-up-to-3_20-GHz
+
+This feature seems to be present only on high-end desktop and server
+chips (I can't find any SKX without). This commit leaves it disabled
+for all processors, but can be re-enabled for specific builds with
+-mrtm.
+---
+ lib/Basic/Targets/X86.cpp                  |  1 -
+ test/Preprocessor/predefined-arch-macros.c | 14 --------------
+ 2 files changed, 15 deletions(-)
+
+diff --git a/tools/clang/lib/Basic/Targets/X86.cpp b/tools/clang/lib/Basic/Targets/X86.cpp
+index e295cff9d5..9d1ec79f33 100644
+--- a/tools/clang/lib/Basic/Targets/X86.cpp
++++ b/tools/clang/lib/Basic/Targets/X86.cpp
+@@ -169,7 +169,6 @@ bool X86TargetInfo::initFeatureMap(
+     if (Kind != CK_SkylakeServer) // SKX inherits all SKL features, except SGX
+       setFeatureEnabledImpl(Features, "sgx", true);
+     setFeatureEnabledImpl(Features, "clflushopt", true);
+-    setFeatureEnabledImpl(Features, "rtm", true);
+     LLVM_FALLTHROUGH;
+   case CK_Broadwell:
+     setFeatureEnabledImpl(Features, "rdseed", true);
+diff --git a/tools/clang/test/Preprocessor/predefined-arch-macros.c b/tools/clang/test/Preprocessor/predefined-arch-macros.c
+index 281e6780cb..2a7a6494d1 100644
+--- a/tools/clang/test/Preprocessor/predefined-arch-macros.c
++++ b/tools/clang/test/Preprocessor/predefined-arch-macros.c
+@@ -673,7 +673,6 @@
+ // CHECK_SKL_M32: #define __PRFCHW__ 1
+ // CHECK_SKL_M32: #define __RDRND__ 1
+ // CHECK_SKL_M32: #define __RDSEED__ 1
+-// CHECK_SKL_M32: #define __RTM__ 1
+ // CHECK_SKL_M32: #define __SGX__ 1
+ // CHECK_SKL_M32: #define __SSE2__ 1
+ // CHECK_SKL_M32: #define __SSE3__ 1
+@@ -708,7 +707,6 @@
+ // CHECK_SKL_M64: #define __PRFCHW__ 1
+ // CHECK_SKL_M64: #define __RDRND__ 1
+ // CHECK_SKL_M64: #define __RDSEED__ 1
+-// CHECK_SKL_M64: #define __RTM__ 1
+ // CHECK_SKL_M64: #define __SGX__ 1
+ // CHECK_SKL_M64: #define __SSE2_MATH__ 1
+ // CHECK_SKL_M64: #define __SSE2__ 1
+@@ -748,7 +746,6 @@
+ // CHECK_KNL_M32: #define __PREFETCHWT1__ 1
+ // CHECK_KNL_M32: #define __PRFCHW__ 1
+ // CHECK_KNL_M32: #define __RDRND__ 1
+-// CHECK_KNL_M32: #define __RTM__ 1
+ // CHECK_KNL_M32: #define __SSE2__ 1
+ // CHECK_KNL_M32: #define __SSE3__ 1
+ // CHECK_KNL_M32: #define __SSE4_1__ 1
+@@ -785,7 +782,6 @@
+ // CHECK_KNL_M64: #define __PREFETCHWT1__ 1
+ // CHECK_KNL_M64: #define __PRFCHW__ 1
+ // CHECK_KNL_M64: #define __RDRND__ 1
+-// CHECK_KNL_M64: #define __RTM__ 1
+ // CHECK_KNL_M64: #define __SSE2_MATH__ 1
+ // CHECK_KNL_M64: #define __SSE2__ 1
+ // CHECK_KNL_M64: #define __SSE3__ 1
+@@ -826,7 +822,6 @@
+ // CHECK_KNM_M32: #define __PREFETCHWT1__ 1
+ // CHECK_KNM_M32: #define __PRFCHW__ 1
+ // CHECK_KNM_M32: #define __RDRND__ 1
+-// CHECK_KNM_M32: #define __RTM__ 1
+ // CHECK_KNM_M32: #define __SSE2__ 1
+ // CHECK_KNM_M32: #define __SSE3__ 1
+ // CHECK_KNM_M32: #define __SSE4_1__ 1
+@@ -861,7 +856,6 @@
+ // CHECK_KNM_M64: #define __PREFETCHWT1__ 1
+ // CHECK_KNM_M64: #define __PRFCHW__ 1
+ // CHECK_KNM_M64: #define __RDRND__ 1
+-// CHECK_KNM_M64: #define __RTM__ 1
+ // CHECK_KNM_M64: #define __SSE2_MATH__ 1
+ // CHECK_KNM_M64: #define __SSE2__ 1
+ // CHECK_KNM_M64: #define __SSE3__ 1
+@@ -904,7 +898,6 @@
+ // CHECK_SKX_M32: #define __PRFCHW__ 1
+ // CHECK_SKX_M32: #define __RDRND__ 1
+ // CHECK_SKX_M32: #define __RDSEED__ 1
+-// CHECK_SKX_M32: #define __RTM__ 1
+ // CHECK_SKX_M32-NOT: #define __SGX__ 1
+ // CHECK_SKX_M32: #define __SSE2__ 1
+ // CHECK_SKX_M32: #define __SSE3__ 1
+@@ -950,7 +943,6 @@
+ // CHECK_SKX_M64: #define __PRFCHW__ 1
+ // CHECK_SKX_M64: #define __RDRND__ 1
+ // CHECK_SKX_M64: #define __RDSEED__ 1
+-// CHECK_SKX_M64: #define __RTM__ 1
+ // CHECK_SKX_M64-NOT: #define __SGX__ 1
+ // CHECK_SKX_M64: #define __SSE2_MATH__ 1
+ // CHECK_SKX_M64: #define __SSE2__ 1
+@@ -1001,7 +993,6 @@
+ // CHECK_CNL_M32: #define __PRFCHW__ 1
+ // CHECK_CNL_M32: #define __RDRND__ 1
+ // CHECK_CNL_M32: #define __RDSEED__ 1
+-// CHECK_CNL_M32: #define __RTM__ 1
+ // CHECK_CNL_M32: #define __SGX__ 1
+ // CHECK_CNL_M32: #define __SHA__ 1
+ // CHECK_CNL_M32: #define __SSE2__ 1
+@@ -1050,7 +1041,6 @@
+ // CHECK_CNL_M64: #define __PRFCHW__ 1
+ // CHECK_CNL_M64: #define __RDRND__ 1
+ // CHECK_CNL_M64: #define __RDSEED__ 1
+-// CHECK_CNL_M64: #define __RTM__ 1
+ // CHECK_CNL_M64: #define __SGX__ 1
+ // CHECK_CNL_M64: #define __SHA__ 1
+ // CHECK_CNL_M64: #define __SSE2__ 1
+@@ -1106,7 +1096,6 @@
+ // CHECK_ICL_M32: #define __RDPID__ 1
+ // CHECK_ICL_M32: #define __RDRND__ 1
+ // CHECK_ICL_M32: #define __RDSEED__ 1
+-// CHECK_ICL_M32: #define __RTM__ 1
+ // CHECK_ICL_M32: #define __SGX__ 1
+ // CHECK_ICL_M32: #define __SHA__ 1
+ // CHECK_ICL_M32: #define __SSE2__ 1
+@@ -1164,7 +1153,6 @@
+ // CHECK_ICL_M64: #define __RDPID__ 1
+ // CHECK_ICL_M64: #define __RDRND__ 1
+ // CHECK_ICL_M64: #define __RDSEED__ 1
+-// CHECK_ICL_M64: #define __RTM__ 1
+ // CHECK_ICL_M64: #define __SGX__ 1
+ // CHECK_ICL_M64: #define __SHA__ 1
+ // CHECK_ICL_M64: #define __SSE2__ 1
+@@ -1224,7 +1212,6 @@
+ // CHECK_ICX_M32: #define __RDPID__ 1
+ // CHECK_ICX_M32: #define __RDRND__ 1
+ // CHECK_ICX_M32: #define __RDSEED__ 1
+-// CHECK_ICX_M32: #define __RTM__ 1
+ // CHECK_ICX_M32: #define __SGX__ 1
+ // CHECK_ICX_M32: #define __SHA__ 1
+ // CHECK_ICX_M32: #define __SSE2__ 1
+@@ -1283,7 +1270,6 @@
+ // CHECK_ICX_M64: #define __RDPID__ 1
+ // CHECK_ICX_M64: #define __RDRND__ 1
+ // CHECK_ICX_M64: #define __RDSEED__ 1
+-// CHECK_ICX_M64: #define __RTM__ 1
+ // CHECK_ICX_M64: #define __SGX__ 1
+ // CHECK_ICX_M64: #define __SHA__ 1
+ // CHECK_ICX_M64: #define __SSE2__ 1
+-- 
+2.19.1
+

@@ -2,5 +2,9 @@ python2-shebangs.patch
 #more-fma.patch
 # llvm patches
 llvm-0001-CMake-Split-static-library-exports-into-their-own-ex.patch
+llvm-0002-Remove-FeatureRTM-from-Skylake-processor-list.patch
 # clang patches
 clang-0001-Allow-building-split-libclang-libraries-with-unified.patch
+clang-0002-Remove-FeatureRTM-from-Skylake-processor-list.patch
+clang-0003-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
+clang-0004-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
