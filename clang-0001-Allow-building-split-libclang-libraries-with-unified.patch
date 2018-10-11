@@ -1,0 +1,33 @@
+From 2f05af217a5d6f67e9be2532478ca98bf9e4424c Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Thu, 11 Oct 2018 10:47:38 -0700
+Subject: [cfe] Allow building split libclang libraries with unified LLVM lib
+
+We use LLVM_BUILD_LLVM_DYLIB to build the llvm libraries as shared, but that
+does not work for clang. We can use BUILD_SHARED_LIBS on clang, but since we
+build them all together, we need to smuggle it in using this patch.
+
+Source: https://build.opensuse.org/package/view_file/openSUSE:Factory/llvm7/n_clang_allow_BUILD_SHARED_LIBRARY.patch
+Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
+---
+ CMakeLists.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/clang/CMakeLists.txt b/tools/clang/CMakeLists.txt
+index 52b8819394..fd1e42499c 100644
+--- a/tools/clang/CMakeLists.txt
++++ b/tools/clang/CMakeLists.txt
+@@ -1,5 +1,10 @@
+ cmake_minimum_required(VERSION 3.4.3)
+ 
++if( CLANG_BUILD_SHARED_LIBS )
++  set(BUILD_SHARED_LIBS ON)
++  set(LLVM_BUILD_LLVM_DYLIB OFF)
++endif()
++
+ # If we are not building as a part of LLVM, build Clang as an
+ # standalone project, using LLVM as an external library:
+ if( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )
+-- 
+2.19.1
+

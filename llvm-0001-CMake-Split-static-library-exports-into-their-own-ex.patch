@@ -1,0 +1,85 @@
+From a0b0bddf2d569192a060ca2b31530148170ddbb1 Mon Sep 17 00:00:00 2001
+From: Tom Stellard <tstellar@redhat.com>
+Date: Sat, 29 Apr 2017 02:03:23 +0000
+Subject: [llvm] CMake: Split static library exports into their own export file
+
+Summary:
+This is to better support distros which split the static libraries into
+their own package.
+
+The current problem is that any project the includes LLVMConfig.cmake
+will fail to configure unless the static libraries are installed.  This
+is because LLVMConfig.cmake includes LLVMExports.cmake, which throws an
+error if it can't find files linked to one of the exported targets.
+
+This patch resolves the problem by putting the static library targets
+into their own export file, LLVMStaticExports.cmake.  This file
+is optionally included by LLVMConfig.cmake, so distros can put this
+new file in their static library package to make  LLVMConfig.cmake
+no longer depend on these libraries when they are not installed.
+
+Reviewers: beanz, mgorny, chapuni
+
+Subscribers: llvm-commits
+
+Differential Revision: https://reviews.llvm.org/D32668
+---
+ cmake/modules/AddLLVM.cmake       | 6 +++++-
+ cmake/modules/CMakeLists.txt      | 3 +++
+ cmake/modules/LLVMConfig.cmake.in | 2 ++
+ 3 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/cmake/modules/AddLLVM.cmake b/cmake/modules/AddLLVM.cmake
+index ce2057f803c..3c8e326f4b9 100644
+--- a/cmake/modules/AddLLVM.cmake
++++ b/cmake/modules/AddLLVM.cmake
+@@ -650,7 +650,11 @@ macro(add_llvm_library name)
+ 
+       if(${name} IN_LIST LLVM_DISTRIBUTION_COMPONENTS OR
+           NOT LLVM_DISTRIBUTION_COMPONENTS)
+-        set(export_to_llvmexports EXPORT LLVMExports)
++        if (ARG_SHARED)
++          set(export_to_llvmexports EXPORT LLVMExports)
++        else()
++          set(export_to_llvmexports EXPORT LLVMStaticExports)
++        endif()
+         set_property(GLOBAL PROPERTY LLVM_HAS_EXPORTS True)
+       endif()
+ 
+diff --git a/cmake/modules/CMakeLists.txt b/cmake/modules/CMakeLists.txt
+index 6c316a2f04f..656b5af1cab 100644
+--- a/cmake/modules/CMakeLists.txt
++++ b/cmake/modules/CMakeLists.txt
+@@ -97,6 +97,7 @@ set(LLVM_CONFIG_BINARY_DIR "\${LLVM_INSTALL_PREFIX}")
+ set(LLVM_CONFIG_TOOLS_BINARY_DIR "\${LLVM_INSTALL_PREFIX}/bin")
+ set(LLVM_CONFIG_EXPORTS_FILE "\${LLVM_CMAKE_DIR}/LLVMExports.cmake")
+ set(LLVM_CONFIG_EXPORTS "${LLVM_EXPORTS}")
++set(LLVM_CONFIG_STATIC_EXPORTS_FILE "\${LLVM_CMAKE_DIR}/LLVMStaticExports.cmake")
+ configure_file(
+   LLVMConfig.cmake.in
+   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/LLVMConfig.cmake
+@@ -113,6 +114,8 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+   if(llvm_has_exports)
+     install(EXPORT LLVMExports DESTINATION ${LLVM_INSTALL_PACKAGE_DIR}
+             COMPONENT cmake-exports)
++    install(EXPORT LLVMStaticExports DESTINATION ${LLVM_INSTALL_PACKAGE_DIR}
++            COMPONENT cmake-exports)
+   endif()
+ 
+   install(FILES
+diff --git a/cmake/modules/LLVMConfig.cmake.in b/cmake/modules/LLVMConfig.cmake.in
+index 8b4c22a3031..2e1df555748 100644
+--- a/cmake/modules/LLVMConfig.cmake.in
++++ b/cmake/modules/LLVMConfig.cmake.in
+@@ -83,6 +83,8 @@ if(NOT TARGET LLVMSupport)
+   set(LLVM_EXPORTED_TARGETS "@LLVM_CONFIG_EXPORTS@")
+   include("@LLVM_CONFIG_EXPORTS_FILE@")
+   @llvm_config_include_buildtree_only_exports@
++
++  include("@LLVM_CONFIG_STATIC_EXPORTS_FILE@" OPTIONAL)
+ endif()
+ 
+ # By creating intrinsics_gen here, subprojects that depend on LLVM's
+-- 
+2.19.1
+

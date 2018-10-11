@@ -2,3 +2,5 @@
 # names, one per line.
 /usr/lib64/libgomp.so
 /usr/lib64/TestPlugin.so
+/usr/lib64/cmake/llvm/LLVMStaticExports.cmake
+/usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake

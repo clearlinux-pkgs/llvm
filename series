@@ -1,2 +1,6 @@
 python2-shebangs.patch
 #more-fma.patch
+# llvm patches
+llvm-0001-CMake-Split-static-library-exports-into-their-own-ex.patch
+# clang patches
+clang-0001-Allow-building-split-libclang-libraries-with-unified.patch
