@@ -6,7 +6,7 @@
 #
 Name     : llvm
 Version  : 7.0.0
-Release  : 74
+Release  : 75
 URL      : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz
@@ -48,11 +48,12 @@ BuildRequires : subversion
 BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
 Patch1: python2-shebangs.patch
-Patch2: 0001-CMake-Split-static-library-exports-into-their-own-ex.patch
-Patch3: 0001-Allow-building-split-libclang-libraries-with-unified.patch
-Patch4: 0002-Remove-FeatureRTM-from-Skylake-processor-list.patch
-Patch5: 0003-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
-Patch6: 0004-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
+Patch2: llvm-0001-CMake-Split-static-library-exports-into-their-own-ex.patch
+Patch3: llvm-0002-Remove-FeatureRTM-from-Skylake-processor-list.patch
+Patch4: clang-0001-Allow-building-split-libclang-libraries-with-unified.patch
+Patch5: clang-0002-Remove-FeatureRTM-from-Skylake-processor-list.patch
+Patch6: clang-0003-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
+Patch7: clang-0004-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
 
 %description
 These are tests for instrumentation based profiling.  This specifically means
@@ -154,13 +155,14 @@ mv %{_topdir}/BUILD/openmp-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1539284004
+export SOURCE_DATE_EPOCH=1539375740
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -196,8 +198,15 @@ unset LDFLAGS
 make  %{?_smp_mflags} VERBOSE=1
 popd
 
+%check
+export LANG=C
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+make test
+
 %install
-export SOURCE_DATE_EPOCH=1539284004
+export SOURCE_DATE_EPOCH=1539375740
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
