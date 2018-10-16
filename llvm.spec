@@ -4,14 +4,16 @@
 #
 # Source0 file verified with key 0x0FC3042E345AD05D (hans@chromium.org)
 #
+%define keepstatic 1
 Name     : llvm
 Version  : 7.0.0
-Release  : 75
+Release  : 76
 URL      : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz
-Source2  : https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz
-Source3  : https://releases.llvm.org/7.0.0/openmp-7.0.0.src.tar.xz
+Source2  : https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz
+Source3  : https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz
+Source4  : https://releases.llvm.org/7.0.0/openmp-7.0.0.src.tar.xz
 Source99 : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz.sig
 Summary  : No detailed summary available
 Group    : Development/Tools
@@ -140,15 +142,19 @@ man components for the llvm package.
 cd ..
 %setup -q -T -D -n llvm-7.0.0.src -b 1
 cd ..
-%setup -q -T -D -n llvm-7.0.0.src -b 2
-cd ..
 %setup -q -T -D -n llvm-7.0.0.src -b 3
+cd ..
+%setup -q -T -D -n llvm-7.0.0.src -b 4
+cd ..
+%setup -q -T -D -n llvm-7.0.0.src -b 2
 mkdir -p tools/clang
 mv %{_topdir}/BUILD/cfe-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/tools/clang
 mkdir -p tools/lld
 mv %{_topdir}/BUILD/lld-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/tools/lld
 mkdir -p projects/openmp
 mv %{_topdir}/BUILD/openmp-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/openmp
+mkdir -p projects/compiler-rt
+mv %{_topdir}/BUILD/compiler-rt-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/compiler-rt
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -162,7 +168,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1539375740
+export SOURCE_DATE_EPOCH=1539661361
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -173,8 +179,8 @@ export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --p
 export CXXFLAGS=$CFLAGS
 unset LDFLAGS
 unset LDFLAGS
-%cmake .. -DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g' <<<$CFLAGS`" \
--DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g' <<<$CXXFLAGS`" \
+%cmake .. -DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS`" \
+-DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS`" \
 -DCMAKE_EXE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
 -DCMAKE_MODULE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
 -DCMAKE_SHARED_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
@@ -206,10 +212,11 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1539375740
+export SOURCE_DATE_EPOCH=1539661361
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
+cp projects/compiler-rt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/projects_compiler-rt_LICENSE.TXT
 cp projects/openmp/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
 cp test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
 cp tools/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
@@ -221,6 +228,9 @@ cp utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses
 pushd clr-build
 %make_install
 popd
+## install_append content
+rm %{buildroot}/usr/lib64/*.a
+## install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -228,6 +238,57 @@ popd
 %exclude /usr/lib64/clang/7.0.0/include/cuda_wrappers/complex
 %exclude /usr/lib64/clang/7.0.0/include/cuda_wrappers/new
 %exclude /usr/lib64/clang/7.0.0/include/module.modulemap
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.asan-preinit-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.asan-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.asan-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.asan_cxx-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.asan_cxx-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.builtins-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.cfi-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.cfi_diag-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.dd-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.dfsan-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.dfsan-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.esan-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.esan-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.fuzzer-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.fuzzer_no_main-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.hwasan-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.hwasan-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.hwasan_cxx-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.hwasan_cxx-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.lsan-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.msan-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.msan-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.msan_cxx-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.msan_cxx-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.profile-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.safestack-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.scudo-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.scudo_cxx-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.scudo_minimal-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.stats-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.stats_client-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.tsan-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.tsan-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.tsan_cxx-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.tsan_cxx-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a.syms
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.xray-basic-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.xray-fdr-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.xray-profiling-x86_64.a
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.xray-x86_64.a
+/usr/lib64/clang/7.0.0/share/asan_blacklist.txt
+/usr/lib64/clang/7.0.0/share/cfi_blacklist.txt
+/usr/lib64/clang/7.0.0/share/dfsan_abilist.txt
+/usr/lib64/clang/7.0.0/share/hwasan_blacklist.txt
+/usr/lib64/clang/7.0.0/share/msan_blacklist.txt
 
 %files bin
 %defattr(-,root,root,-)
@@ -436,6 +497,20 @@ popd
 %exclude /usr/lib64/clang/7.0.0/include/rdseedintrin.h
 %exclude /usr/lib64/clang/7.0.0/include/rtmintrin.h
 %exclude /usr/lib64/clang/7.0.0/include/s390intrin.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/allocator_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/asan_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/common_interface_defs.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/coverage_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/dfsan_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/esan_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/hwasan_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/linux_syscall_hooks.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/lsan_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/msan_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/netbsd_syscall_hooks.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/scudo_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/tsan_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/sanitizer/tsan_interface_atomic.h
 %exclude /usr/lib64/clang/7.0.0/include/sgxintrin.h
 %exclude /usr/lib64/clang/7.0.0/include/shaintrin.h
 %exclude /usr/lib64/clang/7.0.0/include/smmintrin.h
@@ -461,6 +536,8 @@ popd
 %exclude /usr/lib64/clang/7.0.0/include/x86intrin.h
 %exclude /usr/lib64/clang/7.0.0/include/xmmintrin.h
 %exclude /usr/lib64/clang/7.0.0/include/xopintrin.h
+%exclude /usr/lib64/clang/7.0.0/include/xray/xray_interface.h
+%exclude /usr/lib64/clang/7.0.0/include/xray/xray_log_interface.h
 %exclude /usr/lib64/clang/7.0.0/include/xsavecintrin.h
 %exclude /usr/lib64/clang/7.0.0/include/xsaveintrin.h
 %exclude /usr/lib64/clang/7.0.0/include/xsaveoptintrin.h
@@ -2433,6 +2510,20 @@ popd
 /usr/lib64/clang/7.0.0/include/rdseedintrin.h
 /usr/lib64/clang/7.0.0/include/rtmintrin.h
 /usr/lib64/clang/7.0.0/include/s390intrin.h
+/usr/lib64/clang/7.0.0/include/sanitizer/allocator_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/asan_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/common_interface_defs.h
+/usr/lib64/clang/7.0.0/include/sanitizer/coverage_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/dfsan_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/esan_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/hwasan_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/linux_syscall_hooks.h
+/usr/lib64/clang/7.0.0/include/sanitizer/lsan_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/msan_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/netbsd_syscall_hooks.h
+/usr/lib64/clang/7.0.0/include/sanitizer/scudo_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/tsan_interface.h
+/usr/lib64/clang/7.0.0/include/sanitizer/tsan_interface_atomic.h
 /usr/lib64/clang/7.0.0/include/sgxintrin.h
 /usr/lib64/clang/7.0.0/include/shaintrin.h
 /usr/lib64/clang/7.0.0/include/smmintrin.h
@@ -2458,6 +2549,8 @@ popd
 /usr/lib64/clang/7.0.0/include/x86intrin.h
 /usr/lib64/clang/7.0.0/include/xmmintrin.h
 /usr/lib64/clang/7.0.0/include/xopintrin.h
+/usr/lib64/clang/7.0.0/include/xray/xray_interface.h
+/usr/lib64/clang/7.0.0/include/xray/xray_log_interface.h
 /usr/lib64/clang/7.0.0/include/xsavecintrin.h
 /usr/lib64/clang/7.0.0/include/xsaveintrin.h
 /usr/lib64/clang/7.0.0/include/xsaveoptintrin.h
@@ -2466,6 +2559,13 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.asan-x86_64.so
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.dyndd-x86_64.so
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.hwasan-x86_64.so
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.scudo-x86_64.so
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.scudo_minimal-x86_64.so
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
+/usr/lib64/clang/7.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
 /usr/lib64/libLTO.so.7
 /usr/lib64/libclang.so.7
 /usr/lib64/libclangARCMigrate.so.7
@@ -2507,6 +2607,7 @@ popd
 %files license
 %defattr(0644,root,root,0755)
 /usr/share/package-licenses/llvm/LICENSE.TXT
+/usr/share/package-licenses/llvm/projects_compiler-rt_LICENSE.TXT
 /usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
 /usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
 /usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
