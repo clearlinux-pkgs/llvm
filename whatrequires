@@ -1,5 +1,7 @@
 # This file contains recursive sources that require this package
 aeon
 clamav
+cups
 darktable
+itstool
 llvm

@@ -7,15 +7,16 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 7.0.0
-Release  : 76
+Release  : 77
 URL      : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz
-Source2  : https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz
-Source3  : https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz
-Source4  : https://releases.llvm.org/7.0.0/openmp-7.0.0.src.tar.xz
+Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/c04cd74bfd7ab57d92f0ab601b52ca3da8fde952.tar.gz
+Source3  : https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz
+Source4  : https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz
+Source5  : https://releases.llvm.org/7.0.0/openmp-7.0.0.src.tar.xz
 Source99 : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz.sig
-Summary  : No detailed summary available
+Summary  : LLVM/SPIR-V bi-directional translator
 Group    : Development/Tools
 License  : BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
@@ -142,9 +143,11 @@ man components for the llvm package.
 cd ..
 %setup -q -T -D -n llvm-7.0.0.src -b 1
 cd ..
-%setup -q -T -D -n llvm-7.0.0.src -b 3
-cd ..
 %setup -q -T -D -n llvm-7.0.0.src -b 4
+cd ..
+%setup -q -T -D -n llvm-7.0.0.src -b 5
+cd ..
+%setup -q -T -D -n llvm-7.0.0.src -b 3
 cd ..
 %setup -q -T -D -n llvm-7.0.0.src -b 2
 mkdir -p tools/clang
@@ -155,6 +158,8 @@ mkdir -p projects/openmp
 mv %{_topdir}/BUILD/openmp-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/openmp
 mkdir -p projects/compiler-rt
 mv %{_topdir}/BUILD/compiler-rt-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/compiler-rt
+mkdir -p projects/SPIRV
+mv %{_topdir}/BUILD/SPIRV-LLVM-Translator-c04cd74bfd7ab57d92f0ab601b52ca3da8fde952/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/SPIRV
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -168,7 +173,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1539661361
+export SOURCE_DATE_EPOCH=1542422589
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -212,10 +217,11 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1539661361
+export SOURCE_DATE_EPOCH=1542422589
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
+cp projects/SPIRV/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/projects_SPIRV_LICENSE.TXT
 cp projects/compiler-rt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/projects_compiler-rt_LICENSE.TXT
 cp projects/openmp/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
 cp test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
@@ -358,6 +364,7 @@ rm %{buildroot}/usr/lib64/*.a
 /usr/bin/llvm-readobj
 /usr/bin/llvm-rtdyld
 /usr/bin/llvm-size
+/usr/bin/llvm-spirv
 /usr/bin/llvm-split
 /usr/bin/llvm-stress
 /usr/bin/llvm-strings
@@ -546,6 +553,7 @@ rm %{buildroot}/usr/lib64/*.a
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
 %exclude /usr/lib64/libgomp.so
+/usr/include/LLVMSPIRVLib/LLVMSPIRVLib.h
 /usr/include/clang-c/BuildSystem.h
 /usr/include/clang-c/CXCompilationDatabase.h
 /usr/include/clang-c/CXErrorCode.h
@@ -2411,6 +2419,7 @@ rm %{buildroot}/usr/lib64/*.a
 /usr/lib64/libomp.so
 /usr/lib64/libomptarget.rtl.x86_64.so
 /usr/lib64/libomptarget.so
+/usr/lib64/pkgconfig/LLVMSPIRVLib.pc
 
 %files extras
 %defattr(-,root,root,-)
@@ -2607,6 +2616,7 @@ rm %{buildroot}/usr/lib64/*.a
 %files license
 %defattr(0644,root,root,0755)
 /usr/share/package-licenses/llvm/LICENSE.TXT
+/usr/share/package-licenses/llvm/projects_SPIRV_LICENSE.TXT
 /usr/share/package-licenses/llvm/projects_compiler-rt_LICENSE.TXT
 /usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
 /usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
