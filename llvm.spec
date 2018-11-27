@@ -7,11 +7,11 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 7.0.0
-Release  : 77
+Release  : 78
 URL      : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz
-Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/c04cd74bfd7ab57d92f0ab601b52ca3da8fde952.tar.gz
+Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v7.0.0-1.tar.gz
 Source3  : https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz
 Source4  : https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz
 Source5  : https://releases.llvm.org/7.0.0/openmp-7.0.0.src.tar.xz
@@ -57,6 +57,11 @@ Patch4: clang-0001-Allow-building-split-libclang-libraries-with-unified.patch
 Patch5: clang-0002-Remove-FeatureRTM-from-Skylake-processor-list.patch
 Patch6: clang-0003-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
 Patch7: clang-0004-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
+Patch8: 0001-Add-cl_intel_planar_yuv-extension.patch
+Patch9: 0002-Unify-ZeroToOCL-cast-types.patch
+Patch10: 0003-OpenCL-Fix-serialization-of-OpenCLExtensionDecls.patch
+Patch11: 0004-OpenCL-Add-support-of-cl_intel_device_side_avc_motio.patch
+Patch12: 0005-OpenCL-Relax-diagnostics-on-OpenCL-access-qualifiers.patch
 
 %description
 These are tests for instrumentation based profiling.  This specifically means
@@ -159,7 +164,7 @@ mv %{_topdir}/BUILD/openmp-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/
 mkdir -p projects/compiler-rt
 mv %{_topdir}/BUILD/compiler-rt-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/compiler-rt
 mkdir -p projects/SPIRV
-mv %{_topdir}/BUILD/SPIRV-LLVM-Translator-c04cd74bfd7ab57d92f0ab601b52ca3da8fde952/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/SPIRV
+mv %{_topdir}/BUILD/SPIRV-LLVM-Translator-7.0.0-1/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/SPIRV
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -167,13 +172,18 @@ mv %{_topdir}/BUILD/SPIRV-LLVM-Translator-c04cd74bfd7ab57d92f0ab601b52ca3da8fde9
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1542422589
+export SOURCE_DATE_EPOCH=1543318132
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -217,7 +227,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1542422589
+export SOURCE_DATE_EPOCH=1543318132
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -778,6 +788,7 @@ rm %{buildroot}/usr/lib64/*.a
 /usr/include/clang/Basic/MemoryBufferCache.h
 /usr/include/clang/Basic/Module.h
 /usr/include/clang/Basic/ObjCRuntime.h
+/usr/include/clang/Basic/OpenCLExtensionTypes.def
 /usr/include/clang/Basic/OpenCLExtensions.def
 /usr/include/clang/Basic/OpenCLImageTypes.def
 /usr/include/clang/Basic/OpenCLOptions.h
