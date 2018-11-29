@@ -7,11 +7,11 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 7.0.0
-Release  : 78
+Release  : 79
 URL      : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz
-Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v7.0.0-1.tar.gz
+Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/4d62009e2225024abd481ca982ec3d63304df3f0.tar.gz
 Source3  : https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz
 Source4  : https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz
 Source5  : https://releases.llvm.org/7.0.0/openmp-7.0.0.src.tar.xz
@@ -164,7 +164,7 @@ mv %{_topdir}/BUILD/openmp-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/
 mkdir -p projects/compiler-rt
 mv %{_topdir}/BUILD/compiler-rt-7.0.0.src/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/compiler-rt
 mkdir -p projects/SPIRV
-mv %{_topdir}/BUILD/SPIRV-LLVM-Translator-7.0.0-1/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/SPIRV
+mv %{_topdir}/BUILD/SPIRV-LLVM-Translator-4d62009e2225024abd481ca982ec3d63304df3f0/* %{_topdir}/BUILD/llvm-7.0.0.src/projects/SPIRV
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -183,7 +183,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1543318132
+export SOURCE_DATE_EPOCH=1543502288
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -227,7 +227,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1543318132
+export SOURCE_DATE_EPOCH=1543502288
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
