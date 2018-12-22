@@ -1,6 +1,9 @@
 # This file contains recursive sources that require this package
+PyNaCl
 aeon
+blender
 cups
 darktable
 itstool
 llvm
+pyside2-setup

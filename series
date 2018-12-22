@@ -12,6 +12,5 @@ clang-0004-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
 # upstream backports for openCL support
 0001-Add-cl_intel_planar_yuv-extension.patch
 0002-Unify-ZeroToOCL-cast-types.patch
-0003-OpenCL-Fix-serialization-of-OpenCLExtensionDecls.patch
 0004-OpenCL-Add-support-of-cl_intel_device_side_avc_motio.patch
 0005-OpenCL-Relax-diagnostics-on-OpenCL-access-qualifiers.patch
