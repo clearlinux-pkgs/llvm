@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 7.0.1
-Release  : 80
+Release  : 81
 URL      : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.1/cfe-7.0.1.src.tar.xz
@@ -182,7 +182,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1545490074
+export SOURCE_DATE_EPOCH=1548372191
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -215,7 +215,7 @@ unset LDFLAGS
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include" \
 -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
-make  %{?_smp_mflags}
+make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %check
@@ -226,7 +226,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1545490074
+export SOURCE_DATE_EPOCH=1548372191
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -249,10 +249,10 @@ rm %{buildroot}/usr/lib64/*.a
 
 %files
 %defattr(-,root,root,-)
-/usr/lib64/clang/7.0.1/include/cuda_wrappers/algorithm
-/usr/lib64/clang/7.0.1/include/cuda_wrappers/complex
-/usr/lib64/clang/7.0.1/include/cuda_wrappers/new
-/usr/lib64/clang/7.0.1/include/module.modulemap
+%exclude /usr/lib64/clang/7.0.1/include/cuda_wrappers/algorithm
+%exclude /usr/lib64/clang/7.0.1/include/cuda_wrappers/complex
+%exclude /usr/lib64/clang/7.0.1/include/cuda_wrappers/new
+%exclude /usr/lib64/clang/7.0.1/include/module.modulemap
 /usr/lib64/clang/7.0.1/lib/linux/libclang_rt.asan-preinit-x86_64.a
 /usr/lib64/clang/7.0.1/lib/linux/libclang_rt.asan-x86_64.a
 /usr/lib64/clang/7.0.1/lib/linux/libclang_rt.asan-x86_64.a.syms
@@ -425,6 +425,140 @@ rm %{buildroot}/usr/lib64/*.a
 %exclude /usr/lib64/LLVMHello.so
 %exclude /usr/lib64/LLVMgold.so
 %exclude /usr/lib64/TestPlugin.so
+%exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_builtin_vars.h
+%exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_cmath.h
+%exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_complex_builtins.h
+%exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_device_functions.h
+%exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_intrinsics.h
+%exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_libdevice_declares.h
+%exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_math_forward_declares.h
+%exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_runtime_wrapper.h
+%exclude /usr/lib64/clang/7.0.1/include/__stddef_max_align_t.h
+%exclude /usr/lib64/clang/7.0.1/include/__wmmintrin_aes.h
+%exclude /usr/lib64/clang/7.0.1/include/__wmmintrin_pclmul.h
+%exclude /usr/lib64/clang/7.0.1/include/adxintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/altivec.h
+%exclude /usr/lib64/clang/7.0.1/include/ammintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/arm64intr.h
+%exclude /usr/lib64/clang/7.0.1/include/arm_acle.h
+%exclude /usr/lib64/clang/7.0.1/include/arm_fp16.h
+%exclude /usr/lib64/clang/7.0.1/include/arm_neon.h
+%exclude /usr/lib64/clang/7.0.1/include/armintr.h
+%exclude /usr/lib64/clang/7.0.1/include/avx2intrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512bitalgintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512bwintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512cdintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512dqintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512erintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512fintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512ifmaintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512ifmavlintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512pfintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vbmi2intrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vbmiintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vbmivlintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vlbitalgintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vlbwintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vlcdintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vldqintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vlintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vlvbmi2intrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vlvnniintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vnniintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vpopcntdqintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avx512vpopcntdqvlintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/avxintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/bmi2intrin.h
+%exclude /usr/lib64/clang/7.0.1/include/bmiintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/cetintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/cldemoteintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/clflushoptintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/clwbintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/clzerointrin.h
+%exclude /usr/lib64/clang/7.0.1/include/cpuid.h
+%exclude /usr/lib64/clang/7.0.1/include/emmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/f16cintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/float.h
+%exclude /usr/lib64/clang/7.0.1/include/fma4intrin.h
+%exclude /usr/lib64/clang/7.0.1/include/fmaintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/fxsrintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/gfniintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/htmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/htmxlintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/ia32intrin.h
+%exclude /usr/lib64/clang/7.0.1/include/immintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/intrin.h
+%exclude /usr/lib64/clang/7.0.1/include/inttypes.h
+%exclude /usr/lib64/clang/7.0.1/include/invpcidintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/iso646.h
+%exclude /usr/lib64/clang/7.0.1/include/limits.h
+%exclude /usr/lib64/clang/7.0.1/include/lwpintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/lzcntintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/mm3dnow.h
+%exclude /usr/lib64/clang/7.0.1/include/mm_malloc.h
+%exclude /usr/lib64/clang/7.0.1/include/mmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/movdirintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/msa.h
+%exclude /usr/lib64/clang/7.0.1/include/mwaitxintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/nmmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/omp.h
+%exclude /usr/lib64/clang/7.0.1/include/ompt.h
+%exclude /usr/lib64/clang/7.0.1/include/opencl-c.h
+%exclude /usr/lib64/clang/7.0.1/include/pconfigintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/pkuintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/pmmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/popcntintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/prfchwintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/ptwriteintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/rdseedintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/rtmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/s390intrin.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/allocator_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/asan_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/common_interface_defs.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/coverage_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/dfsan_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/esan_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/hwasan_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/linux_syscall_hooks.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/lsan_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/msan_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/netbsd_syscall_hooks.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/scudo_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/tsan_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/sanitizer/tsan_interface_atomic.h
+%exclude /usr/lib64/clang/7.0.1/include/sgxintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/shaintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/smmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/stdalign.h
+%exclude /usr/lib64/clang/7.0.1/include/stdarg.h
+%exclude /usr/lib64/clang/7.0.1/include/stdatomic.h
+%exclude /usr/lib64/clang/7.0.1/include/stdbool.h
+%exclude /usr/lib64/clang/7.0.1/include/stddef.h
+%exclude /usr/lib64/clang/7.0.1/include/stdint.h
+%exclude /usr/lib64/clang/7.0.1/include/stdnoreturn.h
+%exclude /usr/lib64/clang/7.0.1/include/tbmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/tgmath.h
+%exclude /usr/lib64/clang/7.0.1/include/tmmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/unwind.h
+%exclude /usr/lib64/clang/7.0.1/include/vadefs.h
+%exclude /usr/lib64/clang/7.0.1/include/vaesintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/varargs.h
+%exclude /usr/lib64/clang/7.0.1/include/vecintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/vpclmulqdqintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/waitpkgintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/wbnoinvdintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/wmmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/x86intrin.h
+%exclude /usr/lib64/clang/7.0.1/include/xmmintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/xopintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/xray/xray_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/xray/xray_log_interface.h
+%exclude /usr/lib64/clang/7.0.1/include/xsavecintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/xsaveintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/xsaveoptintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/xsavesintrin.h
+%exclude /usr/lib64/clang/7.0.1/include/xtestintrin.h
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
 %exclude /usr/lib64/libgomp.so
@@ -2226,140 +2360,6 @@ rm %{buildroot}/usr/lib64/*.a
 /usr/include/llvm/XRay/Trace.h
 /usr/include/llvm/XRay/XRayRecord.h
 /usr/include/llvm/XRay/YAMLXRayRecord.h
-/usr/lib64/clang/7.0.1/include/__clang_cuda_builtin_vars.h
-/usr/lib64/clang/7.0.1/include/__clang_cuda_cmath.h
-/usr/lib64/clang/7.0.1/include/__clang_cuda_complex_builtins.h
-/usr/lib64/clang/7.0.1/include/__clang_cuda_device_functions.h
-/usr/lib64/clang/7.0.1/include/__clang_cuda_intrinsics.h
-/usr/lib64/clang/7.0.1/include/__clang_cuda_libdevice_declares.h
-/usr/lib64/clang/7.0.1/include/__clang_cuda_math_forward_declares.h
-/usr/lib64/clang/7.0.1/include/__clang_cuda_runtime_wrapper.h
-/usr/lib64/clang/7.0.1/include/__stddef_max_align_t.h
-/usr/lib64/clang/7.0.1/include/__wmmintrin_aes.h
-/usr/lib64/clang/7.0.1/include/__wmmintrin_pclmul.h
-/usr/lib64/clang/7.0.1/include/adxintrin.h
-/usr/lib64/clang/7.0.1/include/altivec.h
-/usr/lib64/clang/7.0.1/include/ammintrin.h
-/usr/lib64/clang/7.0.1/include/arm64intr.h
-/usr/lib64/clang/7.0.1/include/arm_acle.h
-/usr/lib64/clang/7.0.1/include/arm_fp16.h
-/usr/lib64/clang/7.0.1/include/arm_neon.h
-/usr/lib64/clang/7.0.1/include/armintr.h
-/usr/lib64/clang/7.0.1/include/avx2intrin.h
-/usr/lib64/clang/7.0.1/include/avx512bitalgintrin.h
-/usr/lib64/clang/7.0.1/include/avx512bwintrin.h
-/usr/lib64/clang/7.0.1/include/avx512cdintrin.h
-/usr/lib64/clang/7.0.1/include/avx512dqintrin.h
-/usr/lib64/clang/7.0.1/include/avx512erintrin.h
-/usr/lib64/clang/7.0.1/include/avx512fintrin.h
-/usr/lib64/clang/7.0.1/include/avx512ifmaintrin.h
-/usr/lib64/clang/7.0.1/include/avx512ifmavlintrin.h
-/usr/lib64/clang/7.0.1/include/avx512pfintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vbmi2intrin.h
-/usr/lib64/clang/7.0.1/include/avx512vbmiintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vbmivlintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vlbitalgintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vlbwintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vlcdintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vldqintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vlintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vlvbmi2intrin.h
-/usr/lib64/clang/7.0.1/include/avx512vlvnniintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vnniintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vpopcntdqintrin.h
-/usr/lib64/clang/7.0.1/include/avx512vpopcntdqvlintrin.h
-/usr/lib64/clang/7.0.1/include/avxintrin.h
-/usr/lib64/clang/7.0.1/include/bmi2intrin.h
-/usr/lib64/clang/7.0.1/include/bmiintrin.h
-/usr/lib64/clang/7.0.1/include/cetintrin.h
-/usr/lib64/clang/7.0.1/include/cldemoteintrin.h
-/usr/lib64/clang/7.0.1/include/clflushoptintrin.h
-/usr/lib64/clang/7.0.1/include/clwbintrin.h
-/usr/lib64/clang/7.0.1/include/clzerointrin.h
-/usr/lib64/clang/7.0.1/include/cpuid.h
-/usr/lib64/clang/7.0.1/include/emmintrin.h
-/usr/lib64/clang/7.0.1/include/f16cintrin.h
-/usr/lib64/clang/7.0.1/include/float.h
-/usr/lib64/clang/7.0.1/include/fma4intrin.h
-/usr/lib64/clang/7.0.1/include/fmaintrin.h
-/usr/lib64/clang/7.0.1/include/fxsrintrin.h
-/usr/lib64/clang/7.0.1/include/gfniintrin.h
-/usr/lib64/clang/7.0.1/include/htmintrin.h
-/usr/lib64/clang/7.0.1/include/htmxlintrin.h
-/usr/lib64/clang/7.0.1/include/ia32intrin.h
-/usr/lib64/clang/7.0.1/include/immintrin.h
-/usr/lib64/clang/7.0.1/include/intrin.h
-/usr/lib64/clang/7.0.1/include/inttypes.h
-/usr/lib64/clang/7.0.1/include/invpcidintrin.h
-/usr/lib64/clang/7.0.1/include/iso646.h
-/usr/lib64/clang/7.0.1/include/limits.h
-/usr/lib64/clang/7.0.1/include/lwpintrin.h
-/usr/lib64/clang/7.0.1/include/lzcntintrin.h
-/usr/lib64/clang/7.0.1/include/mm3dnow.h
-/usr/lib64/clang/7.0.1/include/mm_malloc.h
-/usr/lib64/clang/7.0.1/include/mmintrin.h
-/usr/lib64/clang/7.0.1/include/movdirintrin.h
-/usr/lib64/clang/7.0.1/include/msa.h
-/usr/lib64/clang/7.0.1/include/mwaitxintrin.h
-/usr/lib64/clang/7.0.1/include/nmmintrin.h
-/usr/lib64/clang/7.0.1/include/omp.h
-/usr/lib64/clang/7.0.1/include/ompt.h
-/usr/lib64/clang/7.0.1/include/opencl-c.h
-/usr/lib64/clang/7.0.1/include/pconfigintrin.h
-/usr/lib64/clang/7.0.1/include/pkuintrin.h
-/usr/lib64/clang/7.0.1/include/pmmintrin.h
-/usr/lib64/clang/7.0.1/include/popcntintrin.h
-/usr/lib64/clang/7.0.1/include/prfchwintrin.h
-/usr/lib64/clang/7.0.1/include/ptwriteintrin.h
-/usr/lib64/clang/7.0.1/include/rdseedintrin.h
-/usr/lib64/clang/7.0.1/include/rtmintrin.h
-/usr/lib64/clang/7.0.1/include/s390intrin.h
-/usr/lib64/clang/7.0.1/include/sanitizer/allocator_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/asan_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/common_interface_defs.h
-/usr/lib64/clang/7.0.1/include/sanitizer/coverage_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/dfsan_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/esan_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/hwasan_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/linux_syscall_hooks.h
-/usr/lib64/clang/7.0.1/include/sanitizer/lsan_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/msan_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/netbsd_syscall_hooks.h
-/usr/lib64/clang/7.0.1/include/sanitizer/scudo_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/tsan_interface.h
-/usr/lib64/clang/7.0.1/include/sanitizer/tsan_interface_atomic.h
-/usr/lib64/clang/7.0.1/include/sgxintrin.h
-/usr/lib64/clang/7.0.1/include/shaintrin.h
-/usr/lib64/clang/7.0.1/include/smmintrin.h
-/usr/lib64/clang/7.0.1/include/stdalign.h
-/usr/lib64/clang/7.0.1/include/stdarg.h
-/usr/lib64/clang/7.0.1/include/stdatomic.h
-/usr/lib64/clang/7.0.1/include/stdbool.h
-/usr/lib64/clang/7.0.1/include/stddef.h
-/usr/lib64/clang/7.0.1/include/stdint.h
-/usr/lib64/clang/7.0.1/include/stdnoreturn.h
-/usr/lib64/clang/7.0.1/include/tbmintrin.h
-/usr/lib64/clang/7.0.1/include/tgmath.h
-/usr/lib64/clang/7.0.1/include/tmmintrin.h
-/usr/lib64/clang/7.0.1/include/unwind.h
-/usr/lib64/clang/7.0.1/include/vadefs.h
-/usr/lib64/clang/7.0.1/include/vaesintrin.h
-/usr/lib64/clang/7.0.1/include/varargs.h
-/usr/lib64/clang/7.0.1/include/vecintrin.h
-/usr/lib64/clang/7.0.1/include/vpclmulqdqintrin.h
-/usr/lib64/clang/7.0.1/include/waitpkgintrin.h
-/usr/lib64/clang/7.0.1/include/wbnoinvdintrin.h
-/usr/lib64/clang/7.0.1/include/wmmintrin.h
-/usr/lib64/clang/7.0.1/include/x86intrin.h
-/usr/lib64/clang/7.0.1/include/xmmintrin.h
-/usr/lib64/clang/7.0.1/include/xopintrin.h
-/usr/lib64/clang/7.0.1/include/xray/xray_interface.h
-/usr/lib64/clang/7.0.1/include/xray/xray_log_interface.h
-/usr/lib64/clang/7.0.1/include/xsavecintrin.h
-/usr/lib64/clang/7.0.1/include/xsaveintrin.h
-/usr/lib64/clang/7.0.1/include/xsaveoptintrin.h
-/usr/lib64/clang/7.0.1/include/xsavesintrin.h
-/usr/lib64/clang/7.0.1/include/xtestintrin.h
 /usr/lib64/cmake/clang/ClangConfig.cmake
 /usr/lib64/cmake/clang/ClangTargets-relwithdebinfo.cmake
 /usr/lib64/cmake/clang/ClangTargets.cmake
@@ -2437,6 +2437,144 @@ rm %{buildroot}/usr/lib64/*.a
 /usr/lib64/LLVMHello.so
 /usr/lib64/LLVMgold.so
 /usr/lib64/TestPlugin.so
+/usr/lib64/clang/7.0.1/include/__clang_cuda_builtin_vars.h
+/usr/lib64/clang/7.0.1/include/__clang_cuda_cmath.h
+/usr/lib64/clang/7.0.1/include/__clang_cuda_complex_builtins.h
+/usr/lib64/clang/7.0.1/include/__clang_cuda_device_functions.h
+/usr/lib64/clang/7.0.1/include/__clang_cuda_intrinsics.h
+/usr/lib64/clang/7.0.1/include/__clang_cuda_libdevice_declares.h
+/usr/lib64/clang/7.0.1/include/__clang_cuda_math_forward_declares.h
+/usr/lib64/clang/7.0.1/include/__clang_cuda_runtime_wrapper.h
+/usr/lib64/clang/7.0.1/include/__stddef_max_align_t.h
+/usr/lib64/clang/7.0.1/include/__wmmintrin_aes.h
+/usr/lib64/clang/7.0.1/include/__wmmintrin_pclmul.h
+/usr/lib64/clang/7.0.1/include/adxintrin.h
+/usr/lib64/clang/7.0.1/include/altivec.h
+/usr/lib64/clang/7.0.1/include/ammintrin.h
+/usr/lib64/clang/7.0.1/include/arm64intr.h
+/usr/lib64/clang/7.0.1/include/arm_acle.h
+/usr/lib64/clang/7.0.1/include/arm_fp16.h
+/usr/lib64/clang/7.0.1/include/arm_neon.h
+/usr/lib64/clang/7.0.1/include/armintr.h
+/usr/lib64/clang/7.0.1/include/avx2intrin.h
+/usr/lib64/clang/7.0.1/include/avx512bitalgintrin.h
+/usr/lib64/clang/7.0.1/include/avx512bwintrin.h
+/usr/lib64/clang/7.0.1/include/avx512cdintrin.h
+/usr/lib64/clang/7.0.1/include/avx512dqintrin.h
+/usr/lib64/clang/7.0.1/include/avx512erintrin.h
+/usr/lib64/clang/7.0.1/include/avx512fintrin.h
+/usr/lib64/clang/7.0.1/include/avx512ifmaintrin.h
+/usr/lib64/clang/7.0.1/include/avx512ifmavlintrin.h
+/usr/lib64/clang/7.0.1/include/avx512pfintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vbmi2intrin.h
+/usr/lib64/clang/7.0.1/include/avx512vbmiintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vbmivlintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vlbitalgintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vlbwintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vlcdintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vldqintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vlintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vlvbmi2intrin.h
+/usr/lib64/clang/7.0.1/include/avx512vlvnniintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vnniintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vpopcntdqintrin.h
+/usr/lib64/clang/7.0.1/include/avx512vpopcntdqvlintrin.h
+/usr/lib64/clang/7.0.1/include/avxintrin.h
+/usr/lib64/clang/7.0.1/include/bmi2intrin.h
+/usr/lib64/clang/7.0.1/include/bmiintrin.h
+/usr/lib64/clang/7.0.1/include/cetintrin.h
+/usr/lib64/clang/7.0.1/include/cldemoteintrin.h
+/usr/lib64/clang/7.0.1/include/clflushoptintrin.h
+/usr/lib64/clang/7.0.1/include/clwbintrin.h
+/usr/lib64/clang/7.0.1/include/clzerointrin.h
+/usr/lib64/clang/7.0.1/include/cpuid.h
+/usr/lib64/clang/7.0.1/include/cuda_wrappers/algorithm
+/usr/lib64/clang/7.0.1/include/cuda_wrappers/complex
+/usr/lib64/clang/7.0.1/include/cuda_wrappers/new
+/usr/lib64/clang/7.0.1/include/emmintrin.h
+/usr/lib64/clang/7.0.1/include/f16cintrin.h
+/usr/lib64/clang/7.0.1/include/float.h
+/usr/lib64/clang/7.0.1/include/fma4intrin.h
+/usr/lib64/clang/7.0.1/include/fmaintrin.h
+/usr/lib64/clang/7.0.1/include/fxsrintrin.h
+/usr/lib64/clang/7.0.1/include/gfniintrin.h
+/usr/lib64/clang/7.0.1/include/htmintrin.h
+/usr/lib64/clang/7.0.1/include/htmxlintrin.h
+/usr/lib64/clang/7.0.1/include/ia32intrin.h
+/usr/lib64/clang/7.0.1/include/immintrin.h
+/usr/lib64/clang/7.0.1/include/intrin.h
+/usr/lib64/clang/7.0.1/include/inttypes.h
+/usr/lib64/clang/7.0.1/include/invpcidintrin.h
+/usr/lib64/clang/7.0.1/include/iso646.h
+/usr/lib64/clang/7.0.1/include/limits.h
+/usr/lib64/clang/7.0.1/include/lwpintrin.h
+/usr/lib64/clang/7.0.1/include/lzcntintrin.h
+/usr/lib64/clang/7.0.1/include/mm3dnow.h
+/usr/lib64/clang/7.0.1/include/mm_malloc.h
+/usr/lib64/clang/7.0.1/include/mmintrin.h
+/usr/lib64/clang/7.0.1/include/module.modulemap
+/usr/lib64/clang/7.0.1/include/movdirintrin.h
+/usr/lib64/clang/7.0.1/include/msa.h
+/usr/lib64/clang/7.0.1/include/mwaitxintrin.h
+/usr/lib64/clang/7.0.1/include/nmmintrin.h
+/usr/lib64/clang/7.0.1/include/omp.h
+/usr/lib64/clang/7.0.1/include/ompt.h
+/usr/lib64/clang/7.0.1/include/opencl-c.h
+/usr/lib64/clang/7.0.1/include/pconfigintrin.h
+/usr/lib64/clang/7.0.1/include/pkuintrin.h
+/usr/lib64/clang/7.0.1/include/pmmintrin.h
+/usr/lib64/clang/7.0.1/include/popcntintrin.h
+/usr/lib64/clang/7.0.1/include/prfchwintrin.h
+/usr/lib64/clang/7.0.1/include/ptwriteintrin.h
+/usr/lib64/clang/7.0.1/include/rdseedintrin.h
+/usr/lib64/clang/7.0.1/include/rtmintrin.h
+/usr/lib64/clang/7.0.1/include/s390intrin.h
+/usr/lib64/clang/7.0.1/include/sanitizer/allocator_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/asan_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/common_interface_defs.h
+/usr/lib64/clang/7.0.1/include/sanitizer/coverage_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/dfsan_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/esan_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/hwasan_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/linux_syscall_hooks.h
+/usr/lib64/clang/7.0.1/include/sanitizer/lsan_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/msan_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/netbsd_syscall_hooks.h
+/usr/lib64/clang/7.0.1/include/sanitizer/scudo_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/tsan_interface.h
+/usr/lib64/clang/7.0.1/include/sanitizer/tsan_interface_atomic.h
+/usr/lib64/clang/7.0.1/include/sgxintrin.h
+/usr/lib64/clang/7.0.1/include/shaintrin.h
+/usr/lib64/clang/7.0.1/include/smmintrin.h
+/usr/lib64/clang/7.0.1/include/stdalign.h
+/usr/lib64/clang/7.0.1/include/stdarg.h
+/usr/lib64/clang/7.0.1/include/stdatomic.h
+/usr/lib64/clang/7.0.1/include/stdbool.h
+/usr/lib64/clang/7.0.1/include/stddef.h
+/usr/lib64/clang/7.0.1/include/stdint.h
+/usr/lib64/clang/7.0.1/include/stdnoreturn.h
+/usr/lib64/clang/7.0.1/include/tbmintrin.h
+/usr/lib64/clang/7.0.1/include/tgmath.h
+/usr/lib64/clang/7.0.1/include/tmmintrin.h
+/usr/lib64/clang/7.0.1/include/unwind.h
+/usr/lib64/clang/7.0.1/include/vadefs.h
+/usr/lib64/clang/7.0.1/include/vaesintrin.h
+/usr/lib64/clang/7.0.1/include/varargs.h
+/usr/lib64/clang/7.0.1/include/vecintrin.h
+/usr/lib64/clang/7.0.1/include/vpclmulqdqintrin.h
+/usr/lib64/clang/7.0.1/include/waitpkgintrin.h
+/usr/lib64/clang/7.0.1/include/wbnoinvdintrin.h
+/usr/lib64/clang/7.0.1/include/wmmintrin.h
+/usr/lib64/clang/7.0.1/include/x86intrin.h
+/usr/lib64/clang/7.0.1/include/xmmintrin.h
+/usr/lib64/clang/7.0.1/include/xopintrin.h
+/usr/lib64/clang/7.0.1/include/xray/xray_interface.h
+/usr/lib64/clang/7.0.1/include/xray/xray_log_interface.h
+/usr/lib64/clang/7.0.1/include/xsavecintrin.h
+/usr/lib64/clang/7.0.1/include/xsaveintrin.h
+/usr/lib64/clang/7.0.1/include/xsaveoptintrin.h
+/usr/lib64/clang/7.0.1/include/xsavesintrin.h
+/usr/lib64/clang/7.0.1/include/xtestintrin.h
 
 %files lib
 %defattr(-,root,root,-)
