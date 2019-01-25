@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 7.0.1
-Release  : 81
+Release  : 82
 URL      : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.1/cfe-7.0.1.src.tar.xz
@@ -182,7 +182,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1548372191
+export SOURCE_DATE_EPOCH=1548374447
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -226,7 +226,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1548372191
+export SOURCE_DATE_EPOCH=1548374447
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -421,10 +421,6 @@ rm %{buildroot}/usr/lib64/*.a
 
 %files dev
 %defattr(-,root,root,-)
-%exclude /usr/lib64/BugpointPasses.so
-%exclude /usr/lib64/LLVMHello.so
-%exclude /usr/lib64/LLVMgold.so
-%exclude /usr/lib64/TestPlugin.so
 %exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_builtin_vars.h
 %exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_cmath.h
 %exclude /usr/lib64/clang/7.0.1/include/__clang_cuda_complex_builtins.h
@@ -561,7 +557,6 @@ rm %{buildroot}/usr/lib64/*.a
 %exclude /usr/lib64/clang/7.0.1/include/xtestintrin.h
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
-%exclude /usr/lib64/libgomp.so
 /usr/include/LLVMSPIRVLib/LLVMSPIRVLib.h
 /usr/include/clang-c/BuildSystem.h
 /usr/include/clang-c/CXCompilationDatabase.h
@@ -2390,45 +2385,6 @@ rm %{buildroot}/usr/lib64/*.a
 /usr/lib64/cmake/llvm/LLVMProcessSources.cmake
 /usr/lib64/cmake/llvm/TableGen.cmake
 /usr/lib64/cmake/llvm/VersionFromVCS.cmake
-/usr/lib64/libLLVM-7.0.1.so
-/usr/lib64/libLLVM-7.so
-/usr/lib64/libLLVM.so
-/usr/lib64/libLTO.so
-/usr/lib64/libclang.so
-/usr/lib64/libclangARCMigrate.so
-/usr/lib64/libclangAST.so
-/usr/lib64/libclangASTMatchers.so
-/usr/lib64/libclangAnalysis.so
-/usr/lib64/libclangBasic.so
-/usr/lib64/libclangCodeGen.so
-/usr/lib64/libclangCrossTU.so
-/usr/lib64/libclangDriver.so
-/usr/lib64/libclangDynamicASTMatchers.so
-/usr/lib64/libclangEdit.so
-/usr/lib64/libclangFormat.so
-/usr/lib64/libclangFrontend.so
-/usr/lib64/libclangFrontendTool.so
-/usr/lib64/libclangHandleCXX.so
-/usr/lib64/libclangHandleLLVM.so
-/usr/lib64/libclangIndex.so
-/usr/lib64/libclangLex.so
-/usr/lib64/libclangParse.so
-/usr/lib64/libclangRewrite.so
-/usr/lib64/libclangRewriteFrontend.so
-/usr/lib64/libclangSema.so
-/usr/lib64/libclangSerialization.so
-/usr/lib64/libclangStaticAnalyzerCheckers.so
-/usr/lib64/libclangStaticAnalyzerCore.so
-/usr/lib64/libclangStaticAnalyzerFrontend.so
-/usr/lib64/libclangTooling.so
-/usr/lib64/libclangToolingASTDiff.so
-/usr/lib64/libclangToolingCore.so
-/usr/lib64/libclangToolingInclusions.so
-/usr/lib64/libclangToolingRefactor.so
-/usr/lib64/libiomp5.so
-/usr/lib64/libomp.so
-/usr/lib64/libomptarget.rtl.x86_64.so
-/usr/lib64/libomptarget.so
 /usr/lib64/pkgconfig/LLVMSPIRVLib.pc
 
 %files extras
@@ -2578,6 +2534,11 @@ rm %{buildroot}/usr/lib64/*.a
 
 %files lib
 %defattr(-,root,root,-)
+%exclude /usr/lib64/BugpointPasses.so
+%exclude /usr/lib64/LLVMHello.so
+%exclude /usr/lib64/LLVMgold.so
+%exclude /usr/lib64/TestPlugin.so
+%exclude /usr/lib64/libgomp.so
 /usr/lib64/clang/7.0.1/lib/linux/libclang_rt.asan-x86_64.so
 /usr/lib64/clang/7.0.1/lib/linux/libclang_rt.dyndd-x86_64.so
 /usr/lib64/clang/7.0.1/lib/linux/libclang_rt.hwasan-x86_64.so
@@ -2585,38 +2546,77 @@ rm %{buildroot}/usr/lib64/*.a
 /usr/lib64/clang/7.0.1/lib/linux/libclang_rt.scudo_minimal-x86_64.so
 /usr/lib64/clang/7.0.1/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
 /usr/lib64/clang/7.0.1/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
+/usr/lib64/libLLVM-7.0.1.so
+/usr/lib64/libLLVM-7.so
+/usr/lib64/libLLVM.so
+/usr/lib64/libLTO.so
 /usr/lib64/libLTO.so.7
+/usr/lib64/libclang.so
 /usr/lib64/libclang.so.7
+/usr/lib64/libclangARCMigrate.so
 /usr/lib64/libclangARCMigrate.so.7
+/usr/lib64/libclangAST.so
 /usr/lib64/libclangAST.so.7
+/usr/lib64/libclangASTMatchers.so
 /usr/lib64/libclangASTMatchers.so.7
+/usr/lib64/libclangAnalysis.so
 /usr/lib64/libclangAnalysis.so.7
+/usr/lib64/libclangBasic.so
 /usr/lib64/libclangBasic.so.7
+/usr/lib64/libclangCodeGen.so
 /usr/lib64/libclangCodeGen.so.7
+/usr/lib64/libclangCrossTU.so
 /usr/lib64/libclangCrossTU.so.7
+/usr/lib64/libclangDriver.so
 /usr/lib64/libclangDriver.so.7
+/usr/lib64/libclangDynamicASTMatchers.so
 /usr/lib64/libclangDynamicASTMatchers.so.7
+/usr/lib64/libclangEdit.so
 /usr/lib64/libclangEdit.so.7
+/usr/lib64/libclangFormat.so
 /usr/lib64/libclangFormat.so.7
+/usr/lib64/libclangFrontend.so
 /usr/lib64/libclangFrontend.so.7
+/usr/lib64/libclangFrontendTool.so
 /usr/lib64/libclangFrontendTool.so.7
+/usr/lib64/libclangHandleCXX.so
 /usr/lib64/libclangHandleCXX.so.7
+/usr/lib64/libclangHandleLLVM.so
 /usr/lib64/libclangHandleLLVM.so.7
+/usr/lib64/libclangIndex.so
 /usr/lib64/libclangIndex.so.7
+/usr/lib64/libclangLex.so
 /usr/lib64/libclangLex.so.7
+/usr/lib64/libclangParse.so
 /usr/lib64/libclangParse.so.7
+/usr/lib64/libclangRewrite.so
 /usr/lib64/libclangRewrite.so.7
+/usr/lib64/libclangRewriteFrontend.so
 /usr/lib64/libclangRewriteFrontend.so.7
+/usr/lib64/libclangSema.so
 /usr/lib64/libclangSema.so.7
+/usr/lib64/libclangSerialization.so
 /usr/lib64/libclangSerialization.so.7
+/usr/lib64/libclangStaticAnalyzerCheckers.so
 /usr/lib64/libclangStaticAnalyzerCheckers.so.7
+/usr/lib64/libclangStaticAnalyzerCore.so
 /usr/lib64/libclangStaticAnalyzerCore.so.7
+/usr/lib64/libclangStaticAnalyzerFrontend.so
 /usr/lib64/libclangStaticAnalyzerFrontend.so.7
+/usr/lib64/libclangTooling.so
 /usr/lib64/libclangTooling.so.7
+/usr/lib64/libclangToolingASTDiff.so
 /usr/lib64/libclangToolingASTDiff.so.7
+/usr/lib64/libclangToolingCore.so
 /usr/lib64/libclangToolingCore.so.7
+/usr/lib64/libclangToolingInclusions.so
 /usr/lib64/libclangToolingInclusions.so.7
+/usr/lib64/libclangToolingRefactor.so
 /usr/lib64/libclangToolingRefactor.so.7
+/usr/lib64/libiomp5.so
+/usr/lib64/libomp.so
+/usr/lib64/libomptarget.rtl.x86_64.so
+/usr/lib64/libomptarget.so
 
 %files libexec
 %defattr(-,root,root,-)
