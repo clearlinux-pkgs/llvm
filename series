@@ -14,3 +14,5 @@ clang-0004-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
 0002-Unify-ZeroToOCL-cast-types.patch
 0004-OpenCL-Add-support-of-cl_intel_device_side_avc_motio.patch
 0005-OpenCL-Relax-diagnostics-on-OpenCL-access-qualifiers.patch
+0005-OpenCL-Fix-invalid-address-space-generation-for-clk_.patch
+fix-common-cl-build.patch

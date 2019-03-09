@@ -1,0 +1,11 @@
+--- llvm-7.0.1.src/projects/common-clang/common_clang.cpp~	2019-03-09 16:50:12.000000000 +0000
++++ llvm-7.0.1.src/projects/common-clang/common_clang.cpp	2019-03-09 17:13:13.594360350 +0000
+@@ -52,7 +52,7 @@
+ #ifdef USE_PREBUILT_LLVM
+ #include "LLVMSPIRVLib/LLVMSPIRVLib.h"
+ #else // USE_PREBUILT_LLVM
+-#include "LLVMSPIRVLib.h"
++#include "../SPIRV/include/LLVMSPIRVLib.h"
+ #endif // USE_PREBUILT_LLVM
+ 
+ // The following #defines are used as return value of Compile() API and defined
