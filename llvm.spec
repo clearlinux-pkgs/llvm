@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 7.0.1
-Release  : 85
+Release  : 86
 URL      : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.1/cfe-7.0.1.src.tar.xz
@@ -65,6 +65,10 @@ Patch10: 0004-OpenCL-Add-support-of-cl_intel_device_side_avc_motio.patch
 Patch11: 0005-OpenCL-Relax-diagnostics-on-OpenCL-access-qualifiers.patch
 Patch12: 0005-OpenCL-Fix-invalid-address-space-generation-for-clk_.patch
 Patch13: fix-common-cl-build.patch
+Patch14: 0001-Do-not-run-LowerSPIRBlocks-pass-if-there-are-no-SPIR.patch
+Patch15: 0002-Fix-disabling-of-fp-contract.patch
+Patch16: 0003-Preserve-debug-location-attached-to-a-builtin-call.patch
+Patch17: 0004-Add-no-signed-unsigned-wrap-decoration-support.patch
 
 %description
 This directory contains a "bundle" for doing syntax highlighting of TableGen
@@ -188,13 +192,17 @@ cp -r %{_topdir}/BUILD/opencl-clang-6257ffe137a2c8df95a3f3b39fa477aa8ed15837/* %
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
+%patch15 -p1
+%patch16 -p1
+%patch17 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1552155272
+export SOURCE_DATE_EPOCH=1552166679
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -238,7 +246,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1552155272
+export SOURCE_DATE_EPOCH=1552166679
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
