@@ -6,6 +6,7 @@ cups
 darktable
 dldt
 embree
+intel-graphics-compiler
 itstool
 libsodium
 llvm

@@ -21,3 +21,4 @@ fix-common-cl-build.patch
 0002-Fix-disabling-of-fp-contract.patch
 0003-Preserve-debug-location-attached-to-a-builtin-call.patch
 0004-Add-no-signed-unsigned-wrap-decoration-support.patch
+improve-phys-core-count.patch

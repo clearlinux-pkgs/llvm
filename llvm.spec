@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 7.0.1
-Release  : 86
+Release  : 87
 URL      : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.1/cfe-7.0.1.src.tar.xz
@@ -69,6 +69,7 @@ Patch14: 0001-Do-not-run-LowerSPIRBlocks-pass-if-there-are-no-SPIR.patch
 Patch15: 0002-Fix-disabling-of-fp-contract.patch
 Patch16: 0003-Preserve-debug-location-attached-to-a-builtin-call.patch
 Patch17: 0004-Add-no-signed-unsigned-wrap-decoration-support.patch
+Patch18: improve-phys-core-count.patch
 
 %description
 This directory contains a "bundle" for doing syntax highlighting of TableGen
@@ -196,13 +197,14 @@ cp -r %{_topdir}/BUILD/opencl-clang-6257ffe137a2c8df95a3f3b39fa477aa8ed15837/* %
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
+%patch18 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1552166679
+export SOURCE_DATE_EPOCH=1552241686
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -246,7 +248,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1552166679
+export SOURCE_DATE_EPOCH=1552241686
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT

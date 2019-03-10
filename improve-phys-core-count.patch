@@ -1,0 +1,11 @@
+--- llvm-7.0.0.src/lib/Support/Host.cpp~	2018-05-25 06:32:05.000000000 +0000
++++ llvm-7.0.0.src/lib/Support/Host.cpp	2019-03-10 17:15:17.554155693 +0000
+@@ -1092,7 +1092,7 @@
+   if (std::error_code EC = Text.getError()) {
+     llvm::errs() << "Can't read "
+                  << "/proc/cpuinfo: " << EC.message() << "\n";
+-    return -1;
++    return 1;
+   }
+   SmallVector<StringRef, 8> strs;
+   (*Text)->getBuffer().split(strs, "\n", /*MaxSplit=*/-1,
