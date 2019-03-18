@@ -7,17 +7,16 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 7.0.1
-Release  : 88
+Release  : 91
 URL      : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.1/cfe-7.0.1.src.tar.xz
 Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/4d62009e2225024abd481ca982ec3d63304df3f0.tar.gz
-Source3  : https://github.com/intel/opencl-clang/archive/6257ffe137a2c8df95a3f3b39fa477aa8ed15837.tar.gz
-Source4  : https://releases.llvm.org/7.0.1/compiler-rt-7.0.1.src.tar.xz
-Source5  : https://releases.llvm.org/7.0.1/lld-7.0.1.src.tar.xz
-Source6  : https://releases.llvm.org/7.0.1/openmp-7.0.1.src.tar.xz
+Source3  : https://releases.llvm.org/7.0.1/compiler-rt-7.0.1.src.tar.xz
+Source4  : https://releases.llvm.org/7.0.1/lld-7.0.1.src.tar.xz
+Source5  : https://releases.llvm.org/7.0.1/openmp-7.0.1.src.tar.xz
 Source99 : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz.sig
-Summary  : Collection of modular and reusable compiler and toolchain technologies
+Summary  : LLVM/SPIR-V bi-directional translator
 Group    : Development/Tools
 License  : BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
@@ -36,7 +35,6 @@ BuildRequires : buildreq-golang
 BuildRequires : cmake
 BuildRequires : doxygen
 BuildRequires : elfutils-dev
-BuildRequires : git
 BuildRequires : glibc-dev
 BuildRequires : googletest-dev
 BuildRequires : libffi-dev
@@ -64,19 +62,16 @@ Patch9: 0002-Unify-ZeroToOCL-cast-types.patch
 Patch10: 0004-OpenCL-Add-support-of-cl_intel_device_side_avc_motio.patch
 Patch11: 0005-OpenCL-Relax-diagnostics-on-OpenCL-access-qualifiers.patch
 Patch12: 0005-OpenCL-Fix-invalid-address-space-generation-for-clk_.patch
-Patch13: fix-common-cl-build.patch
-Patch14: 0001-Do-not-run-LowerSPIRBlocks-pass-if-there-are-no-SPIR.patch
-Patch15: 0002-Fix-disabling-of-fp-contract.patch
-Patch16: 0003-Preserve-debug-location-attached-to-a-builtin-call.patch
-Patch17: 0004-Add-no-signed-unsigned-wrap-decoration-support.patch
-Patch18: improve-phys-core-count.patch
+Patch13: 0001-Do-not-run-LowerSPIRBlocks-pass-if-there-are-no-SPIR.patch
+Patch14: 0002-Fix-disabling-of-fp-contract.patch
+Patch15: 0003-Preserve-debug-location-attached-to-a-builtin-call.patch
+Patch16: 0004-Add-no-signed-unsigned-wrap-decoration-support.patch
+Patch17: improve-phys-core-count.patch
 
 %description
-This directory contains a "bundle" for doing syntax highlighting of TableGen
-files for the Microsoft VSCode editor. The highlighting follows that done by
-the TextMate "C" bundle as it is a translation of the textmate bundle to VSCode
-using the "yo code" npm package. Currently, keywords, comments, and strings are
-highlighted.
+These inputs were pre-generated to allow for easier testing of llvm-cov.
+The files used to test the gcov compatible code coverage tool were generated
+using the following method:
 
 %package bin
 Summary: bin components for the llvm package.
@@ -104,7 +99,6 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-bin = %{version}-%{release}
 Requires: llvm-data = %{version}-%{release}
 Provides: llvm-devel = %{version}-%{release}
-Requires: llvm = %{version}-%{release}
 
 %description dev
 dev components for the llvm package.
@@ -159,15 +153,13 @@ man components for the llvm package.
 cd ..
 %setup -q -T -D -n llvm-7.0.1.src -b 1
 cd ..
-%setup -q -T -D -n llvm-7.0.1.src -b 5
-cd ..
-%setup -q -T -D -n llvm-7.0.1.src -b 6
-cd ..
 %setup -q -T -D -n llvm-7.0.1.src -b 4
 cd ..
-%setup -q -T -D -n llvm-7.0.1.src -b 2
+%setup -q -T -D -n llvm-7.0.1.src -b 5
 cd ..
 %setup -q -T -D -n llvm-7.0.1.src -b 3
+cd ..
+%setup -q -T -D -n llvm-7.0.1.src -b 2
 mkdir -p tools/clang
 cp -r %{_topdir}/BUILD/cfe-7.0.1.src/* %{_topdir}/BUILD/llvm-7.0.1.src/tools/clang
 mkdir -p tools/lld
@@ -178,8 +170,6 @@ mkdir -p projects/compiler-rt
 cp -r %{_topdir}/BUILD/compiler-rt-7.0.1.src/* %{_topdir}/BUILD/llvm-7.0.1.src/projects/compiler-rt
 mkdir -p projects/SPIRV
 cp -r %{_topdir}/BUILD/SPIRV-LLVM-Translator-4d62009e2225024abd481ca982ec3d63304df3f0/* %{_topdir}/BUILD/llvm-7.0.1.src/projects/SPIRV
-mkdir -p projects/common-clang
-cp -r %{_topdir}/BUILD/opencl-clang-6257ffe137a2c8df95a3f3b39fa477aa8ed15837/* %{_topdir}/BUILD/llvm-7.0.1.src/projects/common-clang
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -197,14 +187,13 @@ cp -r %{_topdir}/BUILD/opencl-clang-6257ffe137a2c8df95a3f3b39fa477aa8ed15837/* %
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1552241686
+export SOURCE_DATE_EPOCH=1553039830
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -237,7 +226,7 @@ unset LDFLAGS
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include" \
 -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
-make  %{?_smp_mflags}
+make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %check
@@ -248,7 +237,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1552241686
+export SOURCE_DATE_EPOCH=1553039830
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -580,7 +569,6 @@ rm %{buildroot}/usr/lib64/*.a
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
 /usr/include/LLVMSPIRVLib/LLVMSPIRVLib.h
-/usr/include/cclang/common_clang.h
 /usr/include/clang-c/BuildSystem.h
 /usr/include/clang-c/CXCompilationDatabase.h
 /usr/include/clang-c/CXErrorCode.h
@@ -2636,8 +2624,6 @@ rm %{buildroot}/usr/lib64/*.a
 /usr/lib64/libclangToolingInclusions.so.7
 /usr/lib64/libclangToolingRefactor.so
 /usr/lib64/libclangToolingRefactor.so.7
-/usr/lib64/libcommon_clang.so
-/usr/lib64/libcommon_clang.so.7
 /usr/lib64/libiomp5.so
 /usr/lib64/libomp.so
 /usr/lib64/libomptarget.rtl.x86_64.so
