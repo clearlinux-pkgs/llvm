@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 7.0.1
-Release  : 91
+Release  : 92
 URL      : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source0  : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz
 Source1  : http://releases.llvm.org/7.0.1/cfe-7.0.1.src.tar.xz
@@ -16,7 +16,7 @@ Source3  : https://releases.llvm.org/7.0.1/compiler-rt-7.0.1.src.tar.xz
 Source4  : https://releases.llvm.org/7.0.1/lld-7.0.1.src.tar.xz
 Source5  : https://releases.llvm.org/7.0.1/openmp-7.0.1.src.tar.xz
 Source99 : http://releases.llvm.org/7.0.1/llvm-7.0.1.src.tar.xz.sig
-Summary  : LLVM/SPIR-V bi-directional translator
+Summary  : Collection of modular and reusable compiler and toolchain technologies
 Group    : Development/Tools
 License  : BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
@@ -25,6 +25,7 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-libexec = %{version}-%{release}
 Requires: llvm-license = %{version}-%{release}
 Requires: llvm-man = %{version}-%{release}
+Requires: llvm-staticdev = %{version}-%{release}
 Requires: llvm-extras = %{version}-%{release}
 BuildRequires : Sphinx
 BuildRequires : Z3-dev
@@ -69,9 +70,11 @@ Patch16: 0004-Add-no-signed-unsigned-wrap-decoration-support.patch
 Patch17: improve-phys-core-count.patch
 
 %description
-These inputs were pre-generated to allow for easier testing of llvm-cov.
-The files used to test the gcov compatible code coverage tool were generated
-using the following method:
+This directory contains a "bundle" for doing syntax highlighting of TableGen
+files for the Microsoft VSCode editor. The highlighting follows that done by
+the TextMate "C" bundle as it is a translation of the textmate bundle to VSCode
+using the "yo code" npm package. Currently, keywords, comments, and strings are
+highlighted.
 
 %package bin
 Summary: bin components for the llvm package.
@@ -99,6 +102,7 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-bin = %{version}-%{release}
 Requires: llvm-data = %{version}-%{release}
 Provides: llvm-devel = %{version}-%{release}
+Requires: llvm = %{version}-%{release}
 
 %description dev
 dev components for the llvm package.
@@ -148,6 +152,15 @@ Group: Default
 man components for the llvm package.
 
 
+%package staticdev
+Summary: staticdev components for the llvm package.
+Group: Default
+Requires: llvm-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the llvm package.
+
+
 %prep
 %setup -q -n llvm-7.0.1.src
 cd ..
@@ -193,7 +206,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1553039830
+export SOURCE_DATE_EPOCH=1553447083
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -226,7 +239,7 @@ unset LDFLAGS
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include" \
 -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
-make  %{?_smp_mflags} VERBOSE=1
+make  %{?_smp_mflags}
 popd
 
 %check
@@ -237,7 +250,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1553039830
+export SOURCE_DATE_EPOCH=1553447083
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -254,9 +267,6 @@ cp utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses
 pushd clr-build
 %make_install
 popd
-## install_append content
-rm %{buildroot}/usr/lib64/*.a
-## install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -2651,3 +2661,151 @@ rm %{buildroot}/usr/lib64/*.a
 %files man
 %defattr(0644,root,root,0755)
 /usr/share/man/man1/scan-build.1
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libLLVMAArch64AsmParser.a
+/usr/lib64/libLLVMAArch64AsmPrinter.a
+/usr/lib64/libLLVMAArch64CodeGen.a
+/usr/lib64/libLLVMAArch64Desc.a
+/usr/lib64/libLLVMAArch64Disassembler.a
+/usr/lib64/libLLVMAArch64Info.a
+/usr/lib64/libLLVMAArch64Utils.a
+/usr/lib64/libLLVMAMDGPUAsmParser.a
+/usr/lib64/libLLVMAMDGPUAsmPrinter.a
+/usr/lib64/libLLVMAMDGPUCodeGen.a
+/usr/lib64/libLLVMAMDGPUDesc.a
+/usr/lib64/libLLVMAMDGPUDisassembler.a
+/usr/lib64/libLLVMAMDGPUInfo.a
+/usr/lib64/libLLVMAMDGPUUtils.a
+/usr/lib64/libLLVMARMAsmParser.a
+/usr/lib64/libLLVMARMAsmPrinter.a
+/usr/lib64/libLLVMARMCodeGen.a
+/usr/lib64/libLLVMARMDesc.a
+/usr/lib64/libLLVMARMDisassembler.a
+/usr/lib64/libLLVMARMInfo.a
+/usr/lib64/libLLVMARMUtils.a
+/usr/lib64/libLLVMAggressiveInstCombine.a
+/usr/lib64/libLLVMAnalysis.a
+/usr/lib64/libLLVMAsmParser.a
+/usr/lib64/libLLVMAsmPrinter.a
+/usr/lib64/libLLVMBPFAsmParser.a
+/usr/lib64/libLLVMBPFAsmPrinter.a
+/usr/lib64/libLLVMBPFCodeGen.a
+/usr/lib64/libLLVMBPFDesc.a
+/usr/lib64/libLLVMBPFDisassembler.a
+/usr/lib64/libLLVMBPFInfo.a
+/usr/lib64/libLLVMBinaryFormat.a
+/usr/lib64/libLLVMBitReader.a
+/usr/lib64/libLLVMBitWriter.a
+/usr/lib64/libLLVMCodeGen.a
+/usr/lib64/libLLVMCore.a
+/usr/lib64/libLLVMCoroutines.a
+/usr/lib64/libLLVMCoverage.a
+/usr/lib64/libLLVMDebugInfoCodeView.a
+/usr/lib64/libLLVMDebugInfoDWARF.a
+/usr/lib64/libLLVMDebugInfoMSF.a
+/usr/lib64/libLLVMDebugInfoPDB.a
+/usr/lib64/libLLVMDemangle.a
+/usr/lib64/libLLVMDlltoolDriver.a
+/usr/lib64/libLLVMExecutionEngine.a
+/usr/lib64/libLLVMFuzzMutate.a
+/usr/lib64/libLLVMGlobalISel.a
+/usr/lib64/libLLVMHexagonAsmParser.a
+/usr/lib64/libLLVMHexagonCodeGen.a
+/usr/lib64/libLLVMHexagonDesc.a
+/usr/lib64/libLLVMHexagonDisassembler.a
+/usr/lib64/libLLVMHexagonInfo.a
+/usr/lib64/libLLVMIRReader.a
+/usr/lib64/libLLVMInstCombine.a
+/usr/lib64/libLLVMInstrumentation.a
+/usr/lib64/libLLVMInterpreter.a
+/usr/lib64/libLLVMLTO.a
+/usr/lib64/libLLVMLanaiAsmParser.a
+/usr/lib64/libLLVMLanaiAsmPrinter.a
+/usr/lib64/libLLVMLanaiCodeGen.a
+/usr/lib64/libLLVMLanaiDesc.a
+/usr/lib64/libLLVMLanaiDisassembler.a
+/usr/lib64/libLLVMLanaiInfo.a
+/usr/lib64/libLLVMLibDriver.a
+/usr/lib64/libLLVMLineEditor.a
+/usr/lib64/libLLVMLinker.a
+/usr/lib64/libLLVMMC.a
+/usr/lib64/libLLVMMCDisassembler.a
+/usr/lib64/libLLVMMCJIT.a
+/usr/lib64/libLLVMMCParser.a
+/usr/lib64/libLLVMMIRParser.a
+/usr/lib64/libLLVMMSP430AsmPrinter.a
+/usr/lib64/libLLVMMSP430CodeGen.a
+/usr/lib64/libLLVMMSP430Desc.a
+/usr/lib64/libLLVMMSP430Info.a
+/usr/lib64/libLLVMMipsAsmParser.a
+/usr/lib64/libLLVMMipsAsmPrinter.a
+/usr/lib64/libLLVMMipsCodeGen.a
+/usr/lib64/libLLVMMipsDesc.a
+/usr/lib64/libLLVMMipsDisassembler.a
+/usr/lib64/libLLVMMipsInfo.a
+/usr/lib64/libLLVMNVPTXAsmPrinter.a
+/usr/lib64/libLLVMNVPTXCodeGen.a
+/usr/lib64/libLLVMNVPTXDesc.a
+/usr/lib64/libLLVMNVPTXInfo.a
+/usr/lib64/libLLVMObjCARCOpts.a
+/usr/lib64/libLLVMObject.a
+/usr/lib64/libLLVMObjectYAML.a
+/usr/lib64/libLLVMOption.a
+/usr/lib64/libLLVMOrcJIT.a
+/usr/lib64/libLLVMPasses.a
+/usr/lib64/libLLVMPowerPCAsmParser.a
+/usr/lib64/libLLVMPowerPCAsmPrinter.a
+/usr/lib64/libLLVMPowerPCCodeGen.a
+/usr/lib64/libLLVMPowerPCDesc.a
+/usr/lib64/libLLVMPowerPCDisassembler.a
+/usr/lib64/libLLVMPowerPCInfo.a
+/usr/lib64/libLLVMProfileData.a
+/usr/lib64/libLLVMRuntimeDyld.a
+/usr/lib64/libLLVMSPIRVLib.a
+/usr/lib64/libLLVMScalarOpts.a
+/usr/lib64/libLLVMSelectionDAG.a
+/usr/lib64/libLLVMSparcAsmParser.a
+/usr/lib64/libLLVMSparcAsmPrinter.a
+/usr/lib64/libLLVMSparcCodeGen.a
+/usr/lib64/libLLVMSparcDesc.a
+/usr/lib64/libLLVMSparcDisassembler.a
+/usr/lib64/libLLVMSparcInfo.a
+/usr/lib64/libLLVMSupport.a
+/usr/lib64/libLLVMSymbolize.a
+/usr/lib64/libLLVMSystemZAsmParser.a
+/usr/lib64/libLLVMSystemZAsmPrinter.a
+/usr/lib64/libLLVMSystemZCodeGen.a
+/usr/lib64/libLLVMSystemZDesc.a
+/usr/lib64/libLLVMSystemZDisassembler.a
+/usr/lib64/libLLVMSystemZInfo.a
+/usr/lib64/libLLVMTableGen.a
+/usr/lib64/libLLVMTarget.a
+/usr/lib64/libLLVMTransformUtils.a
+/usr/lib64/libLLVMVectorize.a
+/usr/lib64/libLLVMWindowsManifest.a
+/usr/lib64/libLLVMX86AsmParser.a
+/usr/lib64/libLLVMX86AsmPrinter.a
+/usr/lib64/libLLVMX86CodeGen.a
+/usr/lib64/libLLVMX86Desc.a
+/usr/lib64/libLLVMX86Disassembler.a
+/usr/lib64/libLLVMX86Info.a
+/usr/lib64/libLLVMX86Utils.a
+/usr/lib64/libLLVMXCoreAsmPrinter.a
+/usr/lib64/libLLVMXCoreCodeGen.a
+/usr/lib64/libLLVMXCoreDesc.a
+/usr/lib64/libLLVMXCoreDisassembler.a
+/usr/lib64/libLLVMXCoreInfo.a
+/usr/lib64/libLLVMXRay.a
+/usr/lib64/libLLVMipo.a
+/usr/lib64/liblldCOFF.a
+/usr/lib64/liblldCommon.a
+/usr/lib64/liblldCore.a
+/usr/lib64/liblldDriver.a
+/usr/lib64/liblldELF.a
+/usr/lib64/liblldMachO.a
+/usr/lib64/liblldMinGW.a
+/usr/lib64/liblldReaderWriter.a
+/usr/lib64/liblldWasm.a
+/usr/lib64/liblldYAML.a
