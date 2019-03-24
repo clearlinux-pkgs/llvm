@@ -25,7 +25,6 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-libexec = %{version}-%{release}
 Requires: llvm-license = %{version}-%{release}
 Requires: llvm-man = %{version}-%{release}
-Requires: llvm-staticdev = %{version}-%{release}
 Requires: llvm-extras = %{version}-%{release}
 BuildRequires : Sphinx
 BuildRequires : Z3-dev
