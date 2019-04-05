@@ -1,4 +1,4 @@
-From a0b0bddf2d569192a060ca2b31530148170ddbb1 Mon Sep 17 00:00:00 2001
+From d43137b559523ff7c577be293e59e98b29108d3e Mon Sep 17 00:00:00 2001
 From: Tom Stellard <tstellar@redhat.com>
 Date: Sat, 29 Apr 2017 02:03:23 +0000
 Subject: [llvm] CMake: Split static library exports into their own export file
@@ -30,10 +30,10 @@ Differential Revision: https://reviews.llvm.org/D32668
  3 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/cmake/modules/AddLLVM.cmake b/cmake/modules/AddLLVM.cmake
-index ce2057f803c..3c8e326f4b9 100644
+index 0df6845aaa7..03391c1dc52 100644
 --- a/cmake/modules/AddLLVM.cmake
 +++ b/cmake/modules/AddLLVM.cmake
-@@ -650,7 +650,11 @@ macro(add_llvm_library name)
+@@ -664,7 +664,11 @@ macro(add_llvm_library name)
  
        if(${name} IN_LIST LLVM_DISTRIBUTION_COMPONENTS OR
            NOT LLVM_DISTRIBUTION_COMPONENTS)
@@ -47,7 +47,7 @@ index ce2057f803c..3c8e326f4b9 100644
        endif()
  
 diff --git a/cmake/modules/CMakeLists.txt b/cmake/modules/CMakeLists.txt
-index 6c316a2f04f..656b5af1cab 100644
+index f5cc0006fa0..6605dc729c2 100644
 --- a/cmake/modules/CMakeLists.txt
 +++ b/cmake/modules/CMakeLists.txt
 @@ -97,6 +97,7 @@ set(LLVM_CONFIG_BINARY_DIR "\${LLVM_INSTALL_PREFIX}")
@@ -68,10 +68,10 @@ index 6c316a2f04f..656b5af1cab 100644
  
    install(FILES
 diff --git a/cmake/modules/LLVMConfig.cmake.in b/cmake/modules/LLVMConfig.cmake.in
-index 8b4c22a3031..2e1df555748 100644
+index 7ca06381d90..44d042c9b11 100644
 --- a/cmake/modules/LLVMConfig.cmake.in
 +++ b/cmake/modules/LLVMConfig.cmake.in
-@@ -83,6 +83,8 @@ if(NOT TARGET LLVMSupport)
+@@ -84,6 +84,8 @@ if(NOT TARGET LLVMSupport)
    set(LLVM_EXPORTED_TARGETS "@LLVM_CONFIG_EXPORTS@")
    include("@LLVM_CONFIG_EXPORTS_FILE@")
    @llvm_config_include_buildtree_only_exports@
@@ -81,5 +81,5 @@ index 8b4c22a3031..2e1df555748 100644
  
  # By creating intrinsics_gen here, subprojects that depend on LLVM's
 -- 
-2.19.1
+2.21.0
 

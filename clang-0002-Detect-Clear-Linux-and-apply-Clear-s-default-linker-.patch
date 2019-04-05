@@ -1,4 +1,4 @@
-From c749290f800e6eaf72c63675f5841635b82f4ba5 Mon Sep 17 00:00:00 2001
+From babb8b1f2e41e30435f943363c8c5a663c864d63 Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Wed, 10 Oct 2018 19:53:40 -0700
 Subject: [cfe] Detect Clear Linux and apply Clear's default linker options
@@ -8,14 +8,14 @@ backporting this patch.
 
 Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
 ---
- include/clang/Driver/Distro.h   |  5 +++++
+ include/clang/Driver/Distro.h   |  4 ++++
  lib/Driver/Distro.cpp           | 13 +++++++++++++
- lib/Driver/ToolChains/Linux.cpp |  9 ++++++---
- unittests/Driver/DistroTest.cpp | 15 +++++++++++++++
- 4 files changed, 39 insertions(+), 3 deletions(-)
+ lib/Driver/ToolChains/Linux.cpp | 17 ++++++++++++-----
+ unittests/Driver/DistroTest.cpp | 16 ++++++++++++++++
+ 4 files changed, 45 insertions(+), 5 deletions(-)
 
 diff --git a/tools/clang/include/clang/Driver/Distro.h b/tools/clang/include/clang/Driver/Distro.h
-index 7b34a09256..71de14eea7 100644
+index 5651ebb6d4..30fda469d5 100644
 --- a/tools/clang/include/clang/Driver/Distro.h
 +++ b/tools/clang/include/clang/Driver/Distro.h
 @@ -28,6 +28,7 @@ public:
@@ -26,24 +26,23 @@ index 7b34a09256..71de14eea7 100644
      DebianLenny,
      DebianSqueeze,
      DebianWheezy,
-@@ -122,6 +123,10 @@ public:
-     return DistroVal == AlpineLinux;
+@@ -127,6 +128,9 @@ public:
+   bool IsGentoo() const {
+     return DistroVal == Gentoo;
    }
- 
 +  bool IsClearLinux() const {
 +    return DistroVal == ClearLinux;
 +  }
-+
+ 
    /// @}
  };
- 
 diff --git a/tools/clang/lib/Driver/Distro.cpp b/tools/clang/lib/Driver/Distro.cpp
-index 2c4d44faf8..437ceafc89 100644
+index 396d0bee56..abd33baddf 100644
 --- a/tools/clang/lib/Driver/Distro.cpp
 +++ b/tools/clang/lib/Driver/Distro.cpp
-@@ -136,6 +136,19 @@ static Distro::DistroType DetectDistro(vfs::FileSystem &VFS) {
-   if (VFS.exists("/etc/arch-release"))
-     return Distro::ArchLinux;
+@@ -141,6 +141,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
+   if (VFS.exists("/etc/gentoo-release"))
+     return Distro::Gentoo;
  
 +  File = VFS.getBufferForFile("/usr/lib/os-release");
 +  if (File) {
@@ -52,8 +51,8 @@ index 2c4d44faf8..437ceafc89 100644
 +    Data.split(Lines, "\n");
 +    Distro::DistroType Version = Distro::UnknownDistro;
 +    for (StringRef Line : Lines)
-+      if (Version == Distro::UnknownDistro && Line.startswith("ID="))
-+        Version = llvm::StringSwitch<Distro::DistroType>(Line.substr(3))
++      if (Version == Distro::UnknownDistro && Line.startswith("ID_LIKE="))
++        Version = llvm::StringSwitch<Distro::DistroType>(Line.substr(7))
 +                      .Case("clear-linux-os", Distro::ClearLinux);
 +    return Version;
 +  }
@@ -62,21 +61,22 @@ index 2c4d44faf8..437ceafc89 100644
  }
  
 diff --git a/tools/clang/lib/Driver/ToolChains/Linux.cpp b/tools/clang/lib/Driver/ToolChains/Linux.cpp
-index f8f3623918..92d4bef323 100644
+index 65ab9b2daf..c04445bb28 100644
 --- a/tools/clang/lib/Driver/ToolChains/Linux.cpp
 +++ b/tools/clang/lib/Driver/ToolChains/Linux.cpp
-@@ -228,16 +228,19 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+@@ -236,17 +236,20 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
  
    Distro Distro(D.getVFS());
  
--  if (Distro.IsAlpineLinux()) {
-+  if (Distro.IsAlpineLinux() || Distro.IsClearLinux()) {
+-  if (Distro.IsAlpineLinux() || Triple.isAndroid()) {
++  if (Distro.IsAlpineLinux() || Distro.IsClearLinux() || Triple.isAndroid()) {
      ExtraOpts.push_back("-z");
      ExtraOpts.push_back("now");
    }
  
--  if (Distro.IsOpenSUSE() || Distro.IsUbuntu() || Distro.IsAlpineLinux()) {
-+  if (Distro.IsOpenSUSE() || Distro.IsUbuntu() || Distro.IsAlpineLinux() || Distro.IsClearLinux()) {
+   if (Distro.IsOpenSUSE() || Distro.IsUbuntu() || Distro.IsAlpineLinux() ||
+-      Triple.isAndroid()) {
++      Distro.IsClearLinux() || Triple.isAndroid()) {
      ExtraOpts.push_back("-z");
      ExtraOpts.push_back("relro");
    }
@@ -84,10 +84,10 @@ index f8f3623918..92d4bef323 100644
 +  if (Distro.IsClearLinux())
 +    ExtraOpts.push_back("--copy-dt-needed-entries");
 +
-   if (GCCInstallation.getParentLibPath().find("opt/rh/devtoolset") !=
-       StringRef::npos)
-     // With devtoolset on RHEL, we want to add a bin directory that is relative
-@@ -282,7 +285,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+   // The lld default page size is too large for Aarch64, which produces much
+   // larger .so files and images for arm64 device targets. Use 4KB page size
+   // for Android arm64 targets instead.
+@@ -302,7 +305,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
    ExtraOpts.push_back("--build-id");
  #endif
  
@@ -96,12 +96,27 @@ index f8f3623918..92d4bef323 100644
      ExtraOpts.push_back("--enable-new-dtags");
  
    // The selection of paths to try here is designed to match the patterns which
+@@ -968,8 +971,12 @@ void Linux::AddIAMCUIncludeArgs(const ArgList &DriverArgs,
+ }
+ 
+ bool Linux::isPIEDefault() const {
+-  return (getTriple().isAndroid() && !getTriple().isAndroidVersionLT(16)) ||
+-          getTriple().isMusl() || getSanitizerArgs().requiresPIE();
++  if ((getTriple().isAndroid() && !getTriple().isAndroidVersionLT(16)) ||
++      getTriple().isMusl() || getSanitizerArgs().requiresPIE())
++    return true;
++
++  Distro Distro(getDriver().getVFS());
++  return Distro.IsClearLinux();
+ }
+ 
+ bool Linux::IsMathErrnoDefault() const {
 diff --git a/tools/clang/unittests/Driver/DistroTest.cpp b/tools/clang/unittests/Driver/DistroTest.cpp
-index e3686e4980..ccda2171bd 100644
+index bc1863c429..06bdbcb990 100644
 --- a/tools/clang/unittests/Driver/DistroTest.cpp
 +++ b/tools/clang/unittests/Driver/DistroTest.cpp
-@@ -302,4 +302,19 @@ TEST(DistroTest, DetectArchLinux) {
-   ASSERT_FALSE(ArchLinux.IsDebian());
+@@ -338,4 +338,20 @@ TEST(DistroTest, DetectGentoo) {
+   ASSERT_TRUE(Gentoo.IsGentoo());
  }
  
 +TEST(DistroTest, DetectClearLinux) {
@@ -110,6 +125,7 @@ index e3686e4980..ccda2171bd 100644
 +      llvm::MemoryBuffer::getMemBuffer("NAME=\"Clear Linux OS\"\n"
 +                                       "VERSION=1\n"
 +                                       "ID=clear-linux-os\n"
++                                       "ID_LIKE=clear-linux-os\n"
 +                                       "VERSION_ID=25530\n"
 +                                       "PRETTY_NAME=\"Clear Linux OS\"\n"
 +                                       "ANSI_COLOR=\"1;35\"\n"
@@ -121,5 +137,5 @@ index e3686e4980..ccda2171bd 100644
 +
  } // end anonymous namespace
 -- 
-2.19.1
+2.21.0
 

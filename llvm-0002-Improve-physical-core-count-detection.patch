@@ -1,0 +1,28 @@
+From 7538b9c6f513c52abefd65b4187a979b8ad7a2bb Mon Sep 17 00:00:00 2001
+From: Arjan van de Ven <arjan@linux.intel.com>
+Date: Sun, 10 Mar 2019 18:15:11 +0000
+Subject: [llvm] Improve physical core count detection
+
+Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
+---
+ lib/Support/Host.cpp | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/lib/Support/Host.cpp b/lib/Support/Host.cpp
+index d5a688c7fb9..78af3d00366 100644
+--- a/lib/Support/Host.cpp
++++ b/lib/Support/Host.cpp
+@@ -1153,9 +1153,7 @@ static int computeHostNumPhysicalCores() {
+   llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> Text =
+       llvm::MemoryBuffer::getFileAsStream("/proc/cpuinfo");
+   if (std::error_code EC = Text.getError()) {
+-    llvm::errs() << "Can't read "
+-                 << "/proc/cpuinfo: " << EC.message() << "\n";
+-    return -1;
++    return 1;
+   }
+   SmallVector<StringRef, 8> strs;
+   (*Text)->getBuffer().split(strs, "\n", /*MaxSplit=*/-1,
+-- 
+2.21.0
+

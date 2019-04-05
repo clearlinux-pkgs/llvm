@@ -1,4 +1,4 @@
-From 2f05af217a5d6f67e9be2532478ca98bf9e4424c Mon Sep 17 00:00:00 2001
+From 366c73e4289a5a9af3d4247889c8e8567b011f80 Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Thu, 11 Oct 2018 10:47:38 -0700
 Subject: [cfe] Allow building split libclang libraries with unified LLVM lib
@@ -14,11 +14,12 @@ Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/tools/clang/CMakeLists.txt b/tools/clang/CMakeLists.txt
-index 52b8819394..fd1e42499c 100644
+index c2016a45ca..11f22691ca 100644
 --- a/tools/clang/CMakeLists.txt
 +++ b/tools/clang/CMakeLists.txt
-@@ -1,5 +1,10 @@
- cmake_minimum_required(VERSION 3.4.3)
+@@ -4,6 +4,11 @@ if(POLICY CMP0075)
+   cmake_policy(SET CMP0075 NEW)
+ endif()
  
 +if( CLANG_BUILD_SHARED_LIBS )
 +  set(BUILD_SHARED_LIBS ON)
@@ -29,5 +30,5 @@ index 52b8819394..fd1e42499c 100644
  # standalone project, using LLVM as an external library:
  if( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )
 -- 
-2.19.1
+2.21.0
 

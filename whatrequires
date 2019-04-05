@@ -1,4 +1,5 @@
 # This file contains recursive sources that require this package
+GtkD
 PyNaCl
 aeon
 blender
@@ -8,8 +9,10 @@ dldt
 embree
 intel-graphics-compiler
 itstool
+ldc
 libsodium
 llvm
 llvmlite
 pyside2-setup
 pytorch
+v4l-utils

@@ -1,23 +1,10 @@
 python2-shebangs.patch
-#more-fma.patch
 # llvm patches
 llvm-0001-CMake-Split-static-library-exports-into-their-own-ex.patch
-llvm-0002-Remove-FeatureRTM-from-Skylake-processor-list.patch
+llvm-0002-Improve-physical-core-count-detection.patch
+llvm-0003-Produce-a-normally-versioned-libLLVM.patch
+
 # clang patches
 clang-0001-Allow-building-split-libclang-libraries-with-unified.patch
-clang-0002-Remove-FeatureRTM-from-Skylake-processor-list.patch
-clang-0003-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
-clang-0004-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
-
-# upstream backports for openCL support
-0001-Add-cl_intel_planar_yuv-extension.patch
-0002-Unify-ZeroToOCL-cast-types.patch
-0004-OpenCL-Add-support-of-cl_intel_device_side_avc_motio.patch
-0005-OpenCL-Relax-diagnostics-on-OpenCL-access-qualifiers.patch
-0005-OpenCL-Fix-invalid-address-space-generation-for-clk_.patch
-
-0001-Do-not-run-LowerSPIRBlocks-pass-if-there-are-no-SPIR.patch
-0002-Fix-disabling-of-fp-contract.patch
-0003-Preserve-debug-location-attached-to-a-builtin-call.patch
-0004-Add-no-signed-unsigned-wrap-decoration-support.patch
-improve-phys-core-count.patch
+clang-0002-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
+clang-0003-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
