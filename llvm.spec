@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 95
+Release  : 96
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
@@ -93,6 +93,7 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-bin = %{version}-%{release}
 Requires: llvm-data = %{version}-%{release}
 Provides: llvm-devel = %{version}-%{release}
+Requires: llvm = %{version}-%{release}
 
 %description dev
 dev components for the llvm package.
@@ -190,7 +191,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1554498455
+export SOURCE_DATE_EPOCH=1554504142
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -234,7 +235,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1554498455
+export SOURCE_DATE_EPOCH=1554504142
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -2489,7 +2490,6 @@ popd
 /usr/include/llvm/XRay/Trace.h
 /usr/include/llvm/XRay/XRayRecord.h
 /usr/include/llvm/XRay/YAMLXRayRecord.h
-/usr/lib64/*.a
 /usr/lib64/clang/8.0.0/include/omp-tools.h
 /usr/lib64/cmake/clang/ClangConfig.cmake
 /usr/lib64/cmake/clang/ClangTargets-relwithdebinfo.cmake
@@ -2769,3 +2769,162 @@ popd
 %files man
 %defattr(0644,root,root,0755)
 /usr/share/man/man1/scan-build.1
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libLLVMAArch64AsmParser.a
+/usr/lib64/libLLVMAArch64AsmPrinter.a
+/usr/lib64/libLLVMAArch64CodeGen.a
+/usr/lib64/libLLVMAArch64Desc.a
+/usr/lib64/libLLVMAArch64Disassembler.a
+/usr/lib64/libLLVMAArch64Info.a
+/usr/lib64/libLLVMAArch64Utils.a
+/usr/lib64/libLLVMAMDGPUAsmParser.a
+/usr/lib64/libLLVMAMDGPUAsmPrinter.a
+/usr/lib64/libLLVMAMDGPUCodeGen.a
+/usr/lib64/libLLVMAMDGPUDesc.a
+/usr/lib64/libLLVMAMDGPUDisassembler.a
+/usr/lib64/libLLVMAMDGPUInfo.a
+/usr/lib64/libLLVMAMDGPUUtils.a
+/usr/lib64/libLLVMARMAsmParser.a
+/usr/lib64/libLLVMARMAsmPrinter.a
+/usr/lib64/libLLVMARMCodeGen.a
+/usr/lib64/libLLVMARMDesc.a
+/usr/lib64/libLLVMARMDisassembler.a
+/usr/lib64/libLLVMARMInfo.a
+/usr/lib64/libLLVMARMUtils.a
+/usr/lib64/libLLVMAggressiveInstCombine.a
+/usr/lib64/libLLVMAnalysis.a
+/usr/lib64/libLLVMAsmParser.a
+/usr/lib64/libLLVMAsmPrinter.a
+/usr/lib64/libLLVMBPFAsmParser.a
+/usr/lib64/libLLVMBPFAsmPrinter.a
+/usr/lib64/libLLVMBPFCodeGen.a
+/usr/lib64/libLLVMBPFDesc.a
+/usr/lib64/libLLVMBPFDisassembler.a
+/usr/lib64/libLLVMBPFInfo.a
+/usr/lib64/libLLVMBinaryFormat.a
+/usr/lib64/libLLVMBitReader.a
+/usr/lib64/libLLVMBitWriter.a
+/usr/lib64/libLLVMCodeGen.a
+/usr/lib64/libLLVMCore.a
+/usr/lib64/libLLVMCoroutines.a
+/usr/lib64/libLLVMCoverage.a
+/usr/lib64/libLLVMDebugInfoCodeView.a
+/usr/lib64/libLLVMDebugInfoDWARF.a
+/usr/lib64/libLLVMDebugInfoMSF.a
+/usr/lib64/libLLVMDebugInfoPDB.a
+/usr/lib64/libLLVMDemangle.a
+/usr/lib64/libLLVMDlltoolDriver.a
+/usr/lib64/libLLVMExecutionEngine.a
+/usr/lib64/libLLVMFuzzMutate.a
+/usr/lib64/libLLVMGlobalISel.a
+/usr/lib64/libLLVMHexagonAsmParser.a
+/usr/lib64/libLLVMHexagonCodeGen.a
+/usr/lib64/libLLVMHexagonDesc.a
+/usr/lib64/libLLVMHexagonDisassembler.a
+/usr/lib64/libLLVMHexagonInfo.a
+/usr/lib64/libLLVMIRReader.a
+/usr/lib64/libLLVMInstCombine.a
+/usr/lib64/libLLVMInstrumentation.a
+/usr/lib64/libLLVMInterpreter.a
+/usr/lib64/libLLVMLTO.a
+/usr/lib64/libLLVMLanaiAsmParser.a
+/usr/lib64/libLLVMLanaiAsmPrinter.a
+/usr/lib64/libLLVMLanaiCodeGen.a
+/usr/lib64/libLLVMLanaiDesc.a
+/usr/lib64/libLLVMLanaiDisassembler.a
+/usr/lib64/libLLVMLanaiInfo.a
+/usr/lib64/libLLVMLibDriver.a
+/usr/lib64/libLLVMLineEditor.a
+/usr/lib64/libLLVMLinker.a
+/usr/lib64/libLLVMMC.a
+/usr/lib64/libLLVMMCA.a
+/usr/lib64/libLLVMMCDisassembler.a
+/usr/lib64/libLLVMMCJIT.a
+/usr/lib64/libLLVMMCParser.a
+/usr/lib64/libLLVMMIRParser.a
+/usr/lib64/libLLVMMSP430AsmParser.a
+/usr/lib64/libLLVMMSP430AsmPrinter.a
+/usr/lib64/libLLVMMSP430CodeGen.a
+/usr/lib64/libLLVMMSP430Desc.a
+/usr/lib64/libLLVMMSP430Disassembler.a
+/usr/lib64/libLLVMMSP430Info.a
+/usr/lib64/libLLVMMipsAsmParser.a
+/usr/lib64/libLLVMMipsAsmPrinter.a
+/usr/lib64/libLLVMMipsCodeGen.a
+/usr/lib64/libLLVMMipsDesc.a
+/usr/lib64/libLLVMMipsDisassembler.a
+/usr/lib64/libLLVMMipsInfo.a
+/usr/lib64/libLLVMNVPTXAsmPrinter.a
+/usr/lib64/libLLVMNVPTXCodeGen.a
+/usr/lib64/libLLVMNVPTXDesc.a
+/usr/lib64/libLLVMNVPTXInfo.a
+/usr/lib64/libLLVMObjCARCOpts.a
+/usr/lib64/libLLVMObject.a
+/usr/lib64/libLLVMObjectYAML.a
+/usr/lib64/libLLVMOptRemarks.a
+/usr/lib64/libLLVMOption.a
+/usr/lib64/libLLVMOrcJIT.a
+/usr/lib64/libLLVMPasses.a
+/usr/lib64/libLLVMPowerPCAsmParser.a
+/usr/lib64/libLLVMPowerPCAsmPrinter.a
+/usr/lib64/libLLVMPowerPCCodeGen.a
+/usr/lib64/libLLVMPowerPCDesc.a
+/usr/lib64/libLLVMPowerPCDisassembler.a
+/usr/lib64/libLLVMPowerPCInfo.a
+/usr/lib64/libLLVMProfileData.a
+/usr/lib64/libLLVMRuntimeDyld.a
+/usr/lib64/libLLVMSPIRVLib.a
+/usr/lib64/libLLVMScalarOpts.a
+/usr/lib64/libLLVMSelectionDAG.a
+/usr/lib64/libLLVMSparcAsmParser.a
+/usr/lib64/libLLVMSparcAsmPrinter.a
+/usr/lib64/libLLVMSparcCodeGen.a
+/usr/lib64/libLLVMSparcDesc.a
+/usr/lib64/libLLVMSparcDisassembler.a
+/usr/lib64/libLLVMSparcInfo.a
+/usr/lib64/libLLVMSupport.a
+/usr/lib64/libLLVMSymbolize.a
+/usr/lib64/libLLVMSystemZAsmParser.a
+/usr/lib64/libLLVMSystemZAsmPrinter.a
+/usr/lib64/libLLVMSystemZCodeGen.a
+/usr/lib64/libLLVMSystemZDesc.a
+/usr/lib64/libLLVMSystemZDisassembler.a
+/usr/lib64/libLLVMSystemZInfo.a
+/usr/lib64/libLLVMTableGen.a
+/usr/lib64/libLLVMTarget.a
+/usr/lib64/libLLVMTextAPI.a
+/usr/lib64/libLLVMTransformUtils.a
+/usr/lib64/libLLVMVectorize.a
+/usr/lib64/libLLVMWebAssemblyAsmParser.a
+/usr/lib64/libLLVMWebAssemblyAsmPrinter.a
+/usr/lib64/libLLVMWebAssemblyCodeGen.a
+/usr/lib64/libLLVMWebAssemblyDesc.a
+/usr/lib64/libLLVMWebAssemblyDisassembler.a
+/usr/lib64/libLLVMWebAssemblyInfo.a
+/usr/lib64/libLLVMWindowsManifest.a
+/usr/lib64/libLLVMX86AsmParser.a
+/usr/lib64/libLLVMX86AsmPrinter.a
+/usr/lib64/libLLVMX86CodeGen.a
+/usr/lib64/libLLVMX86Desc.a
+/usr/lib64/libLLVMX86Disassembler.a
+/usr/lib64/libLLVMX86Info.a
+/usr/lib64/libLLVMX86Utils.a
+/usr/lib64/libLLVMXCoreAsmPrinter.a
+/usr/lib64/libLLVMXCoreCodeGen.a
+/usr/lib64/libLLVMXCoreDesc.a
+/usr/lib64/libLLVMXCoreDisassembler.a
+/usr/lib64/libLLVMXCoreInfo.a
+/usr/lib64/libLLVMXRay.a
+/usr/lib64/libLLVMipo.a
+/usr/lib64/liblldCOFF.a
+/usr/lib64/liblldCommon.a
+/usr/lib64/liblldCore.a
+/usr/lib64/liblldDriver.a
+/usr/lib64/liblldELF.a
+/usr/lib64/liblldMachO.a
+/usr/lib64/liblldMinGW.a
+/usr/lib64/liblldReaderWriter.a
+/usr/lib64/liblldWasm.a
+/usr/lib64/liblldYAML.a
