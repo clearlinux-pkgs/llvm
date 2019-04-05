@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 94
+Release  : 95
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
@@ -58,6 +58,10 @@ Patch4: llvm-0003-Produce-a-normally-versioned-libLLVM.patch
 Patch5: clang-0001-Allow-building-split-libclang-libraries-with-unified.patch
 Patch6: clang-0002-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
 Patch7: clang-0003-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
+Patch8: clang-0004-Change-type-of-block-pointer-for-OpenCL.patch
+Patch9: clang-0005-Simplify-LLVM-IR-generated-for-OpenCL-blocks.patch
+Patch10: clang-0006-Fix-assertion-due-to-blocks.patch
+Patch11: SPIRV-0001-Update-LowerOpenCL-pass-to-handle-new-blocks-represn.patch
 
 %description
 These are syntax highlighting files for the Kate editor. Included are:
@@ -138,6 +142,15 @@ Group: Default
 man components for the llvm package.
 
 
+%package staticdev
+Summary: staticdev components for the llvm package.
+Group: Default
+Requires: llvm-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the llvm package.
+
+
 %prep
 %setup -q -n llvm-8.0.0.src
 cd ..
@@ -167,13 +180,17 @@ cp -r %{_topdir}/BUILD/SPIRV-LLVM-Translator-8.0.0-1/* %{_topdir}/BUILD/llvm-8.0
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1554493342
+export SOURCE_DATE_EPOCH=1554498455
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -217,7 +234,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1554493342
+export SOURCE_DATE_EPOCH=1554498455
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT

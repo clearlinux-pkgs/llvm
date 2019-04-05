@@ -8,3 +8,9 @@ llvm-0003-Produce-a-normally-versioned-libLLVM.patch
 clang-0001-Allow-building-split-libclang-libraries-with-unified.patch
 clang-0002-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
 clang-0003-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
+clang-0004-Change-type-of-block-pointer-for-OpenCL.patch
+clang-0005-Simplify-LLVM-IR-generated-for-OpenCL-blocks.patch
+clang-0006-Fix-assertion-due-to-blocks.patch
+
+# SPIRV patches
+SPIRV-0001-Update-LowerOpenCL-pass-to-handle-new-blocks-represn.patch
