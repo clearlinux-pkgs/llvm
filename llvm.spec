@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 96
+Release  : 97
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
@@ -16,7 +16,7 @@ Source3  : http://releases.llvm.org/8.0.0/lld-8.0.0.src.tar.xz
 Source4  : http://releases.llvm.org/8.0.0/openmp-8.0.0.src.tar.xz
 Source5  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v8.0.0-1.tar.gz
 Source99 : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz.sig
-Summary  : LLVM/SPIR-V bi-directional translator
+Summary  : Collection of modular and reusable compiler and toolchain technologies
 Group    : Development/Tools
 License  : Apache-2.0 BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
@@ -62,10 +62,14 @@ Patch8: clang-0004-Change-type-of-block-pointer-for-OpenCL.patch
 Patch9: clang-0005-Simplify-LLVM-IR-generated-for-OpenCL-blocks.patch
 Patch10: clang-0006-Fix-assertion-due-to-blocks.patch
 Patch11: SPIRV-0001-Update-LowerOpenCL-pass-to-handle-new-blocks-represn.patch
+Patch12: fma.patch
 
 %description
-These are syntax highlighting files for the Kate editor. Included are:
-* llvm.xml
+This directory contains a "bundle" for doing syntax highlighting of TableGen
+files for the Microsoft VSCode editor. The highlighting follows that done by
+the TextMate "C" bundle as it is a translation of the textmate bundle to VSCode
+using the "yo code" npm package. Currently, keywords, comments, and strings are
+highlighted.
 
 %package bin
 Summary: bin components for the llvm package.
@@ -185,13 +189,14 @@ cp -r %{_topdir}/BUILD/SPIRV-LLVM-Translator-8.0.0-1/* %{_topdir}/BUILD/llvm-8.0
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1554504142
+export SOURCE_DATE_EPOCH=1554786538
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -224,7 +229,7 @@ unset LDFLAGS
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include" \
 -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
-make  %{?_smp_mflags} VERBOSE=1
+make  %{?_smp_mflags}
 popd
 
 %check
@@ -235,12 +240,13 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1554504142
+export SOURCE_DATE_EPOCH=1554786538
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
 cp projects/SPIRV/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/projects_SPIRV_LICENSE.TXT
 cp projects/compiler-rt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/projects_compiler-rt_LICENSE.TXT
+cp projects/openmp/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
 cp test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
 cp tools/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
 cp tools/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/package-licenses/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
@@ -2757,6 +2763,7 @@ popd
 /usr/share/package-licenses/llvm/LICENSE.TXT
 /usr/share/package-licenses/llvm/projects_SPIRV_LICENSE.TXT
 /usr/share/package-licenses/llvm/projects_compiler-rt_LICENSE.TXT
+/usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
 /usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
 /usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
 /usr/share/package-licenses/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt

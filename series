@@ -14,3 +14,4 @@ clang-0006-Fix-assertion-due-to-blocks.patch
 
 # SPIRV patches
 SPIRV-0001-Update-LowerOpenCL-pass-to-handle-new-blocks-represn.patch
+fma.patch
