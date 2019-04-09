@@ -33,5 +33,6 @@
 # Distro choices
 -DLLVM_LIBDIR_SUFFIX=64
 -DLLVM_BINUTILS_INCDIR=/usr/include
+-DLLVM_HOST_TRIPLE="x86_64-generic-linux"
 -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include"
 -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
