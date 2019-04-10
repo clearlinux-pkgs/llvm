@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 97
+Release  : 98
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
@@ -16,7 +16,7 @@ Source3  : http://releases.llvm.org/8.0.0/lld-8.0.0.src.tar.xz
 Source4  : http://releases.llvm.org/8.0.0/openmp-8.0.0.src.tar.xz
 Source5  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v8.0.0-1.tar.gz
 Source99 : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz.sig
-Summary  : Collection of modular and reusable compiler and toolchain technologies
+Summary  : LLVM/SPIR-V bi-directional translator
 Group    : Development/Tools
 License  : Apache-2.0 BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
@@ -25,9 +25,11 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-libexec = %{version}-%{release}
 Requires: llvm-license = %{version}-%{release}
 Requires: llvm-man = %{version}-%{release}
+Requires: llvm-staticdev32 = %{version}-%{release}
 Requires: llvm-extras = %{version}-%{release}
 BuildRequires : Sphinx
 BuildRequires : Z3-dev
+BuildRequires : Z3-dev32
 BuildRequires : binutils-dev
 BuildRequires : buildreq-cmake
 BuildRequires : buildreq-distutils3
@@ -35,22 +37,30 @@ BuildRequires : buildreq-golang
 BuildRequires : cmake
 BuildRequires : doxygen
 BuildRequires : elfutils-dev
+BuildRequires : gcc-dev32
+BuildRequires : gcc-libgcc32
+BuildRequires : gcc-libstdc++32
 BuildRequires : git
 BuildRequires : glibc-dev
+BuildRequires : glibc-dev32
+BuildRequires : glibc-libc32
 BuildRequires : googletest-dev
 BuildRequires : libffi-dev
 BuildRequires : libstdc++-dev
 BuildRequires : libxml2-dev
+BuildRequires : libxml2-dev32
 BuildRequires : llvm
 BuildRequires : ncurses-dev
 BuildRequires : perl
 BuildRequires : pkg-config
+BuildRequires : pkgconfig(32libffi)
 BuildRequires : pkgconfig(libffi)
 BuildRequires : protobuf-dev
 BuildRequires : python3-dev
 BuildRequires : subversion
 BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
+BuildRequires : zlib-dev32
 Patch1: python2-shebangs.patch
 Patch2: llvm-0001-CMake-Split-static-library-exports-into-their-own-ex.patch
 Patch3: llvm-0002-Improve-physical-core-count-detection.patch
@@ -65,11 +75,8 @@ Patch11: SPIRV-0001-Update-LowerOpenCL-pass-to-handle-new-blocks-represn.patch
 Patch12: fma.patch
 
 %description
-This directory contains a "bundle" for doing syntax highlighting of TableGen
-files for the Microsoft VSCode editor. The highlighting follows that done by
-the TextMate "C" bundle as it is a translation of the textmate bundle to VSCode
-using the "yo code" npm package. Currently, keywords, comments, and strings are
-highlighted.
+These are syntax highlighting files for the Kate editor. Included are:
+* llvm.xml
 
 %package bin
 Summary: bin components for the llvm package.
@@ -103,6 +110,18 @@ Requires: llvm = %{version}-%{release}
 dev components for the llvm package.
 
 
+%package dev32
+Summary: dev32 components for the llvm package.
+Group: Default
+Requires: llvm-lib32 = %{version}-%{release}
+Requires: llvm-bin = %{version}-%{release}
+Requires: llvm-data = %{version}-%{release}
+Requires: llvm-dev = %{version}-%{release}
+
+%description dev32
+dev32 components for the llvm package.
+
+
 %package extras
 Summary: extras components for the llvm package.
 Group: Default
@@ -120,6 +139,16 @@ Requires: llvm-license = %{version}-%{release}
 
 %description lib
 lib components for the llvm package.
+
+
+%package lib32
+Summary: lib32 components for the llvm package.
+Group: Default
+Requires: llvm-data = %{version}-%{release}
+Requires: llvm-license = %{version}-%{release}
+
+%description lib32
+lib32 components for the llvm package.
 
 
 %package libexec
@@ -154,6 +183,14 @@ Requires: llvm-dev = %{version}-%{release}
 
 %description staticdev
 staticdev components for the llvm package.
+
+
+%package staticdev32
+Summary: staticdev32 components for the llvm package.
+Group: Default
+
+%description staticdev32
+staticdev32 components for the llvm package.
 
 
 %prep
@@ -196,7 +233,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1554786538
+export SOURCE_DATE_EPOCH=1554856355
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -227,9 +264,66 @@ unset LDFLAGS
 -DLLVM_REQUIRES_RTTI:BOOL=ON \
 -DLLVM_LIBDIR_SUFFIX=64 \
 -DLLVM_BINUTILS_INCDIR=/usr/include \
+-DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
 -DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include" \
--DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
-make  %{?_smp_mflags}
+-DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3 \
+`case "$PWD" in *build32) \
+echo -DLLVM_BUILD_TOOLS:BOOL=OFF -DLLVM_TOOL_CLANG_BUILD:BOOL=OFF; \
+echo -DLLVM_TOOL_COMPILER_RT_BUILD:BOOL=OFF -DLLVM_TOOL_LLD_BUILD:BOOL=OFF; \
+echo -DLLVM_TOOL_OPENMP_BUILD:BOOL=OFF -DLLVM_TOOL_COMPILER_RT_BUILD:BOOL=OFF; \
+echo -DLLVM_TOOL_SPIRV_BUILD:BOOL=ON; \
+echo -DLLVM_LIBDIR_SUFFIX=32 -DLLVM_HOST_TRIPLE="i686-generic-linux" \
+;; \
+esac`
+make  %{?_smp_mflags} VERBOSE=1
+popd
+mkdir -p clr-build32
+pushd clr-build32
+export CC=clang
+export CXX=clang++
+export LD=ld.gold
+export CFLAGS="-O2 -g -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=32 -Wformat -Wformat-security -Wno-error -Wl,-z,max-page-size=0x1000 -march=westmere -mtune=haswell"
+export CXXFLAGS=$CFLAGS
+unset LDFLAGS
+unset LDFLAGS
+export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
+export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32"
+export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32"
+export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32"
+%cmake -DLIB_INSTALL_DIR:PATH=/usr/lib32 -DCMAKE_INSTALL_LIBDIR=/usr/lib32 -DLIB_SUFFIX=32 .. -DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS`" \
+-DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS`" \
+-DCMAKE_EXE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
+-DCMAKE_MODULE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
+-DCMAKE_SHARED_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
+-DENABLE_LINKER_BUILD_ID=ON \
+-DBUILD_SHARED_LIBS:BOOL=OFF \
+-DLLVM_LINK_LLVM_DYLIB:BOOL=ON \
+-DCLANG_BUILD_SHARED_LIBS:BOOL=ON \
+-DLLVM_BUILD_RUNTIME:BOOL=ON \
+-DLLVM_BUILD_TOOLS:BOOL=ON \
+-DLLVM_ENABLE_CXX1Y=ON \
+-DLLVM_ENABLE_FFI:BOOL=ON -DFFI_INCLUDE_DIR=`pkg-config --variable=includedir libffi` \
+-DLLVM_ENABLE_LIBCXX:BOOL=OFF \
+-DLLVM_ENABLE_RTTI:BOOL=ON \
+-DLLVM_ENABLE_ZLIB:BOOL=ON \
+-DLLVM_INSTALL_UTILS:BOOL=ON \
+-DLLVM_REQUIRES_RTTI:BOOL=ON \
+-DLLVM_LIBDIR_SUFFIX=64 \
+-DLLVM_BINUTILS_INCDIR=/usr/include \
+-DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
+-DC_INCLUDE_DIRS="/usr/include/c++:/usr/include/c++/x86_64-generic-linux:/usr/include" \
+-DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3 \
+`case "$PWD" in *build32) \
+echo -DLLVM_BUILD_TOOLS:BOOL=OFF -DLLVM_TOOL_CLANG_BUILD:BOOL=OFF; \
+echo -DLLVM_TOOL_COMPILER_RT_BUILD:BOOL=OFF -DLLVM_TOOL_LLD_BUILD:BOOL=OFF; \
+echo -DLLVM_TOOL_OPENMP_BUILD:BOOL=OFF -DLLVM_TOOL_COMPILER_RT_BUILD:BOOL=OFF; \
+echo -DLLVM_TOOL_SPIRV_BUILD:BOOL=ON; \
+echo -DLLVM_LIBDIR_SUFFIX=32 -DLLVM_HOST_TRIPLE="i686-generic-linux" \
+;; \
+esac`
+make  %{?_smp_mflags} VERBOSE=1
+unset PKG_CONFIG_PATH
 popd
 
 %check
@@ -240,7 +334,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1554786538
+export SOURCE_DATE_EPOCH=1554856355
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -255,6 +349,15 @@ cp tools/msbuild/license.txt %{buildroot}/usr/share/package-licenses/llvm/tools_
 cp utils/benchmark/LICENSE %{buildroot}/usr/share/package-licenses/llvm/utils_benchmark_LICENSE
 cp utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/utils_unittest_googlemock_LICENSE.txt
 cp utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/utils_unittest_googletest_LICENSE.TXT
+pushd clr-build32
+%make_install32
+if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
+then
+pushd %{buildroot}/usr/lib32/pkgconfig
+for i in *.pc ; do ln -s $i 32$i ; done
+popd
+fi
+popd
 pushd clr-build
 %make_install
 popd
@@ -265,13 +368,19 @@ popd
 %exclude /usr/lib64/clang/8.0.0/include/cuda_wrappers/complex
 %exclude /usr/lib64/clang/8.0.0/include/cuda_wrappers/new
 %exclude /usr/lib64/clang/8.0.0/include/module.modulemap
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.a.syms
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-x86_64.a.syms
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-x86_64.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-x86_64.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dd-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dfsan-x86_64.a
@@ -284,27 +393,39 @@ popd
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan_cxx-x86_64.a.syms
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan_cxx-x86_64.a.syms
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-x86_64.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-x86_64.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-x86_64.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-x86_64.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-x86_64.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-x86_64.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-x86_64.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan_cxx-x86_64.a.syms
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.a.syms
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.a.syms
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.xray-basic-x86_64.a
@@ -2567,6 +2688,44 @@ popd
 /usr/lib64/libomptarget.so
 /usr/lib64/pkgconfig/LLVMSPIRVLib.pc
 
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/LLVMgold.so
+/usr/lib32/cmake/llvm/AddLLVM.cmake
+/usr/lib32/cmake/llvm/AddLLVMDefinitions.cmake
+/usr/lib32/cmake/llvm/AddOCaml.cmake
+/usr/lib32/cmake/llvm/AddSphinxTarget.cmake
+/usr/lib32/cmake/llvm/CheckAtomic.cmake
+/usr/lib32/cmake/llvm/CheckCompilerVersion.cmake
+/usr/lib32/cmake/llvm/CheckLinkerFlag.cmake
+/usr/lib32/cmake/llvm/ChooseMSVCCRT.cmake
+/usr/lib32/cmake/llvm/CrossCompile.cmake
+/usr/lib32/cmake/llvm/DetermineGCCCompatible.cmake
+/usr/lib32/cmake/llvm/FindLibpfm.cmake
+/usr/lib32/cmake/llvm/FindOCaml.cmake
+/usr/lib32/cmake/llvm/FindSphinx.cmake
+/usr/lib32/cmake/llvm/GenerateVersionFromCVS.cmake
+/usr/lib32/cmake/llvm/GetSVN.cmake
+/usr/lib32/cmake/llvm/HandleLLVMOptions.cmake
+/usr/lib32/cmake/llvm/HandleLLVMStdlib.cmake
+/usr/lib32/cmake/llvm/LLVM-Config.cmake
+/usr/lib32/cmake/llvm/LLVMConfig.cmake
+/usr/lib32/cmake/llvm/LLVMConfigVersion.cmake
+/usr/lib32/cmake/llvm/LLVMExports-relwithdebinfo.cmake
+/usr/lib32/cmake/llvm/LLVMExports.cmake
+/usr/lib32/cmake/llvm/LLVMExternalProjectUtils.cmake
+/usr/lib32/cmake/llvm/LLVMInstallSymlink.cmake
+/usr/lib32/cmake/llvm/LLVMProcessSources.cmake
+/usr/lib32/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
+/usr/lib32/cmake/llvm/LLVMStaticExports.cmake
+/usr/lib32/cmake/llvm/TableGen.cmake
+/usr/lib32/cmake/llvm/VersionFromVCS.cmake
+/usr/lib32/libLLVM.so
+/usr/lib32/libLTO.so
+/usr/lib32/libOptRemarks.so
+/usr/lib32/pkgconfig/32LLVMSPIRVLib.pc
+/usr/lib32/pkgconfig/LLVMSPIRVLib.pc
+
 %files extras
 %defattr(-,root,root,-)
 /usr/lib64/LLVMgold.so
@@ -2711,12 +2870,17 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dyndd-x86_64.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan-x86_64.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-x86_64.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-x86_64.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
 /usr/lib64/libLLVM.so.8
 /usr/lib64/libLTO.so.8
@@ -2752,6 +2916,12 @@ popd
 /usr/lib64/libclangToolingCore.so.8
 /usr/lib64/libclangToolingInclusions.so.8
 /usr/lib64/libclangToolingRefactor.so.8
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libLLVM.so.8
+/usr/lib32/libLTO.so.8
+/usr/lib32/libOptRemarks.so.8
 
 %files libexec
 %defattr(-,root,root,-)
@@ -2935,3 +3105,152 @@ popd
 /usr/lib64/liblldReaderWriter.a
 /usr/lib64/liblldWasm.a
 /usr/lib64/liblldYAML.a
+
+%files staticdev32
+%defattr(-,root,root,-)
+/usr/lib32/libLLVMAArch64AsmParser.a
+/usr/lib32/libLLVMAArch64AsmPrinter.a
+/usr/lib32/libLLVMAArch64CodeGen.a
+/usr/lib32/libLLVMAArch64Desc.a
+/usr/lib32/libLLVMAArch64Disassembler.a
+/usr/lib32/libLLVMAArch64Info.a
+/usr/lib32/libLLVMAArch64Utils.a
+/usr/lib32/libLLVMAMDGPUAsmParser.a
+/usr/lib32/libLLVMAMDGPUAsmPrinter.a
+/usr/lib32/libLLVMAMDGPUCodeGen.a
+/usr/lib32/libLLVMAMDGPUDesc.a
+/usr/lib32/libLLVMAMDGPUDisassembler.a
+/usr/lib32/libLLVMAMDGPUInfo.a
+/usr/lib32/libLLVMAMDGPUUtils.a
+/usr/lib32/libLLVMARMAsmParser.a
+/usr/lib32/libLLVMARMAsmPrinter.a
+/usr/lib32/libLLVMARMCodeGen.a
+/usr/lib32/libLLVMARMDesc.a
+/usr/lib32/libLLVMARMDisassembler.a
+/usr/lib32/libLLVMARMInfo.a
+/usr/lib32/libLLVMARMUtils.a
+/usr/lib32/libLLVMAggressiveInstCombine.a
+/usr/lib32/libLLVMAnalysis.a
+/usr/lib32/libLLVMAsmParser.a
+/usr/lib32/libLLVMAsmPrinter.a
+/usr/lib32/libLLVMBPFAsmParser.a
+/usr/lib32/libLLVMBPFAsmPrinter.a
+/usr/lib32/libLLVMBPFCodeGen.a
+/usr/lib32/libLLVMBPFDesc.a
+/usr/lib32/libLLVMBPFDisassembler.a
+/usr/lib32/libLLVMBPFInfo.a
+/usr/lib32/libLLVMBinaryFormat.a
+/usr/lib32/libLLVMBitReader.a
+/usr/lib32/libLLVMBitWriter.a
+/usr/lib32/libLLVMCodeGen.a
+/usr/lib32/libLLVMCore.a
+/usr/lib32/libLLVMCoroutines.a
+/usr/lib32/libLLVMCoverage.a
+/usr/lib32/libLLVMDebugInfoCodeView.a
+/usr/lib32/libLLVMDebugInfoDWARF.a
+/usr/lib32/libLLVMDebugInfoMSF.a
+/usr/lib32/libLLVMDebugInfoPDB.a
+/usr/lib32/libLLVMDemangle.a
+/usr/lib32/libLLVMDlltoolDriver.a
+/usr/lib32/libLLVMExecutionEngine.a
+/usr/lib32/libLLVMFuzzMutate.a
+/usr/lib32/libLLVMGlobalISel.a
+/usr/lib32/libLLVMHexagonAsmParser.a
+/usr/lib32/libLLVMHexagonCodeGen.a
+/usr/lib32/libLLVMHexagonDesc.a
+/usr/lib32/libLLVMHexagonDisassembler.a
+/usr/lib32/libLLVMHexagonInfo.a
+/usr/lib32/libLLVMIRReader.a
+/usr/lib32/libLLVMInstCombine.a
+/usr/lib32/libLLVMInstrumentation.a
+/usr/lib32/libLLVMInterpreter.a
+/usr/lib32/libLLVMLTO.a
+/usr/lib32/libLLVMLanaiAsmParser.a
+/usr/lib32/libLLVMLanaiAsmPrinter.a
+/usr/lib32/libLLVMLanaiCodeGen.a
+/usr/lib32/libLLVMLanaiDesc.a
+/usr/lib32/libLLVMLanaiDisassembler.a
+/usr/lib32/libLLVMLanaiInfo.a
+/usr/lib32/libLLVMLibDriver.a
+/usr/lib32/libLLVMLineEditor.a
+/usr/lib32/libLLVMLinker.a
+/usr/lib32/libLLVMMC.a
+/usr/lib32/libLLVMMCA.a
+/usr/lib32/libLLVMMCDisassembler.a
+/usr/lib32/libLLVMMCJIT.a
+/usr/lib32/libLLVMMCParser.a
+/usr/lib32/libLLVMMIRParser.a
+/usr/lib32/libLLVMMSP430AsmParser.a
+/usr/lib32/libLLVMMSP430AsmPrinter.a
+/usr/lib32/libLLVMMSP430CodeGen.a
+/usr/lib32/libLLVMMSP430Desc.a
+/usr/lib32/libLLVMMSP430Disassembler.a
+/usr/lib32/libLLVMMSP430Info.a
+/usr/lib32/libLLVMMipsAsmParser.a
+/usr/lib32/libLLVMMipsAsmPrinter.a
+/usr/lib32/libLLVMMipsCodeGen.a
+/usr/lib32/libLLVMMipsDesc.a
+/usr/lib32/libLLVMMipsDisassembler.a
+/usr/lib32/libLLVMMipsInfo.a
+/usr/lib32/libLLVMNVPTXAsmPrinter.a
+/usr/lib32/libLLVMNVPTXCodeGen.a
+/usr/lib32/libLLVMNVPTXDesc.a
+/usr/lib32/libLLVMNVPTXInfo.a
+/usr/lib32/libLLVMObjCARCOpts.a
+/usr/lib32/libLLVMObject.a
+/usr/lib32/libLLVMObjectYAML.a
+/usr/lib32/libLLVMOptRemarks.a
+/usr/lib32/libLLVMOption.a
+/usr/lib32/libLLVMOrcJIT.a
+/usr/lib32/libLLVMPasses.a
+/usr/lib32/libLLVMPowerPCAsmParser.a
+/usr/lib32/libLLVMPowerPCAsmPrinter.a
+/usr/lib32/libLLVMPowerPCCodeGen.a
+/usr/lib32/libLLVMPowerPCDesc.a
+/usr/lib32/libLLVMPowerPCDisassembler.a
+/usr/lib32/libLLVMPowerPCInfo.a
+/usr/lib32/libLLVMProfileData.a
+/usr/lib32/libLLVMRuntimeDyld.a
+/usr/lib32/libLLVMSPIRVLib.a
+/usr/lib32/libLLVMScalarOpts.a
+/usr/lib32/libLLVMSelectionDAG.a
+/usr/lib32/libLLVMSparcAsmParser.a
+/usr/lib32/libLLVMSparcAsmPrinter.a
+/usr/lib32/libLLVMSparcCodeGen.a
+/usr/lib32/libLLVMSparcDesc.a
+/usr/lib32/libLLVMSparcDisassembler.a
+/usr/lib32/libLLVMSparcInfo.a
+/usr/lib32/libLLVMSupport.a
+/usr/lib32/libLLVMSymbolize.a
+/usr/lib32/libLLVMSystemZAsmParser.a
+/usr/lib32/libLLVMSystemZAsmPrinter.a
+/usr/lib32/libLLVMSystemZCodeGen.a
+/usr/lib32/libLLVMSystemZDesc.a
+/usr/lib32/libLLVMSystemZDisassembler.a
+/usr/lib32/libLLVMSystemZInfo.a
+/usr/lib32/libLLVMTableGen.a
+/usr/lib32/libLLVMTarget.a
+/usr/lib32/libLLVMTextAPI.a
+/usr/lib32/libLLVMTransformUtils.a
+/usr/lib32/libLLVMVectorize.a
+/usr/lib32/libLLVMWebAssemblyAsmParser.a
+/usr/lib32/libLLVMWebAssemblyAsmPrinter.a
+/usr/lib32/libLLVMWebAssemblyCodeGen.a
+/usr/lib32/libLLVMWebAssemblyDesc.a
+/usr/lib32/libLLVMWebAssemblyDisassembler.a
+/usr/lib32/libLLVMWebAssemblyInfo.a
+/usr/lib32/libLLVMWindowsManifest.a
+/usr/lib32/libLLVMX86AsmParser.a
+/usr/lib32/libLLVMX86AsmPrinter.a
+/usr/lib32/libLLVMX86CodeGen.a
+/usr/lib32/libLLVMX86Desc.a
+/usr/lib32/libLLVMX86Disassembler.a
+/usr/lib32/libLLVMX86Info.a
+/usr/lib32/libLLVMX86Utils.a
+/usr/lib32/libLLVMXCoreAsmPrinter.a
+/usr/lib32/libLLVMXCoreCodeGen.a
+/usr/lib32/libLLVMXCoreDesc.a
+/usr/lib32/libLLVMXCoreDisassembler.a
+/usr/lib32/libLLVMXCoreInfo.a
+/usr/lib32/libLLVMXRay.a
+/usr/lib32/libLLVMipo.a

@@ -2,6 +2,7 @@
 # picked up automatically. One name per line, no whitespace.
 Sphinx
 Z3-dev
+Z3-dev32
 binutils-dev
 googletest-dev
 libffi-dev
@@ -10,4 +11,6 @@ ncurses-dev
 python3-dev
 valgrind-dev
 zlib-dev
+zlib-dev32
 elfutils-dev
+libxml2-dev32
