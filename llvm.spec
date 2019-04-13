@@ -25,7 +25,6 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-libexec = %{version}-%{release}
 Requires: llvm-license = %{version}-%{release}
 Requires: llvm-man = %{version}-%{release}
-Requires: llvm-staticdev32 = %{version}-%{release}
 Requires: llvm-extras = %{version}-%{release}
 BuildRequires : Sphinx
 BuildRequires : Z3-dev
@@ -233,7 +232,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1555116484
+export SOURCE_DATE_EPOCH=1555137118
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -332,7 +331,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1555116484
+export SOURCE_DATE_EPOCH=1555137118
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
