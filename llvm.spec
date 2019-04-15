@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 100
+Release  : 101
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
@@ -16,7 +16,7 @@ Source3  : http://releases.llvm.org/8.0.0/lld-8.0.0.src.tar.xz
 Source4  : http://releases.llvm.org/8.0.0/openmp-8.0.0.src.tar.xz
 Source5  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v8.0.0-1.tar.gz
 Source99 : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz.sig
-Summary  : LLVM/SPIR-V bi-directional translator
+Summary  : Collection of modular and reusable compiler and toolchain technologies
 Group    : Development/Tools
 License  : Apache-2.0 BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
@@ -74,8 +74,11 @@ Patch11: SPIRV-0001-Update-LowerOpenCL-pass-to-handle-new-blocks-represn.patch
 Patch12: fma.patch
 
 %description
-These are syntax highlighting files for the Kate editor. Included are:
-* llvm.xml
+This directory contains a "bundle" for doing syntax highlighting of TableGen
+files for the Microsoft VSCode editor. The highlighting follows that done by
+the TextMate "C" bundle as it is a translation of the textmate bundle to VSCode
+using the "yo code" npm package. Currently, keywords, comments, and strings are
+highlighted.
 
 %package bin
 Summary: bin components for the llvm package.
@@ -127,6 +130,14 @@ Group: Default
 
 %description extras
 extras components for the llvm package.
+
+
+%package extras-sanitizers
+Summary: extras-sanitizers components for the llvm package.
+Group: Default
+
+%description extras-sanitizers
+extras-sanitizers components for the llvm package.
 
 
 %package lib
@@ -226,13 +237,16 @@ cp -r %{_topdir}/BUILD/SPIRV-LLVM-Translator-8.0.0-1/* %{_topdir}/BUILD/llvm-8.0
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+pushd ..
+cp -a llvm-8.0.0.src build32
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1555352193
+export SOURCE_DATE_EPOCH=1555370976
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -273,7 +287,7 @@ echo -DLLVM_TOOL_SPIRV_BUILD:BOOL=ON; \
 echo -DLLVM_LIBDIR_SUFFIX=32 -DLLVM_HOST_TRIPLE="i686-generic-linux" \
 ;; \
 esac`
-make  %{?_smp_mflags} VERBOSE=1
+make  %{?_smp_mflags}
 popd
 mkdir -p clr-build32
 pushd clr-build32
@@ -319,7 +333,7 @@ echo -DLLVM_TOOL_SPIRV_BUILD:BOOL=ON; \
 echo -DLLVM_LIBDIR_SUFFIX=32 -DLLVM_HOST_TRIPLE="i686-generic-linux" \
 ;; \
 esac`
-make  %{?_smp_mflags} VERBOSE=1
+make  %{?_smp_mflags}
 unset PKG_CONFIG_PATH
 popd
 
@@ -331,7 +345,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1555352193
+export SOURCE_DATE_EPOCH=1555370976
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -365,19 +379,31 @@ popd
 %exclude /usr/lib64/clang/8.0.0/include/cuda_wrappers/complex
 %exclude /usr/lib64/clang/8.0.0/include/cuda_wrappers/new
 %exclude /usr/lib64/clang/8.0.0/include/module.modulemap
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dd-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dfsan-x86_64.a
@@ -390,39 +416,27 @@ popd
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan_cxx-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan_cxx-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan_cxx-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.xray-basic-x86_64.a
@@ -2876,6 +2890,32 @@ popd
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
+
+%files extras-sanitizers
+%defattr(-,root,root,-)
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 
 %files lib
 %defattr(-,root,root,-)
