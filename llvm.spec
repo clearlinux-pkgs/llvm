@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 99
+Release  : 100
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
@@ -232,7 +232,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1555137118
+export SOURCE_DATE_EPOCH=1555352193
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -331,7 +331,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1555137118
+export SOURCE_DATE_EPOCH=1555352193
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -2864,9 +2864,6 @@ popd
 /usr/lib64/clang/8.0.0/include/xsaveoptintrin.h
 /usr/lib64/clang/8.0.0/include/xsavesintrin.h
 /usr/lib64/clang/8.0.0/include/xtestintrin.h
-
-%files lib
-%defattr(-,root,root,-)
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dyndd-x86_64.so
@@ -2879,6 +2876,21 @@ popd
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
+
+%files lib
+%defattr(-,root,root,-)
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dyndd-x86_64.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan-x86_64.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-x86_64.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-x86_64.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
 /usr/lib64/libLLVM.so.8
 /usr/lib64/libLTO.so.8
 /usr/lib64/libOptRemarks.so.8
