@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 101
+Release  : 102
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
