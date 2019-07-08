@@ -7,7 +7,8 @@ compat-ldc-soname84
 compat-llvm-soname7
 cups
 darktable
-dldt
+emacs
+emacs-x11
 embree
 intel-graphics-compiler
 itstool

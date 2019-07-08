@@ -4,3 +4,8 @@
 /usr/lib64/TestPlugin.so
 /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
 /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
