@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 104
+Release  : 105
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
@@ -133,6 +133,14 @@ Group: Default
 extras components for the llvm package.
 
 
+%package extras-sanitizers
+Summary: extras-sanitizers components for the llvm package.
+Group: Default
+
+%description extras-sanitizers
+extras-sanitizers components for the llvm package.
+
+
 %package lib
 Summary: lib components for the llvm package.
 Group: Libraries
@@ -238,7 +246,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1562546833
+export SOURCE_DATE_EPOCH=1562598431
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -347,7 +355,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1562546833
+export SOURCE_DATE_EPOCH=1562598431
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -381,19 +389,31 @@ popd
 %exclude /usr/lib64/clang/8.0.0/include/cuda_wrappers/complex
 %exclude /usr/lib64/clang/8.0.0/include/cuda_wrappers/new
 %exclude /usr/lib64/clang/8.0.0/include/module.modulemap
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.a
+%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dd-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dfsan-x86_64.a
@@ -406,39 +426,27 @@ popd
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan_cxx-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.msan_cxx-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-x86_64.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.tsan_cxx-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.a.syms
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a.syms
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.xray-basic-x86_64.a
@@ -2887,6 +2895,32 @@ popd
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-x86_64.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
+
+%files extras-sanitizers
+%defattr(-,root,root,-)
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.a
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
+/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 
 %files lib
 %defattr(-,root,root,-)
