@@ -9,3 +9,8 @@
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
+
+# Static library, so the .pc files point to nothing
+/usr/lib64/pkgconfig/LLVMSPIRVLib.pc
+/usr/lib32/pkgconfig/32LLVMSPIRVLib.pc
+/usr/lib32/pkgconfig/LLVMSPIRVLib.pc

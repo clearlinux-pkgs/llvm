@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 105
+Release  : 106
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
@@ -16,7 +16,7 @@ Source3  : http://releases.llvm.org/8.0.0/lld-8.0.0.src.tar.xz
 Source4  : http://releases.llvm.org/8.0.0/openmp-8.0.0.src.tar.xz
 Source5  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v8.0.0-1.tar.gz
 Source99 : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz.sig
-Summary  : Collection of modular and reusable compiler and toolchain technologies
+Summary  : LLVM/SPIR-V bi-directional translator
 Group    : Development/Tools
 License  : Apache-2.0 BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
@@ -74,11 +74,8 @@ Patch11: SPIRV-0001-Update-LowerOpenCL-pass-to-handle-new-blocks-represn.patch
 Patch12: fma.patch
 
 %description
-This directory contains a "bundle" for doing syntax highlighting of TableGen
-files for the Microsoft VSCode editor. The highlighting follows that done by
-the TextMate "C" bundle as it is a translation of the textmate bundle to VSCode
-using the "yo code" npm package. Currently, keywords, comments, and strings are
-highlighted.
+These are syntax highlighting files for the Kate editor. Included are:
+* llvm.xml
 
 %package bin
 Summary: bin components for the llvm package.
@@ -106,7 +103,6 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-bin = %{version}-%{release}
 Requires: llvm-data = %{version}-%{release}
 Provides: llvm-devel = %{version}-%{release}
-Requires: llvm = %{version}-%{release}
 Requires: llvm = %{version}-%{release}
 
 %description dev
@@ -191,7 +187,6 @@ man components for the llvm package.
 Summary: staticdev components for the llvm package.
 Group: Default
 Requires: llvm-dev = %{version}-%{release}
-Requires: llvm-dev = %{version}-%{release}
 
 %description staticdev
 staticdev components for the llvm package.
@@ -246,7 +241,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1562598431
+export SOURCE_DATE_EPOCH=1563296942
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -355,7 +350,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1562598431
+export SOURCE_DATE_EPOCH=1563296942
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -715,6 +710,7 @@ popd
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
 %exclude /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
 %exclude /usr/lib64/libgomp.so
+%exclude /usr/lib64/pkgconfig/LLVMSPIRVLib.pc
 /usr/include/LLVMSPIRVLib/LLVMSPIRVLib.h
 /usr/include/clang-c/BuildSystem.h
 /usr/include/clang-c/CXCompilationDatabase.h
@@ -2707,10 +2703,11 @@ popd
 /usr/lib64/libomp.so
 /usr/lib64/libomptarget.rtl.x86_64.so
 /usr/lib64/libomptarget.so
-/usr/lib64/pkgconfig/LLVMSPIRVLib.pc
 
 %files dev32
 %defattr(-,root,root,-)
+%exclude /usr/lib32/pkgconfig/32LLVMSPIRVLib.pc
+%exclude /usr/lib32/pkgconfig/LLVMSPIRVLib.pc
 /usr/lib32/LLVMgold.so
 /usr/lib32/cmake/llvm/AddLLVM.cmake
 /usr/lib32/cmake/llvm/AddLLVMDefinitions.cmake
@@ -2744,8 +2741,6 @@ popd
 /usr/lib32/libLLVM.so
 /usr/lib32/libLTO.so
 /usr/lib32/libOptRemarks.so
-/usr/lib32/pkgconfig/32LLVMSPIRVLib.pc
-/usr/lib32/pkgconfig/LLVMSPIRVLib.pc
 
 %files extras
 %defattr(-,root,root,-)
