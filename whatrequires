@@ -1,9 +1,7 @@
 # This file contains recursive sources that require this package
 GtkD
 PyNaCl
-aeon
 blender
-compat-ldc-soname84
 compat-llvm-soname7
 cups
 darktable

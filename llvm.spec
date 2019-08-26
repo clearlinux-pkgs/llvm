@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 8.0.0
-Release  : 106
+Release  : 107
 URL      : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/8.0.0/cfe-8.0.0.src.tar.xz
@@ -15,8 +15,8 @@ Source2  : http://releases.llvm.org/8.0.0/compiler-rt-8.0.0.src.tar.xz
 Source3  : http://releases.llvm.org/8.0.0/lld-8.0.0.src.tar.xz
 Source4  : http://releases.llvm.org/8.0.0/openmp-8.0.0.src.tar.xz
 Source5  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v8.0.0-1.tar.gz
-Source99 : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz.sig
-Summary  : LLVM/SPIR-V bi-directional translator
+Source6 : http://releases.llvm.org/8.0.0/llvm-8.0.0.src.tar.xz.sig
+Summary  : Collection of modular and reusable compiler and toolchain technologies
 Group    : Development/Tools
 License  : Apache-2.0 BSD-3-Clause MIT NCSA
 Requires: llvm-bin = %{version}-%{release}
@@ -72,10 +72,14 @@ Patch9: clang-0005-Simplify-LLVM-IR-generated-for-OpenCL-blocks.patch
 Patch10: clang-0006-Fix-assertion-due-to-blocks.patch
 Patch11: SPIRV-0001-Update-LowerOpenCL-pass-to-handle-new-blocks-represn.patch
 Patch12: fma.patch
+Patch13: clang-gcc.patch
 
 %description
-These are syntax highlighting files for the Kate editor. Included are:
-* llvm.xml
+This directory contains a "bundle" for doing syntax highlighting of TableGen
+files for the Microsoft VSCode editor. The highlighting follows that done by
+the TextMate "C" bundle as it is a translation of the textmate bundle to VSCode
+using the "yo code" npm package. Currently, keywords, comments, and strings are
+highlighted.
 
 %package bin
 Summary: bin components for the llvm package.
@@ -103,6 +107,7 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-bin = %{version}-%{release}
 Requires: llvm-data = %{version}-%{release}
 Provides: llvm-devel = %{version}-%{release}
+Requires: llvm = %{version}-%{release}
 Requires: llvm = %{version}-%{release}
 
 %description dev
@@ -187,6 +192,7 @@ man components for the llvm package.
 Summary: staticdev components for the llvm package.
 Group: Default
 Requires: llvm-dev = %{version}-%{release}
+Requires: llvm-dev = %{version}-%{release}
 
 %description staticdev
 staticdev components for the llvm package.
@@ -235,16 +241,18 @@ cp -r %{_topdir}/BUILD/SPIRV-LLVM-Translator-8.0.0-1/* %{_topdir}/BUILD/llvm-8.0
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1563296942
+export SOURCE_DATE_EPOCH=1566834736
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
+# -Werror is for werrorists
 export GCC_IGNORE_WERROR=1
 export CC=clang
 export CXX=clang++
@@ -291,6 +299,7 @@ make  %{?_smp_mflags} VERBOSE=1
 popd
 mkdir -p clr-build32
 pushd clr-build32
+# -Werror is for werrorists
 export GCC_IGNORE_WERROR=1
 export CC=clang
 export CXX=clang++
@@ -350,7 +359,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1563296942
+export SOURCE_DATE_EPOCH=1566834736
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -377,31 +386,22 @@ popd
 pushd clr-build
 %make_install
 popd
+## Remove excluded files
+rm -f %{buildroot}/usr/lib64/libgomp.so
+rm -f %{buildroot}/usr/lib64/TestPlugin.so
+rm -f %{buildroot}/usr/lib64/cmake/llvm/LLVMStaticExports.cmake
+rm -f %{buildroot}/usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
+rm -f %{buildroot}/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.so
+rm -f %{buildroot}/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.so
+rm -f %{buildroot}/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
+rm -f %{buildroot}/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
+rm -f %{buildroot}/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
+rm -f %{buildroot}/usr/lib64/pkgconfig/LLVMSPIRVLib.pc
+rm -f %{buildroot}/usr/lib32/pkgconfig/32LLVMSPIRVLib.pc
+rm -f %{buildroot}/usr/lib32/pkgconfig/LLVMSPIRVLib.pc
 
 %files
 %defattr(-,root,root,-)
-%exclude /usr/lib64/clang/8.0.0/include/cuda_wrappers/algorithm
-%exclude /usr/lib64/clang/8.0.0/include/cuda_wrappers/complex
-%exclude /usr/lib64/clang/8.0.0/include/cuda_wrappers/new
-%exclude /usr/lib64/clang/8.0.0/include/module.modulemap
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.cfi_diag-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.lsan-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.a
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.a.syms
@@ -572,145 +572,6 @@ popd
 
 %files dev
 %defattr(-,root,root,-)
-%exclude /usr/lib64/LLVMgold.so
-%exclude /usr/lib64/clang/8.0.0/include/__clang_cuda_builtin_vars.h
-%exclude /usr/lib64/clang/8.0.0/include/__clang_cuda_cmath.h
-%exclude /usr/lib64/clang/8.0.0/include/__clang_cuda_complex_builtins.h
-%exclude /usr/lib64/clang/8.0.0/include/__clang_cuda_device_functions.h
-%exclude /usr/lib64/clang/8.0.0/include/__clang_cuda_intrinsics.h
-%exclude /usr/lib64/clang/8.0.0/include/__clang_cuda_libdevice_declares.h
-%exclude /usr/lib64/clang/8.0.0/include/__clang_cuda_math_forward_declares.h
-%exclude /usr/lib64/clang/8.0.0/include/__clang_cuda_runtime_wrapper.h
-%exclude /usr/lib64/clang/8.0.0/include/__stddef_max_align_t.h
-%exclude /usr/lib64/clang/8.0.0/include/__wmmintrin_aes.h
-%exclude /usr/lib64/clang/8.0.0/include/__wmmintrin_pclmul.h
-%exclude /usr/lib64/clang/8.0.0/include/adxintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/altivec.h
-%exclude /usr/lib64/clang/8.0.0/include/ammintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/arm64intr.h
-%exclude /usr/lib64/clang/8.0.0/include/arm_acle.h
-%exclude /usr/lib64/clang/8.0.0/include/arm_fp16.h
-%exclude /usr/lib64/clang/8.0.0/include/arm_neon.h
-%exclude /usr/lib64/clang/8.0.0/include/armintr.h
-%exclude /usr/lib64/clang/8.0.0/include/avx2intrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512bitalgintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512bwintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512cdintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512dqintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512erintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512fintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512ifmaintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512ifmavlintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512pfintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vbmi2intrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vbmiintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vbmivlintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vlbitalgintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vlbwintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vlcdintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vldqintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vlintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vlvbmi2intrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vlvnniintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vnniintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vpopcntdqintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avx512vpopcntdqvlintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/avxintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/bmi2intrin.h
-%exclude /usr/lib64/clang/8.0.0/include/bmiintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/cetintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/cldemoteintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/clflushoptintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/clwbintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/clzerointrin.h
-%exclude /usr/lib64/clang/8.0.0/include/cpuid.h
-%exclude /usr/lib64/clang/8.0.0/include/emmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/f16cintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/float.h
-%exclude /usr/lib64/clang/8.0.0/include/fma4intrin.h
-%exclude /usr/lib64/clang/8.0.0/include/fmaintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/fxsrintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/gfniintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/htmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/htmxlintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/ia32intrin.h
-%exclude /usr/lib64/clang/8.0.0/include/immintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/intrin.h
-%exclude /usr/lib64/clang/8.0.0/include/inttypes.h
-%exclude /usr/lib64/clang/8.0.0/include/invpcidintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/iso646.h
-%exclude /usr/lib64/clang/8.0.0/include/limits.h
-%exclude /usr/lib64/clang/8.0.0/include/lwpintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/lzcntintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/mm3dnow.h
-%exclude /usr/lib64/clang/8.0.0/include/mm_malloc.h
-%exclude /usr/lib64/clang/8.0.0/include/mmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/movdirintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/msa.h
-%exclude /usr/lib64/clang/8.0.0/include/mwaitxintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/nmmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/omp.h
-%exclude /usr/lib64/clang/8.0.0/include/ompt.h
-%exclude /usr/lib64/clang/8.0.0/include/opencl-c.h
-%exclude /usr/lib64/clang/8.0.0/include/pconfigintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/pkuintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/pmmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/popcntintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/prfchwintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/ptwriteintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/rdseedintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/rtmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/s390intrin.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/allocator_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/asan_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/common_interface_defs.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/coverage_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/dfsan_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/esan_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/hwasan_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/linux_syscall_hooks.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/lsan_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/msan_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/netbsd_syscall_hooks.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/scudo_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/tsan_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/sanitizer/tsan_interface_atomic.h
-%exclude /usr/lib64/clang/8.0.0/include/sgxintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/shaintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/smmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/stdalign.h
-%exclude /usr/lib64/clang/8.0.0/include/stdarg.h
-%exclude /usr/lib64/clang/8.0.0/include/stdatomic.h
-%exclude /usr/lib64/clang/8.0.0/include/stdbool.h
-%exclude /usr/lib64/clang/8.0.0/include/stddef.h
-%exclude /usr/lib64/clang/8.0.0/include/stdint.h
-%exclude /usr/lib64/clang/8.0.0/include/stdnoreturn.h
-%exclude /usr/lib64/clang/8.0.0/include/tbmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/tgmath.h
-%exclude /usr/lib64/clang/8.0.0/include/tmmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/unwind.h
-%exclude /usr/lib64/clang/8.0.0/include/vadefs.h
-%exclude /usr/lib64/clang/8.0.0/include/vaesintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/varargs.h
-%exclude /usr/lib64/clang/8.0.0/include/vecintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/vpclmulqdqintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/waitpkgintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/wbnoinvdintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/wmmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/x86intrin.h
-%exclude /usr/lib64/clang/8.0.0/include/xmmintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/xopintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/xray/xray_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/xray/xray_log_interface.h
-%exclude /usr/lib64/clang/8.0.0/include/xsavecintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/xsaveintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/xsaveoptintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/xsavesintrin.h
-%exclude /usr/lib64/clang/8.0.0/include/xtestintrin.h
-%exclude /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
-%exclude /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
-%exclude /usr/lib64/libgomp.so
-%exclude /usr/lib64/pkgconfig/LLVMSPIRVLib.pc
 /usr/include/LLVMSPIRVLib/LLVMSPIRVLib.h
 /usr/include/clang-c/BuildSystem.h
 /usr/include/clang-c/CXCompilationDatabase.h
@@ -2706,8 +2567,6 @@ popd
 
 %files dev32
 %defattr(-,root,root,-)
-%exclude /usr/lib32/pkgconfig/32LLVMSPIRVLib.pc
-%exclude /usr/lib32/pkgconfig/LLVMSPIRVLib.pc
 /usr/lib32/LLVMgold.so
 /usr/lib32/cmake/llvm/AddLLVM.cmake
 /usr/lib32/cmake/llvm/AddLLVMDefinitions.cmake
@@ -2894,7 +2753,6 @@ popd
 %files extras-sanitizers
 %defattr(-,root,root,-)
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-preinit-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.builtins-i386.a
@@ -2904,33 +2762,17 @@ popd
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.profile-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.safestack-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.stats_client-i386.a
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.a
-/usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
 /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 
 %files lib
 %defattr(-,root,root,-)
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-i386.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.asan-x86_64.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.dyndd-x86_64.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.hwasan-x86_64.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-i386.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo-x86_64.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.scudo_minimal-x86_64.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
-%exclude /usr/lib64/clang/8.0.0/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
 /usr/lib64/libLLVM.so.8
 /usr/lib64/libLTO.so.8
 /usr/lib64/libOptRemarks.so.8
