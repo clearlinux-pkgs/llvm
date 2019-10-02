@@ -1,0 +1,25 @@
+From 6f7d4d81debfcff93c51e7fe26d3a7aef14d1411 Mon Sep 17 00:00:00 2001
+From: Arjan van de Ven <arjan@linux.intel.com>
+Date: Tue, 9 Apr 2019 05:09:34 +0000
+Subject: [PATCH] Allow one more FMA fusion
+
+---
+ lib/CodeGen/SelectionDAG/DAGCombiner.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/CodeGen/SelectionDAG/DAGCombiner.cpp b/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
+index 49c922f560f..9b1b48bd72f 100644
+--- a/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
++++ b/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
+@@ -11399,7 +11399,7 @@ SDValue DAGCombiner::visitFADDForFMACombine(SDNode *N) {
+ 
+   SDNodeFlags Flags = N->getFlags();
+   bool CanFuse = Options.UnsafeFPMath || isContractable(N);
+-  bool AllowFusionGlobally = (Options.AllowFPOpFusion == FPOpFusion::Fast ||
++  bool AllowFusionGlobally = (Options.AllowFPOpFusion == FPOpFusion::Fast || Options.AllowFPOpFusion == FPOpFusion::Standard || 
+                               CanFuse || HasFMAD);
+   // If the addition is not contractable, do not combine.
+   if (!AllowFusionGlobally && !isContractable(N))
+-- 
+2.23.0
+

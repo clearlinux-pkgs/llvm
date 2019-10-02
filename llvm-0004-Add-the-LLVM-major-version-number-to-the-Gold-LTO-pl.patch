@@ -1,0 +1,25 @@
+From befef789a1a914c70c01292bb88a262dae69b73e Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Tue, 1 Oct 2019 18:48:24 -0700
+Subject: [PATCH] Add the LLVM major version number to the Gold LTO plugin
+
+---
+ tools/gold/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/gold/CMakeLists.txt b/tools/gold/CMakeLists.txt
+index 72f76558c08..6cfb2bc402e 100644
+--- a/tools/gold/CMakeLists.txt
++++ b/tools/gold/CMakeLists.txt
+@@ -11,7 +11,7 @@ if( LLVM_ENABLE_PIC AND LLVM_BINUTILS_INCDIR )
+      IPO
+      )
+ 
+-  add_llvm_library(LLVMgold MODULE
++  add_llvm_library(LLVMgold-${LLVM_VERSION_MAJOR} MODULE
+     gold-plugin.cpp
+     )
+ 
+-- 
+2.23.0
+

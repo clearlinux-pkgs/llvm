@@ -1,4 +1,4 @@
-From babb8b1f2e41e30435f943363c8c5a663c864d63 Mon Sep 17 00:00:00 2001
+From 165344fc369bb3a1612adc7105c9e7cd864218e0 Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Wed, 10 Oct 2018 19:53:40 -0700
 Subject: [cfe] Detect Clear Linux and apply Clear's default linker options
@@ -10,15 +10,15 @@ Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
 ---
  include/clang/Driver/Distro.h   |  4 ++++
  lib/Driver/Distro.cpp           | 13 +++++++++++++
- lib/Driver/ToolChains/Linux.cpp | 17 ++++++++++++-----
+ lib/Driver/ToolChains/Linux.cpp | 14 +++++++++-----
  unittests/Driver/DistroTest.cpp | 16 ++++++++++++++++
- 4 files changed, 45 insertions(+), 5 deletions(-)
+ 4 files changed, 42 insertions(+), 5 deletions(-)
 
 diff --git a/tools/clang/include/clang/Driver/Distro.h b/tools/clang/include/clang/Driver/Distro.h
-index 5651ebb6d4..30fda469d5 100644
+index 67dc764fb7..80f659d2fe 100644
 --- a/tools/clang/include/clang/Driver/Distro.h
 +++ b/tools/clang/include/clang/Driver/Distro.h
-@@ -28,6 +28,7 @@ public:
+@@ -27,6 +27,7 @@ public:
      // the first and last known member in the family, e.g. IsRedHat().
      AlpineLinux,
      ArchLinux,
@@ -26,7 +26,7 @@ index 5651ebb6d4..30fda469d5 100644
      DebianLenny,
      DebianSqueeze,
      DebianWheezy,
-@@ -127,6 +128,9 @@ public:
+@@ -128,6 +129,9 @@ public:
    bool IsGentoo() const {
      return DistroVal == Gentoo;
    }
@@ -37,10 +37,10 @@ index 5651ebb6d4..30fda469d5 100644
    /// @}
  };
 diff --git a/tools/clang/lib/Driver/Distro.cpp b/tools/clang/lib/Driver/Distro.cpp
-index 396d0bee56..abd33baddf 100644
+index f2a3074d1e..1fc74a6279 100644
 --- a/tools/clang/lib/Driver/Distro.cpp
 +++ b/tools/clang/lib/Driver/Distro.cpp
-@@ -141,6 +141,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
+@@ -145,6 +145,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
    if (VFS.exists("/etc/gentoo-release"))
      return Distro::Gentoo;
  
@@ -61,10 +61,10 @@ index 396d0bee56..abd33baddf 100644
  }
  
 diff --git a/tools/clang/lib/Driver/ToolChains/Linux.cpp b/tools/clang/lib/Driver/ToolChains/Linux.cpp
-index 65ab9b2daf..c04445bb28 100644
+index d900508ad9..01a783e4ec 100644
 --- a/tools/clang/lib/Driver/ToolChains/Linux.cpp
 +++ b/tools/clang/lib/Driver/ToolChains/Linux.cpp
-@@ -236,17 +236,20 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+@@ -242,13 +242,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
  
    Distro Distro(D.getVFS());
  
@@ -80,14 +80,7 @@ index 65ab9b2daf..c04445bb28 100644
      ExtraOpts.push_back("-z");
      ExtraOpts.push_back("relro");
    }
- 
-+  if (Distro.IsClearLinux())
-+    ExtraOpts.push_back("--copy-dt-needed-entries");
-+
-   // The lld default page size is too large for Aarch64, which produces much
-   // larger .so files and images for arm64 device targets. Use 4KB page size
-   // for Android arm64 targets instead.
-@@ -302,7 +305,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+@@ -304,7 +304,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
    ExtraOpts.push_back("--build-id");
  #endif
  
@@ -96,7 +89,7 @@ index 65ab9b2daf..c04445bb28 100644
      ExtraOpts.push_back("--enable-new-dtags");
  
    // The selection of paths to try here is designed to match the patterns which
-@@ -968,8 +971,12 @@ void Linux::AddIAMCUIncludeArgs(const ArgList &DriverArgs,
+@@ -972,8 +972,12 @@ void Linux::AddIAMCUIncludeArgs(const ArgList &DriverArgs,
  }
  
  bool Linux::isPIEDefault() const {
@@ -110,12 +103,12 @@ index 65ab9b2daf..c04445bb28 100644
 +  return Distro.IsClearLinux();
  }
  
- bool Linux::IsMathErrnoDefault() const {
+ bool Linux::isNoExecStackDefault() const {
 diff --git a/tools/clang/unittests/Driver/DistroTest.cpp b/tools/clang/unittests/Driver/DistroTest.cpp
-index bc1863c429..06bdbcb990 100644
+index d0c86d1c54..3a7f9226e6 100644
 --- a/tools/clang/unittests/Driver/DistroTest.cpp
 +++ b/tools/clang/unittests/Driver/DistroTest.cpp
-@@ -338,4 +338,20 @@ TEST(DistroTest, DetectGentoo) {
+@@ -337,4 +337,20 @@ TEST(DistroTest, DetectGentoo) {
    ASSERT_TRUE(Gentoo.IsGentoo());
  }
  
@@ -137,5 +130,5 @@ index bc1863c429..06bdbcb990 100644
 +
  } // end anonymous namespace
 -- 
-2.21.0
+2.23.0
 

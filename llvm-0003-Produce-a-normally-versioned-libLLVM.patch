@@ -1,7 +1,7 @@
-From e7373cd0ecf63498077c9a76b015f88e233fee09 Mon Sep 17 00:00:00 2001
+From 01019550fce3516b0007f5c8c8096a173384c47c Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Fri, 5 Apr 2019 10:36:42 -0700
-Subject: [llvm] Produce a normally-versioned libLLVM
+Subject: [PATCH] Produce a normally-versioned libLLVM
 
 This patch is originally from
 https://build.opensuse.org/package/view_file/openSUSE:Factory/llvm7/llvm-normally-versioned-libllvm.patch?expand=1
@@ -40,10 +40,10 @@ Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
  2 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/tools/llvm-config/llvm-config.cpp b/tools/llvm-config/llvm-config.cpp
-index bec89fef98c..58b12a61fac 100644
+index 7ef7c46a262..11766f25447 100644
 --- a/tools/llvm-config/llvm-config.cpp
 +++ b/tools/llvm-config/llvm-config.cpp
-@@ -380,7 +380,6 @@ int main(int argc, char **argv) {
+@@ -379,7 +379,6 @@ int main(int argc, char **argv) {
    } else {
      // default to the unix values:
      SharedExt = "so";
@@ -51,7 +51,7 @@ index bec89fef98c..58b12a61fac 100644
      StaticExt = "a";
      StaticDir = SharedDir = ActiveLibDir;
      StaticPrefix = SharedPrefix = "lib";
-@@ -393,7 +392,7 @@ int main(int argc, char **argv) {
+@@ -392,7 +391,7 @@ int main(int argc, char **argv) {
  
    bool DyLibExists = false;
    const std::string DyLibName =
@@ -61,18 +61,18 @@ index bec89fef98c..58b12a61fac 100644
    // If LLVM_LINK_DYLIB is ON, the single shared library will be returned
    // for "--libs", etc, if they exist. This behaviour can be overridden with
 diff --git a/tools/llvm-shlib/CMakeLists.txt b/tools/llvm-shlib/CMakeLists.txt
-index 187066e5ded..0ccf86b3f8a 100644
+index 901f55c99d5..4d7190fb5f1 100644
 --- a/tools/llvm-shlib/CMakeLists.txt
 +++ b/tools/llvm-shlib/CMakeLists.txt
-@@ -39,7 +39,7 @@ if(LLVM_BUILD_LLVM_DYLIB)
-     add_custom_target(libLLVMExports DEPENDS ${LLVM_EXPORTED_SYMBOL_FILE})
+@@ -42,7 +42,7 @@ if(LLVM_BUILD_LLVM_DYLIB)
+   if (LLVM_LINK_LLVM_DYLIB)
+     set(INSTALL_WITH_TOOLCHAIN INSTALL_WITH_TOOLCHAIN)
    endif()
- 
--  add_llvm_library(LLVM SHARED DISABLE_LLVM_LINK_LLVM_DYLIB SONAME ${SOURCES})
-+  add_llvm_library(LLVM SHARED DISABLE_LLVM_LINK_LLVM_DYLIB ${SOURCES})
+-  add_llvm_library(LLVM SHARED DISABLE_LLVM_LINK_LLVM_DYLIB SONAME ${INSTALL_WITH_TOOLCHAIN} ${SOURCES})
++  add_llvm_library(LLVM SHARED DISABLE_LLVM_LINK_LLVM_DYLIB ${INSTALL_WITH_TOOLCHAIN} ${SOURCES})
  
    list(REMOVE_DUPLICATES LIB_NAMES)
    if(("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux") OR (MINGW) OR (HAIKU)
 -- 
-2.21.0
+2.23.0
 

@@ -1,6 +1,6 @@
-0689345d73911e24a07b24cc82dab4fb46b8c323/llvm-8.0.0.src.tar.xz
-3cb1e10af3955174a3ca5e560f674f24fac2a02f/cfe-8.0.0.src.tar.xz
-b9062249ef61316e3450fc26e7238432673036bb/lld-8.0.0.src.tar.xz
-90462a0f720a9a40ecbda9636c24d627b5dc05db/openmp-8.0.0.src.tar.xz
-5af387779120bb2a9fad5d6fff1a3d6f4fa6c352/compiler-rt-8.0.0.src.tar.xz
-b77ce23de6dbf581eb9d220abeeca2f75688e546/v8.0.0-1.tar.gz
+7ef2527ba3da7603a41ce3592a8cd890f8d27ffa/llvm-9.0.0.src.tar.xz
+6977cf7a802a053c57fa74138d3648b563e71e88/cfe-9.0.0.src.tar.xz
+021a8c38cf27d63db37d939c7cdec46ffd627be2/lld-9.0.0.src.tar.xz
+53a17a74f23a2b6a24964cc3f6c1dd8a8e7d8eb3/openmp-9.0.0.src.tar.xz
+4e00cb231ff87fd4f970f35b2da86185a612e0e2/compiler-rt-9.0.0.src.tar.xz
+62c705d3dfde87a4c4daad5735415059ce128f59/SPIRV-9.0.0.1.tar.gz

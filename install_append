@@ -1,0 +1,29 @@
+# -*- sh -*-
+# Rename the tools to have a versioned suffix and symlink back
+pushd %{buildroot}/usr/bin
+mv clang ..
+VERSION=%{version}
+VERSION=${VERSION%%%%.*}
+for f in *; do
+    case "$f" in
+        *-$VERSION)
+            # Already versioned, leave it alone
+            continue
+            ;;
+    esac
+    if [ -L "$f" ]; then
+        # Retarget the symlink
+        ln -s -f `readlink $f`-$VERSION $f
+    fi
+    mv $f $f-$VERSION
+    ln -s -f $f-$VERSION $f
+done
+mv ../clang .
+popd
+
+# Ditto for the gold plugin
+pushd %{buildroot}/usr/lib64
+mv LLVMgold.so LLVMgold-$VERSION.so
+mkdir -p ../lib/bfd-plugins
+ln -s ../../lib64/LLVMgold-$VERSION.so ../lib/bfd-plugins
+popd

@@ -2,11 +2,10 @@
 GtkD
 PyNaCl
 blender
+compat-llvm-soname5
 compat-llvm-soname7
 cups
 darktable
-emacs
-emacs-x11
 embree
 intel-graphics-compiler
 itstool
