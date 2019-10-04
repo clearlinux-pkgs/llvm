@@ -12,6 +12,7 @@ itstool
 ldc
 libsodium
 llvm
+llvm8
 llvmlite
 pyside2-setup
 pytorch

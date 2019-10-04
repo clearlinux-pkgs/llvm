@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 9.0.0
-Release  : 109
+Release  : 110
 URL      : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/9.0.0/cfe-9.0.0.src.tar.xz
@@ -525,7 +525,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1569994757
+export SOURCE_DATE_EPOCH=1570161587
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -557,7 +557,7 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 -DLLVM_ENABLE_LIBCXX:BOOL=OFF \
 -DLLVM_ENABLE_RTTI:BOOL=ON \
 -DLLVM_ENABLE_ZLIB:BOOL=ON \
--DLLVM_INSTALL_UTILS:BOOL=ON \
+-DLLVM_INSTALL_UTILS:BOOL=OFF \
 -DLLVM_REQUIRES_RTTI:BOOL=ON \
 -DLLVM_LIBDIR_SUFFIX=64 \
 -DLLVM_BINUTILS_INCDIR=/usr/include \
@@ -608,7 +608,7 @@ export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 -DLLVM_ENABLE_LIBCXX:BOOL=OFF \
 -DLLVM_ENABLE_RTTI:BOOL=ON \
 -DLLVM_ENABLE_ZLIB:BOOL=ON \
--DLLVM_INSTALL_UTILS:BOOL=ON \
+-DLLVM_INSTALL_UTILS:BOOL=OFF \
 -DLLVM_REQUIRES_RTTI:BOOL=ON \
 -DLLVM_LIBDIR_SUFFIX=64 \
 -DLLVM_BINUTILS_INCDIR=/usr/include \
@@ -634,7 +634,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1569994757
+export SOURCE_DATE_EPOCH=1570161587
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -766,8 +766,6 @@ popd
 
 %files bin
 %defattr(-,root,root,-)
-/usr/bin/FileCheck
-/usr/bin/FileCheck-9
 /usr/bin/bugpoint
 /usr/bin/bugpoint-9
 /usr/bin/c-index-test
@@ -796,8 +794,6 @@ popd
 /usr/bin/clang-rename-9
 /usr/bin/clang-scan-deps
 /usr/bin/clang-scan-deps-9
-/usr/bin/count
-/usr/bin/count-9
 /usr/bin/diagtool
 /usr/bin/diagtool-9
 /usr/bin/dsymutil
@@ -818,10 +814,6 @@ popd
 /usr/bin/lld-link-9
 /usr/bin/lli
 /usr/bin/lli-9
-/usr/bin/lli-child-target
-/usr/bin/lli-child-target-9
-/usr/bin/llvm-PerfectShuffle
-/usr/bin/llvm-PerfectShuffle-9
 /usr/bin/llvm-addr2line
 /usr/bin/llvm-addr2line-9
 /usr/bin/llvm-ar
@@ -926,8 +918,6 @@ popd
 /usr/bin/llvm-undname-9
 /usr/bin/llvm-xray
 /usr/bin/llvm-xray-9
-/usr/bin/not
-/usr/bin/not-9
 /usr/bin/obj2yaml
 /usr/bin/obj2yaml-9
 /usr/bin/opt
@@ -944,8 +934,6 @@ popd
 /usr/bin/verify-uselistorder-9
 /usr/bin/wasm-ld
 /usr/bin/wasm-ld-9
-/usr/bin/yaml-bench
-/usr/bin/yaml-bench-9
 /usr/bin/yaml2obj
 /usr/bin/yaml2obj-9
 
