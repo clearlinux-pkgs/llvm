@@ -7,15 +7,16 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 9.0.0
-Release  : 110
+Release  : 111
 URL      : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/9.0.0/cfe-9.0.0.src.tar.xz
-Source2  : http://releases.llvm.org/9.0.0/compiler-rt-9.0.0.src.tar.xz
-Source3  : http://releases.llvm.org/9.0.0/lld-9.0.0.src.tar.xz
-Source4  : http://releases.llvm.org/9.0.0/openmp-9.0.0.src.tar.xz
-Source5  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v9.0.0-1/SPIRV-9.0.0.1.tar.gz
-Source6 : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz.sig
+Source2  : http://releases.llvm.org/9.0.0/clang-tools-extra-9.0.0.src.tar.xz
+Source3  : http://releases.llvm.org/9.0.0/compiler-rt-9.0.0.src.tar.xz
+Source4  : http://releases.llvm.org/9.0.0/lld-9.0.0.src.tar.xz
+Source5  : http://releases.llvm.org/9.0.0/openmp-9.0.0.src.tar.xz
+Source6  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v9.0.0-1/SPIRV-9.0.0.1.tar.gz
+Source7 : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz.sig
 Summary  : LLVM/SPIR-V bi-directional translator
 Group    : Development/Tools
 License  : Apache-2.0 BSD-3-Clause MIT MPL-2.0 NCSA
@@ -151,6 +152,14 @@ Group: Default
 extras-libclanganalysis components for the llvm package.
 
 
+%package extras-libclangapplyreplacements
+Summary: extras-libclangapplyreplacements components for the llvm package.
+Group: Default
+
+%description extras-libclangapplyreplacements
+extras-libclangapplyreplacements components for the llvm package.
+
+
 %package extras-libclangarcmigrate
 Summary: extras-libclangarcmigrate components for the llvm package.
 Group: Default
@@ -183,6 +192,14 @@ Group: Default
 extras-libclangbasic components for the llvm package.
 
 
+%package extras-libclangchangenamespace
+Summary: extras-libclangchangenamespace components for the llvm package.
+Group: Default
+
+%description extras-libclangchangenamespace
+extras-libclangchangenamespace components for the llvm package.
+
+
 %package extras-libclangcodegen
 Summary: extras-libclangcodegen components for the llvm package.
 Group: Default
@@ -199,6 +216,22 @@ Group: Default
 extras-libclangcrosstu components for the llvm package.
 
 
+%package extras-libclangdaemon
+Summary: extras-libclangdaemon components for the llvm package.
+Group: Default
+
+%description extras-libclangdaemon
+extras-libclangdaemon components for the llvm package.
+
+
+%package extras-libclangdaemontweaks
+Summary: extras-libclangdaemontweaks components for the llvm package.
+Group: Default
+
+%description extras-libclangdaemontweaks
+extras-libclangdaemontweaks components for the llvm package.
+
+
 %package extras-libclangdependencyscanning
 Summary: extras-libclangdependencyscanning components for the llvm package.
 Group: Default
@@ -213,6 +246,14 @@ Group: Default
 
 %description extras-libclangdirectorywatcher
 extras-libclangdirectorywatcher components for the llvm package.
+
+
+%package extras-libclangdoc
+Summary: extras-libclangdoc components for the llvm package.
+Group: Default
+
+%description extras-libclangdoc
+extras-libclangdoc components for the llvm package.
 
 
 %package extras-libclangdriver
@@ -279,6 +320,22 @@ Group: Default
 extras-libclanghandlellvm components for the llvm package.
 
 
+%package extras-libclangincludefixer
+Summary: extras-libclangincludefixer components for the llvm package.
+Group: Default
+
+%description extras-libclangincludefixer
+extras-libclangincludefixer components for the llvm package.
+
+
+%package extras-libclangincludefixerplugin
+Summary: extras-libclangincludefixerplugin components for the llvm package.
+Group: Default
+
+%description extras-libclangincludefixerplugin
+extras-libclangincludefixerplugin components for the llvm package.
+
+
 %package extras-libclangindex
 Summary: extras-libclangindex components for the llvm package.
 Group: Default
@@ -295,12 +352,36 @@ Group: Default
 extras-libclanglex components for the llvm package.
 
 
+%package extras-libclangmove
+Summary: extras-libclangmove components for the llvm package.
+Group: Default
+
+%description extras-libclangmove
+extras-libclangmove components for the llvm package.
+
+
 %package extras-libclangparse
 Summary: extras-libclangparse components for the llvm package.
 Group: Default
 
 %description extras-libclangparse
 extras-libclangparse components for the llvm package.
+
+
+%package extras-libclangquery
+Summary: extras-libclangquery components for the llvm package.
+Group: Default
+
+%description extras-libclangquery
+extras-libclangquery components for the llvm package.
+
+
+%package extras-libclangreorderfields
+Summary: extras-libclangreorderfields components for the llvm package.
+Group: Default
+
+%description extras-libclangreorderfields
+extras-libclangreorderfields components for the llvm package.
 
 
 %package extras-libclangrewrite
@@ -357,6 +438,182 @@ Group: Default
 
 %description extras-libclangstaticanalyzerfrontend
 extras-libclangstaticanalyzerfrontend components for the llvm package.
+
+
+%package extras-libclangtidy
+Summary: extras-libclangtidy components for the llvm package.
+Group: Default
+
+%description extras-libclangtidy
+extras-libclangtidy components for the llvm package.
+
+
+%package extras-libclangtidyabseilmodule
+Summary: extras-libclangtidyabseilmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyabseilmodule
+extras-libclangtidyabseilmodule components for the llvm package.
+
+
+%package extras-libclangtidyandroidmodule
+Summary: extras-libclangtidyandroidmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyandroidmodule
+extras-libclangtidyandroidmodule components for the llvm package.
+
+
+%package extras-libclangtidyboostmodule
+Summary: extras-libclangtidyboostmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyboostmodule
+extras-libclangtidyboostmodule components for the llvm package.
+
+
+%package extras-libclangtidybugpronemodule
+Summary: extras-libclangtidybugpronemodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidybugpronemodule
+extras-libclangtidybugpronemodule components for the llvm package.
+
+
+%package extras-libclangtidycertmodule
+Summary: extras-libclangtidycertmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidycertmodule
+extras-libclangtidycertmodule components for the llvm package.
+
+
+%package extras-libclangtidycppcoreguidelinesmodule
+Summary: extras-libclangtidycppcoreguidelinesmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidycppcoreguidelinesmodule
+extras-libclangtidycppcoreguidelinesmodule components for the llvm package.
+
+
+%package extras-libclangtidyfuchsiamodule
+Summary: extras-libclangtidyfuchsiamodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyfuchsiamodule
+extras-libclangtidyfuchsiamodule components for the llvm package.
+
+
+%package extras-libclangtidygooglemodule
+Summary: extras-libclangtidygooglemodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidygooglemodule
+extras-libclangtidygooglemodule components for the llvm package.
+
+
+%package extras-libclangtidyhicppmodule
+Summary: extras-libclangtidyhicppmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyhicppmodule
+extras-libclangtidyhicppmodule components for the llvm package.
+
+
+%package extras-libclangtidyllvmmodule
+Summary: extras-libclangtidyllvmmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyllvmmodule
+extras-libclangtidyllvmmodule components for the llvm package.
+
+
+%package extras-libclangtidymiscmodule
+Summary: extras-libclangtidymiscmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidymiscmodule
+extras-libclangtidymiscmodule components for the llvm package.
+
+
+%package extras-libclangtidymodernizemodule
+Summary: extras-libclangtidymodernizemodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidymodernizemodule
+extras-libclangtidymodernizemodule components for the llvm package.
+
+
+%package extras-libclangtidympimodule
+Summary: extras-libclangtidympimodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidympimodule
+extras-libclangtidympimodule components for the llvm package.
+
+
+%package extras-libclangtidyobjcmodule
+Summary: extras-libclangtidyobjcmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyobjcmodule
+extras-libclangtidyobjcmodule components for the llvm package.
+
+
+%package extras-libclangtidyopenmpmodule
+Summary: extras-libclangtidyopenmpmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyopenmpmodule
+extras-libclangtidyopenmpmodule components for the llvm package.
+
+
+%package extras-libclangtidyperformancemodule
+Summary: extras-libclangtidyperformancemodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyperformancemodule
+extras-libclangtidyperformancemodule components for the llvm package.
+
+
+%package extras-libclangtidyplugin
+Summary: extras-libclangtidyplugin components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyplugin
+extras-libclangtidyplugin components for the llvm package.
+
+
+%package extras-libclangtidyportabilitymodule
+Summary: extras-libclangtidyportabilitymodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyportabilitymodule
+extras-libclangtidyportabilitymodule components for the llvm package.
+
+
+%package extras-libclangtidyreadabilitymodule
+Summary: extras-libclangtidyreadabilitymodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyreadabilitymodule
+extras-libclangtidyreadabilitymodule components for the llvm package.
+
+
+%package extras-libclangtidyutils
+Summary: extras-libclangtidyutils components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyutils
+extras-libclangtidyutils components for the llvm package.
+
+
+%package extras-libclangtidyzirconmodule
+Summary: extras-libclangtidyzirconmodule components for the llvm package.
+Group: Default
+
+%description extras-libclangtidyzirconmodule
+extras-libclangtidyzirconmodule components for the llvm package.
 
 
 %package extras-libclangtooling
@@ -492,15 +749,19 @@ staticdev32 components for the llvm package.
 cd ..
 %setup -q -T -D -n llvm-9.0.0.src -b 1
 cd ..
-%setup -q -T -D -n llvm-9.0.0.src -b 3
+%setup -q -T -D -n llvm-9.0.0.src -b 2
 cd ..
 %setup -q -T -D -n llvm-9.0.0.src -b 4
 cd ..
-%setup -q -T -D -n llvm-9.0.0.src -b 2
-cd ..
 %setup -q -T -D -n llvm-9.0.0.src -b 5
+cd ..
+%setup -q -T -D -n llvm-9.0.0.src -b 3
+cd ..
+%setup -q -T -D -n llvm-9.0.0.src -b 6
 mkdir -p tools/clang
 cp -r %{_topdir}/BUILD/cfe-9.0.0.src/* %{_topdir}/BUILD/llvm-9.0.0.src/tools/clang
+mkdir -p tools/clang/tools/extra
+cp -r %{_topdir}/BUILD/clang-tools-extra-9.0.0.src/* %{_topdir}/BUILD/llvm-9.0.0.src/tools/clang/tools/extra
 mkdir -p tools/lld
 cp -r %{_topdir}/BUILD/lld-9.0.0.src/* %{_topdir}/BUILD/llvm-9.0.0.src/tools/lld
 mkdir -p projects/openmp
@@ -525,7 +786,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1570161587
+export SOURCE_DATE_EPOCH=1570687959
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -634,7 +895,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1570161587
+export SOURCE_DATE_EPOCH=1570687959
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
@@ -644,6 +905,8 @@ cp projects/openmp/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/proj
 cp test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
 cp tools/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
 cp tools/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/package-licenses/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
+cp tools/clang/tools/extra/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/tools_clang_tools_extra_LICENSE.TXT
+cp tools/clang/tools/extra/clangd/clients/clangd-vscode/LICENSE %{buildroot}/usr/share/package-licenses/llvm/tools_clang_tools_extra_clangd_clients_clangd-vscode_LICENSE
 cp tools/msbuild/license.txt %{buildroot}/usr/share/package-licenses/llvm/tools_msbuild_license.txt
 cp utils/benchmark/LICENSE %{buildroot}/usr/share/package-licenses/llvm/utils_benchmark_LICENSE
 cp utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/utils_unittest_googlemock_LICENSE.txt
@@ -774,30 +1037,48 @@ popd
 /usr/bin/clang++
 /usr/bin/clang++-9
 /usr/bin/clang-9
+/usr/bin/clang-apply-replacements
+/usr/bin/clang-apply-replacements-9
+/usr/bin/clang-change-namespace
+/usr/bin/clang-change-namespace-9
 /usr/bin/clang-check
 /usr/bin/clang-check-9
 /usr/bin/clang-cl
 /usr/bin/clang-cl-9
 /usr/bin/clang-cpp
 /usr/bin/clang-cpp-9
+/usr/bin/clang-doc
+/usr/bin/clang-doc-9
 /usr/bin/clang-extdef-mapping
 /usr/bin/clang-extdef-mapping-9
 /usr/bin/clang-format
 /usr/bin/clang-format-9
 /usr/bin/clang-import-test
 /usr/bin/clang-import-test-9
+/usr/bin/clang-include-fixer
+/usr/bin/clang-include-fixer-9
 /usr/bin/clang-offload-bundler
 /usr/bin/clang-offload-bundler-9
+/usr/bin/clang-query
+/usr/bin/clang-query-9
 /usr/bin/clang-refactor
 /usr/bin/clang-refactor-9
 /usr/bin/clang-rename
 /usr/bin/clang-rename-9
+/usr/bin/clang-reorder-fields
+/usr/bin/clang-reorder-fields-9
 /usr/bin/clang-scan-deps
 /usr/bin/clang-scan-deps-9
+/usr/bin/clang-tidy
+/usr/bin/clang-tidy-9
+/usr/bin/clangd
+/usr/bin/clangd-9
 /usr/bin/diagtool
 /usr/bin/diagtool-9
 /usr/bin/dsymutil
 /usr/bin/dsymutil-9
+/usr/bin/find-all-symbols
+/usr/bin/find-all-symbols-9
 /usr/bin/git-clang-format
 /usr/bin/git-clang-format-9
 /usr/bin/hmaptool
@@ -918,6 +1199,8 @@ popd
 /usr/bin/llvm-undname-9
 /usr/bin/llvm-xray
 /usr/bin/llvm-xray-9
+/usr/bin/modularize
+/usr/bin/modularize-9
 /usr/bin/obj2yaml
 /usr/bin/obj2yaml-9
 /usr/bin/opt
@@ -945,8 +1228,13 @@ popd
 /usr/share/clang/clang-format-sublime.py
 /usr/share/clang/clang-format.el
 /usr/share/clang/clang-format.py
+/usr/share/clang/clang-include-fixer.el
+/usr/share/clang/clang-include-fixer.py
 /usr/share/clang/clang-rename.el
 /usr/share/clang/clang-rename.py
+/usr/share/clang/clang-tidy-diff.py
+/usr/share/clang/run-clang-tidy.py
+/usr/share/clang/run-find-all-symbols.py
 /usr/share/opt-viewer/opt-diff.py
 /usr/share/opt-viewer/opt-stats.py
 /usr/share/opt-viewer/opt-viewer.py
@@ -3012,11 +3300,16 @@ popd
 /usr/lib64/libclangAST.so
 /usr/lib64/libclangASTMatchers.so
 /usr/lib64/libclangAnalysis.so
+/usr/lib64/libclangApplyReplacements.so
 /usr/lib64/libclangBasic.so
+/usr/lib64/libclangChangeNamespace.so
 /usr/lib64/libclangCodeGen.so
 /usr/lib64/libclangCrossTU.so
+/usr/lib64/libclangDaemon.so
+/usr/lib64/libclangDaemonTweaks.so
 /usr/lib64/libclangDependencyScanning.so
 /usr/lib64/libclangDirectoryWatcher.so
+/usr/lib64/libclangDoc.so
 /usr/lib64/libclangDriver.so
 /usr/lib64/libclangDynamicASTMatchers.so
 /usr/lib64/libclangEdit.so
@@ -3025,9 +3318,14 @@ popd
 /usr/lib64/libclangFrontendTool.so
 /usr/lib64/libclangHandleCXX.so
 /usr/lib64/libclangHandleLLVM.so
+/usr/lib64/libclangIncludeFixer.so
+/usr/lib64/libclangIncludeFixerPlugin.so
 /usr/lib64/libclangIndex.so
 /usr/lib64/libclangLex.so
+/usr/lib64/libclangMove.so
 /usr/lib64/libclangParse.so
+/usr/lib64/libclangQuery.so
+/usr/lib64/libclangReorderFields.so
 /usr/lib64/libclangRewrite.so
 /usr/lib64/libclangRewriteFrontend.so
 /usr/lib64/libclangSema.so
@@ -3035,12 +3333,35 @@ popd
 /usr/lib64/libclangStaticAnalyzerCheckers.so
 /usr/lib64/libclangStaticAnalyzerCore.so
 /usr/lib64/libclangStaticAnalyzerFrontend.so
+/usr/lib64/libclangTidy.so
+/usr/lib64/libclangTidyAbseilModule.so
+/usr/lib64/libclangTidyAndroidModule.so
+/usr/lib64/libclangTidyBoostModule.so
+/usr/lib64/libclangTidyBugproneModule.so
+/usr/lib64/libclangTidyCERTModule.so
+/usr/lib64/libclangTidyCppCoreGuidelinesModule.so
+/usr/lib64/libclangTidyFuchsiaModule.so
+/usr/lib64/libclangTidyGoogleModule.so
+/usr/lib64/libclangTidyHICPPModule.so
+/usr/lib64/libclangTidyLLVMModule.so
+/usr/lib64/libclangTidyMPIModule.so
+/usr/lib64/libclangTidyMiscModule.so
+/usr/lib64/libclangTidyModernizeModule.so
+/usr/lib64/libclangTidyObjCModule.so
+/usr/lib64/libclangTidyOpenMPModule.so
+/usr/lib64/libclangTidyPerformanceModule.so
+/usr/lib64/libclangTidyPlugin.so
+/usr/lib64/libclangTidyPortabilityModule.so
+/usr/lib64/libclangTidyReadabilityModule.so
+/usr/lib64/libclangTidyUtils.so
+/usr/lib64/libclangTidyZirconModule.so
 /usr/lib64/libclangTooling.so
 /usr/lib64/libclangToolingASTDiff.so
 /usr/lib64/libclangToolingCore.so
 /usr/lib64/libclangToolingInclusions.so
 /usr/lib64/libclangToolingRefactoring.so
 /usr/lib64/libclangToolingSyntax.so
+/usr/lib64/libfindAllSymbols.so
 /usr/lib64/libiomp5.so
 /usr/lib64/libomp.so
 /usr/lib64/libomptarget.rtl.x86_64.so
@@ -3263,6 +3584,10 @@ popd
 %defattr(-,root,root,-)
 /usr/lib64/libclangAnalysis.so.9
 
+%files extras-libclangapplyreplacements
+%defattr(-,root,root,-)
+/usr/lib64/libclangApplyReplacements.so.9
+
 %files extras-libclangarcmigrate
 %defattr(-,root,root,-)
 /usr/lib64/libclangARCMigrate.so.9
@@ -3279,6 +3604,10 @@ popd
 %defattr(-,root,root,-)
 /usr/lib64/libclangBasic.so.9
 
+%files extras-libclangchangenamespace
+%defattr(-,root,root,-)
+/usr/lib64/libclangChangeNamespace.so.9
+
 %files extras-libclangcodegen
 %defattr(-,root,root,-)
 /usr/lib64/libclangCodeGen.so.9
@@ -3287,6 +3616,14 @@ popd
 %defattr(-,root,root,-)
 /usr/lib64/libclangCrossTU.so.9
 
+%files extras-libclangdaemon
+%defattr(-,root,root,-)
+/usr/lib64/libclangDaemon.so.9
+
+%files extras-libclangdaemontweaks
+%defattr(-,root,root,-)
+/usr/lib64/libclangDaemonTweaks.so.9
+
 %files extras-libclangdependencyscanning
 %defattr(-,root,root,-)
 /usr/lib64/libclangDependencyScanning.so.9
@@ -3294,6 +3631,10 @@ popd
 %files extras-libclangdirectorywatcher
 %defattr(-,root,root,-)
 /usr/lib64/libclangDirectoryWatcher.so.9
+
+%files extras-libclangdoc
+%defattr(-,root,root,-)
+/usr/lib64/libclangDoc.so.9
 
 %files extras-libclangdriver
 %defattr(-,root,root,-)
@@ -3327,6 +3668,14 @@ popd
 %defattr(-,root,root,-)
 /usr/lib64/libclangHandleLLVM.so.9
 
+%files extras-libclangincludefixer
+%defattr(-,root,root,-)
+/usr/lib64/libclangIncludeFixer.so.9
+
+%files extras-libclangincludefixerplugin
+%defattr(-,root,root,-)
+/usr/lib64/libclangIncludeFixerPlugin.so.9
+
 %files extras-libclangindex
 %defattr(-,root,root,-)
 /usr/lib64/libclangIndex.so.9
@@ -3335,9 +3684,21 @@ popd
 %defattr(-,root,root,-)
 /usr/lib64/libclangLex.so.9
 
+%files extras-libclangmove
+%defattr(-,root,root,-)
+/usr/lib64/libclangMove.so.9
+
 %files extras-libclangparse
 %defattr(-,root,root,-)
 /usr/lib64/libclangParse.so.9
+
+%files extras-libclangquery
+%defattr(-,root,root,-)
+/usr/lib64/libclangQuery.so.9
+
+%files extras-libclangreorderfields
+%defattr(-,root,root,-)
+/usr/lib64/libclangReorderFields.so.9
 
 %files extras-libclangrewrite
 %defattr(-,root,root,-)
@@ -3366,6 +3727,94 @@ popd
 %files extras-libclangstaticanalyzerfrontend
 %defattr(-,root,root,-)
 /usr/lib64/libclangStaticAnalyzerFrontend.so.9
+
+%files extras-libclangtidy
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidy.so.9
+
+%files extras-libclangtidyabseilmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyAbseilModule.so.9
+
+%files extras-libclangtidyandroidmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyAndroidModule.so.9
+
+%files extras-libclangtidyboostmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyBoostModule.so.9
+
+%files extras-libclangtidybugpronemodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyBugproneModule.so.9
+
+%files extras-libclangtidycertmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyCERTModule.so.9
+
+%files extras-libclangtidycppcoreguidelinesmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyCppCoreGuidelinesModule.so.9
+
+%files extras-libclangtidyfuchsiamodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyFuchsiaModule.so.9
+
+%files extras-libclangtidygooglemodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyGoogleModule.so.9
+
+%files extras-libclangtidyhicppmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyHICPPModule.so.9
+
+%files extras-libclangtidyllvmmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyLLVMModule.so.9
+
+%files extras-libclangtidymiscmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyMiscModule.so.9
+
+%files extras-libclangtidymodernizemodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyModernizeModule.so.9
+
+%files extras-libclangtidympimodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyMPIModule.so.9
+
+%files extras-libclangtidyobjcmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyObjCModule.so.9
+
+%files extras-libclangtidyopenmpmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyOpenMPModule.so.9
+
+%files extras-libclangtidyperformancemodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyPerformanceModule.so.9
+
+%files extras-libclangtidyplugin
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyPlugin.so.9
+
+%files extras-libclangtidyportabilitymodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyPortabilityModule.so.9
+
+%files extras-libclangtidyreadabilitymodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyReadabilityModule.so.9
+
+%files extras-libclangtidyutils
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyUtils.so.9
+
+%files extras-libclangtidyzirconmodule
+%defattr(-,root,root,-)
+/usr/lib64/libclangTidyZirconModule.so.9
 
 %files extras-libclangtooling
 %defattr(-,root,root,-)
@@ -3420,6 +3869,7 @@ popd
 %defattr(-,root,root,-)
 /usr/lib64/libLTO.so.9
 /usr/lib64/libRemarks.so.9
+/usr/lib64/libfindAllSymbols.so.9
 
 %files lib32
 %defattr(-,root,root,-)
@@ -3441,6 +3891,8 @@ popd
 /usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
 /usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
 /usr/share/package-licenses/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
+/usr/share/package-licenses/llvm/tools_clang_tools_extra_LICENSE.TXT
+/usr/share/package-licenses/llvm/tools_clang_tools_extra_clangd_clients_clangd-vscode_LICENSE
 /usr/share/package-licenses/llvm/tools_msbuild_license.txt
 /usr/share/package-licenses/llvm/utils_benchmark_LICENSE
 /usr/share/package-licenses/llvm/utils_unittest_googlemock_LICENSE.txt

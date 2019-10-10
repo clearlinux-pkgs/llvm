@@ -1,5 +1,6 @@
 7ef2527ba3da7603a41ce3592a8cd890f8d27ffa/llvm-9.0.0.src.tar.xz
 6977cf7a802a053c57fa74138d3648b563e71e88/cfe-9.0.0.src.tar.xz
+ac64403321d8486699d8bea5376b2438663dbb41/clang-tools-extra-9.0.0.src.tar.xz
 021a8c38cf27d63db37d939c7cdec46ffd627be2/lld-9.0.0.src.tar.xz
 53a17a74f23a2b6a24964cc3f6c1dd8a8e7d8eb3/openmp-9.0.0.src.tar.xz
 4e00cb231ff87fd4f970f35b2da86185a612e0e2/compiler-rt-9.0.0.src.tar.xz

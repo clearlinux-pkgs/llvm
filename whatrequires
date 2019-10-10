@@ -14,6 +14,7 @@ libsodium
 llvm
 llvm8
 llvmlite
+mediasdk
 pyside2-setup
 pytorch
 v4l-utils
