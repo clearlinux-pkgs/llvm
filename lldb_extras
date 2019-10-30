@@ -1,0 +1,14 @@
+/usr/bin/lldb
+/usr/bin/lldb-9
+/usr/bin/lldb-argdumper
+/usr/bin/lldb-argdumper-9
+/usr/bin/lldb-instr
+/usr/bin/lldb-instr-9
+/usr/bin/lldb-mi
+/usr/bin/lldb-mi-9
+/usr/bin/lldb-server
+/usr/bin/lldb-server-9
+/usr/bin/lldb-vscode
+/usr/bin/lldb-vscode-9
+/usr/lib/python3.7/site-packages/_lldb.so
+/usr/lib/python3.7/site-packages/lldb/

@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 9.0.0
-Release  : 111
+Release  : 112
 URL      : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/9.0.0/cfe-9.0.0.src.tar.xz
@@ -66,11 +66,12 @@ Patch2: llvm-0001-CMake-Split-static-library-exports-into-their-own-ex.patch
 Patch3: llvm-0002-Improve-physical-core-count-detection.patch
 Patch4: llvm-0003-Produce-a-normally-versioned-libLLVM.patch
 Patch5: llvm-0004-Allow-one-more-FMA-fusion.patch
-Patch6: clang-0001-Allow-building-split-libclang-libraries-with-unified.patch
-Patch7: clang-0002-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
-Patch8: clang-0003-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
-Patch9: clang-0004-Add-the-LLVM-major-version-number-to-the-Gold-LTO-pl.patch
-Patch10: clang-0005-Add-a-couple-more-f-instructions-that-GCC-has-that-C.patch
+Patch6: llvm-0005-Build-tablegen-component-as-a-shared-library.patch
+Patch7: clang-0001-Allow-building-split-libclang-libraries-with-unified.patch
+Patch8: clang-0002-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
+Patch9: clang-0003-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
+Patch10: clang-0004-Add-the-LLVM-major-version-number-to-the-Gold-LTO-pl.patch
+Patch11: clang-0005-Add-a-couple-more-f-instructions-that-GCC-has-that-C.patch
 
 %description
 These are syntax highlighting files for the Kate editor. Included are:
@@ -746,30 +747,31 @@ staticdev32 components for the llvm package.
 
 %prep
 %setup -q -n llvm-9.0.0.src
-cd ..
-%setup -q -T -D -n llvm-9.0.0.src -b 1
-cd ..
-%setup -q -T -D -n llvm-9.0.0.src -b 2
-cd ..
-%setup -q -T -D -n llvm-9.0.0.src -b 4
-cd ..
-%setup -q -T -D -n llvm-9.0.0.src -b 5
-cd ..
-%setup -q -T -D -n llvm-9.0.0.src -b 3
-cd ..
-%setup -q -T -D -n llvm-9.0.0.src -b 6
+cd %{_builddir}
+tar xf %{_sourcedir}/cfe-9.0.0.src.tar.xz
+cd %{_builddir}
+tar xf %{_sourcedir}/clang-tools-extra-9.0.0.src.tar.xz
+cd %{_builddir}
+tar xf %{_sourcedir}/lld-9.0.0.src.tar.xz
+cd %{_builddir}
+tar xf %{_sourcedir}/openmp-9.0.0.src.tar.xz
+cd %{_builddir}
+tar xf %{_sourcedir}/compiler-rt-9.0.0.src.tar.xz
+cd %{_builddir}
+tar xf %{_sourcedir}/SPIRV-9.0.0.1.tar.gz
+cd %{_builddir}/llvm-9.0.0.src
 mkdir -p tools/clang
-cp -r %{_topdir}/BUILD/cfe-9.0.0.src/* %{_topdir}/BUILD/llvm-9.0.0.src/tools/clang
+cp -r %{_builddir}/cfe-9.0.0.src/* %{_builddir}/llvm-9.0.0.src/tools/clang
 mkdir -p tools/clang/tools/extra
-cp -r %{_topdir}/BUILD/clang-tools-extra-9.0.0.src/* %{_topdir}/BUILD/llvm-9.0.0.src/tools/clang/tools/extra
+cp -r %{_builddir}/clang-tools-extra-9.0.0.src/* %{_builddir}/llvm-9.0.0.src/tools/clang/tools/extra
 mkdir -p tools/lld
-cp -r %{_topdir}/BUILD/lld-9.0.0.src/* %{_topdir}/BUILD/llvm-9.0.0.src/tools/lld
+cp -r %{_builddir}/lld-9.0.0.src/* %{_builddir}/llvm-9.0.0.src/tools/lld
 mkdir -p projects/openmp
-cp -r %{_topdir}/BUILD/openmp-9.0.0.src/* %{_topdir}/BUILD/llvm-9.0.0.src/projects/openmp
+cp -r %{_builddir}/openmp-9.0.0.src/* %{_builddir}/llvm-9.0.0.src/projects/openmp
 mkdir -p projects/compiler-rt
-cp -r %{_topdir}/BUILD/compiler-rt-9.0.0.src/* %{_topdir}/BUILD/llvm-9.0.0.src/projects/compiler-rt
+cp -r %{_builddir}/compiler-rt-9.0.0.src/* %{_builddir}/llvm-9.0.0.src/projects/compiler-rt
 mkdir -p projects/SPIRV
-cp -r %{_topdir}/BUILD/SPIRV-LLVM-Translator-9.0.0-1/* %{_topdir}/BUILD/llvm-9.0.0.src/projects/SPIRV
+cp -r %{_builddir}/SPIRV-LLVM-Translator-9.0.0-1/* %{_builddir}/llvm-9.0.0.src/projects/SPIRV
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -780,13 +782,14 @@ cp -r %{_topdir}/BUILD/SPIRV-LLVM-Translator-9.0.0-1/* %{_topdir}/BUILD/llvm-9.0
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1570687959
+export SOURCE_DATE_EPOCH=1572412365
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -820,6 +823,7 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 -DLLVM_ENABLE_ZLIB:BOOL=ON \
 -DLLVM_INSTALL_UTILS:BOOL=OFF \
 -DLLVM_REQUIRES_RTTI:BOOL=ON \
+-DLLVM_TABLEGEN=/usr/bin/llvm-tblgen \
 -DLLVM_LIBDIR_SUFFIX=64 \
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
@@ -871,6 +875,7 @@ export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 -DLLVM_ENABLE_ZLIB:BOOL=ON \
 -DLLVM_INSTALL_UTILS:BOOL=OFF \
 -DLLVM_REQUIRES_RTTI:BOOL=ON \
+-DLLVM_TABLEGEN=/usr/bin/llvm-tblgen \
 -DLLVM_LIBDIR_SUFFIX=64 \
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
@@ -895,22 +900,22 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1570687959
+export SOURCE_DATE_EPOCH=1572412365
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
-cp LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/LICENSE.TXT
-cp projects/SPIRV/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/projects_SPIRV_LICENSE.TXT
-cp projects/compiler-rt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/projects_compiler-rt_LICENSE.TXT
-cp projects/openmp/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
-cp test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
-cp tools/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
-cp tools/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/package-licenses/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
-cp tools/clang/tools/extra/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/tools_clang_tools_extra_LICENSE.TXT
-cp tools/clang/tools/extra/clangd/clients/clangd-vscode/LICENSE %{buildroot}/usr/share/package-licenses/llvm/tools_clang_tools_extra_clangd_clients_clangd-vscode_LICENSE
-cp tools/msbuild/license.txt %{buildroot}/usr/share/package-licenses/llvm/tools_msbuild_license.txt
-cp utils/benchmark/LICENSE %{buildroot}/usr/share/package-licenses/llvm/utils_benchmark_LICENSE
-cp utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/utils_unittest_googlemock_LICENSE.txt
-cp utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/utils_unittest_googletest_LICENSE.TXT
+cp %{_builddir}/llvm-9.0.0.src/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
+cp %{_builddir}/llvm-9.0.0.src/projects/SPIRV/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6
+cp %{_builddir}/llvm-9.0.0.src/projects/compiler-rt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/f4359b9da55a3b9e4d9513eb79cacf125fb49e7b
+cp %{_builddir}/llvm-9.0.0.src/projects/openmp/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/e3cccabb67bd491a643d32a7d2b65b49836e626d
+cp %{_builddir}/llvm-9.0.0.src/test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/c01c212bdf3925189f673e2081b44094023860ea
+cp %{_builddir}/llvm-9.0.0.src/tools/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
+cp %{_builddir}/llvm-9.0.0.src/tools/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7
+cp %{_builddir}/llvm-9.0.0.src/tools/clang/tools/extra/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
+cp %{_builddir}/llvm-9.0.0.src/tools/clang/tools/extra/clangd/clients/clangd-vscode/LICENSE %{buildroot}/usr/share/package-licenses/llvm/27311ab9774bb8ce4b1c6d1f5c8c4d45689792a4
+cp %{_builddir}/llvm-9.0.0.src/tools/msbuild/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7
+cp %{_builddir}/llvm-9.0.0.src/utils/benchmark/LICENSE %{buildroot}/usr/share/package-licenses/llvm/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/llvm-9.0.0.src/utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304
+cp %{_builddir}/llvm-9.0.0.src/utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304
 pushd clr-build32
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -3292,6 +3297,7 @@ popd
 /usr/lib64/cmake/llvm/UseLibtool.cmake
 /usr/lib64/cmake/llvm/VersionFromVCS.cmake
 /usr/lib64/libLLVM.so
+/usr/lib64/libLLVMTableGen.so
 /usr/lib64/libLTO.so
 /usr/lib64/libRemarks.so
 /usr/lib64/libclang-cpp.so
@@ -3402,6 +3408,7 @@ popd
 /usr/lib32/cmake/llvm/UseLibtool.cmake
 /usr/lib32/cmake/llvm/VersionFromVCS.cmake
 /usr/lib32/libLLVM.so
+/usr/lib32/libLLVMTableGen.so
 /usr/lib32/libLTO.so
 /usr/lib32/libRemarks.so
 
@@ -3867,6 +3874,7 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
+/usr/lib64/libLLVMTableGen.so.9
 /usr/lib64/libLTO.so.9
 /usr/lib64/libRemarks.so.9
 /usr/lib64/libfindAllSymbols.so.9
@@ -3874,6 +3882,7 @@ popd
 %files lib32
 %defattr(-,root,root,-)
 /usr/lib32/libLLVM.so.9
+/usr/lib32/libLLVMTableGen.so.9
 /usr/lib32/libLTO.so.9
 /usr/lib32/libRemarks.so.9
 
@@ -3884,19 +3893,16 @@ popd
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/llvm/LICENSE.TXT
-/usr/share/package-licenses/llvm/projects_SPIRV_LICENSE.TXT
-/usr/share/package-licenses/llvm/projects_compiler-rt_LICENSE.TXT
-/usr/share/package-licenses/llvm/projects_openmp_LICENSE.txt
-/usr/share/package-licenses/llvm/test_YAMLParser_LICENSE.txt
-/usr/share/package-licenses/llvm/tools_clang_LICENSE.TXT
-/usr/share/package-licenses/llvm/tools_clang_tools_clang-format-vs_ClangFormat_license.txt
-/usr/share/package-licenses/llvm/tools_clang_tools_extra_LICENSE.TXT
-/usr/share/package-licenses/llvm/tools_clang_tools_extra_clangd_clients_clangd-vscode_LICENSE
-/usr/share/package-licenses/llvm/tools_msbuild_license.txt
-/usr/share/package-licenses/llvm/utils_benchmark_LICENSE
-/usr/share/package-licenses/llvm/utils_unittest_googlemock_LICENSE.txt
-/usr/share/package-licenses/llvm/utils_unittest_googletest_LICENSE.TXT
+/usr/share/package-licenses/llvm/27311ab9774bb8ce4b1c6d1f5c8c4d45689792a4
+/usr/share/package-licenses/llvm/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304
+/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6
+/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
+/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
+/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7
+/usr/share/package-licenses/llvm/c01c212bdf3925189f673e2081b44094023860ea
+/usr/share/package-licenses/llvm/e3cccabb67bd491a643d32a7d2b65b49836e626d
+/usr/share/package-licenses/llvm/f4359b9da55a3b9e4d9513eb79cacf125fb49e7b
 
 %files man
 %defattr(0644,root,root,0755)
@@ -4022,7 +4028,6 @@ popd
 /usr/lib64/libLLVMSystemZDesc.a
 /usr/lib64/libLLVMSystemZDisassembler.a
 /usr/lib64/libLLVMSystemZInfo.a
-/usr/lib64/libLLVMTableGen.a
 /usr/lib64/libLLVMTarget.a
 /usr/lib64/libLLVMTextAPI.a
 /usr/lib64/libLLVMTransformUtils.a
@@ -4175,7 +4180,6 @@ popd
 /usr/lib32/libLLVMSystemZDesc.a
 /usr/lib32/libLLVMSystemZDisassembler.a
 /usr/lib32/libLLVMSystemZInfo.a
-/usr/lib32/libLLVMTableGen.a
 /usr/lib32/libLLVMTarget.a
 /usr/lib32/libLLVMTextAPI.a
 /usr/lib32/libLLVMTransformUtils.a

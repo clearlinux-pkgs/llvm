@@ -17,4 +17,5 @@ llvmlite
 mediasdk
 pyside2-setup
 pytorch
+suricata
 v4l-utils
