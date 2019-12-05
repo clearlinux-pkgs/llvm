@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 9.0.0
-Release  : 113
+Release  : 114
 URL      : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
 Source0  : http://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
 Source1  : http://releases.llvm.org/9.0.0/cfe-9.0.0.src.tar.xz
