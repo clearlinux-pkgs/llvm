@@ -1,16 +1,18 @@
 # This file contains recursive sources that require this package
 GtkD
 PyNaCl
-blender
+cereal
 compat-llvm-soname5
 compat-llvm-soname7
 cups
 darktable
+emacs
 embree
 intel-graphics-compiler
 itstool
 ldc
 libsodium
+lldb
 llvm
 llvm8
 llvmlite
