@@ -3,7 +3,6 @@ GtkD
 PyNaCl
 cereal
 compat-llvm-soname5
-compat-llvm-soname7
 cups
 darktable
 emacs
@@ -17,6 +16,7 @@ llvm
 llvm8
 llvmlite
 mediasdk
+mono
 pyside2-setup
 pytorch
 suricata

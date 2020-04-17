@@ -1,0 +1,33 @@
+From 23548e0d7d795faa78b47bb9f858cf0318d3eadb Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Thu, 16 Apr 2020 13:07:02 -0700
+Subject: [llvm] Disable broken amdgcn target
+
+Build fails.
+
+clang-10: error: no such file or directory: 'hip.amdgcn.bc'
+clang-10: error: no such file or directory: 'ocml.amdgcn.bc'
+clang-10: error: no such file or directory: 'ockl.amdgcn.bc'
+clang-10: error: no such file or directory: 'oclc_finite_only_off.amdgcn.bc'
+clang-10: error: no such file or directory: 'oclc_daz_opt_off.amdgcn.bc'
+clang-10: error: no such file or directory: 'oclc_correctly_rounded_sqrt_on.amdgcn.bc'
+clang-10: error: no such file or directory: 'oclc_unsafe_math_off.amdgcn.bc'
+clang-10: error: no such file or directory: 'oclc_isa_version_803.amdgcn.bc'
+clang-10: error: no such file or directory: 'oclc_wavefrontsize64_on.amdgcn.bc'
+---
+ openmp/libomptarget/deviceRTLs/CMakeLists.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/projects/openmp/libomptarget/deviceRTLs/CMakeLists.txt b/projects/openmp/libomptarget/deviceRTLs/CMakeLists.txt
+index 8bbf987aaf20..3df94eac0727 100644
+--- a/projects/openmp/libomptarget/deviceRTLs/CMakeLists.txt
++++ b/projects/openmp/libomptarget/deviceRTLs/CMakeLists.txt
+@@ -10,5 +10,4 @@
+ #
+ ##===----------------------------------------------------------------------===##
+ 
+-add_subdirectory(amdgcn)
+ add_subdirectory(nvptx)
+-- 
+2.26.1
+

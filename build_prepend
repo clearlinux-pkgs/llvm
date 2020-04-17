@@ -1,0 +1,44 @@
+#!rpm
+# Bootstrap Clang and the table generators
+# See https://build.opensuse.org/package/view_file/devel:tools:compiler/llvm10/llvm10.spec?expand=1
+mkdir clr-bootstrap-build
+pushd clr-bootstrap-build
+CFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS` -fno-integrated-as"
+CXXFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS` -fno-integrated-as"
+%cmake .. \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_SHARED_LIBS:BOOL=OFF \
+    -DCMAKE_C_COMPILER=clang \
+    -DCMAKE_C_FLAGS="$CFLAGS -g0" \
+    -DCMAKE_CXX_COMPILER=clang++ \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS -g0" \
+    -DLLVM_BUILD_LLVM_DYLIB:BOOL=OFF \
+    -DLLVM_LINK_LLVM_DYLIB:BOOL=OFF \
+    -DLLVM_BUILD_TOOLS:BOOL=OFF \
+    -DLLVM_BUILD_UTILS:BOOL=OFF \
+    -DLLVM_BUILD_EXAMPLES:BOOL=OFF \
+    -DLLVM_POLLY_BUILD:BOOL=OFF \
+    -DLLVM_TOOL_CLANG_TOOLS_EXTRA_BUILD:BOOL=OFF \
+    -DLLVM_INCLUDE_TESTS:BOOL=OFF \
+    -DLLVM_ENABLE_ASSERTIONS=OFF \
+    -DLLVM_TARGETS_TO_BUILD=Native \
+    -DCLANG_ENABLE_ARCMT:BOOL=OFF \
+    -DCLANG_ENABLE_STATIC_ANALYZER:BOOL=OFF \
+    -DCOMPILER_RT_BUILD_SANITIZERS:BOOL=OFF \
+    -DCOMPILER_RT_BUILD_XRAY:BOOL=OFF \
+    -DLLDB_DISABLE_PYTHON=ON \
+    -DCMAKE_SKIP_RPATH:BOOL=OFF \
+    -DLLVM_LIBDIR_SUFFIX=64 \
+    -DLLVM_BINUTILS_INCDIR=/usr/include \
+    -DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
+make  %{?_smp_mflags}  VERBOSE=1 clang llvm-tblgen clang-tblgen
+popd
+
+export PATH=/usr/lib64/ccache/bin/:${PWD}/clr-bootstrap-build/bin:${PATH}
+#export CC=${PWD}/clr-bootstrap-build/bin/clang
+#export CXX=${PWD}/clr-bootstrap-build/bin/clang++
+export LLVM_AR=${PWD}/clr-bootstrap-build/bin/llvm-ar
+export LLVM_RANLIB=${PWD}/clr-bootstrap-build/bin/llvm-ranlib
+export LLVM_TABLEGEN=${PWD}/clr-bootstrap-build/bin/llvm-tblgen
+export CLANG_TABLEGEN=${PWD}/clr-bootstrap-build/bin/clang-tblgen

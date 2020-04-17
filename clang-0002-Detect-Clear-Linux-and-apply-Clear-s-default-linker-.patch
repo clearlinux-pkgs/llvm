@@ -1,24 +1,24 @@
-From 165344fc369bb3a1612adc7105c9e7cd864218e0 Mon Sep 17 00:00:00 2001
+From e7190b13eb0524cc59b62158dd164c3de1b3807e Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Wed, 10 Oct 2018 19:53:40 -0700
-Subject: [cfe] Detect Clear Linux and apply Clear's default linker options
+Subject: [llvm] Detect Clear Linux and apply Clear's default linker options
 
 Enum placed at the end to avoid Binary Compatibility break when
 backporting this patch.
 
 Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
 ---
- include/clang/Driver/Distro.h   |  4 ++++
- lib/Driver/Distro.cpp           | 13 +++++++++++++
- lib/Driver/ToolChains/Linux.cpp | 14 +++++++++-----
- unittests/Driver/DistroTest.cpp | 16 ++++++++++++++++
+ clang/include/clang/Driver/Distro.h   |  4 ++++
+ clang/lib/Driver/Distro.cpp           | 13 +++++++++++++
+ clang/lib/Driver/ToolChains/Linux.cpp | 14 +++++++++-----
+ clang/unittests/Driver/DistroTest.cpp | 16 ++++++++++++++++
  4 files changed, 42 insertions(+), 5 deletions(-)
 
 diff --git a/tools/clang/include/clang/Driver/Distro.h b/tools/clang/include/clang/Driver/Distro.h
-index 67dc764fb7..80f659d2fe 100644
+index d382cf77a8b2..deb6bcbc869d 100644
 --- a/tools/clang/include/clang/Driver/Distro.h
 +++ b/tools/clang/include/clang/Driver/Distro.h
-@@ -27,6 +27,7 @@ public:
+@@ -28,6 +28,7 @@ public:
      // the first and last known member in the family, e.g. IsRedHat().
      AlpineLinux,
      ArchLinux,
@@ -26,7 +26,7 @@ index 67dc764fb7..80f659d2fe 100644
      DebianLenny,
      DebianSqueeze,
      DebianWheezy,
-@@ -128,6 +129,9 @@ public:
+@@ -130,6 +131,9 @@ public:
    bool IsGentoo() const {
      return DistroVal == Gentoo;
    }
@@ -37,10 +37,10 @@ index 67dc764fb7..80f659d2fe 100644
    /// @}
  };
 diff --git a/tools/clang/lib/Driver/Distro.cpp b/tools/clang/lib/Driver/Distro.cpp
-index f2a3074d1e..1fc74a6279 100644
+index 06707fefc9d0..c854521de747 100644
 --- a/tools/clang/lib/Driver/Distro.cpp
 +++ b/tools/clang/lib/Driver/Distro.cpp
-@@ -145,6 +145,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
+@@ -163,6 +163,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS,
    if (VFS.exists("/etc/gentoo-release"))
      return Distro::Gentoo;
  
@@ -61,12 +61,12 @@ index f2a3074d1e..1fc74a6279 100644
  }
  
 diff --git a/tools/clang/lib/Driver/ToolChains/Linux.cpp b/tools/clang/lib/Driver/ToolChains/Linux.cpp
-index d900508ad9..01a783e4ec 100644
+index bff1ab1009be..50c17bb94b42 100644
 --- a/tools/clang/lib/Driver/ToolChains/Linux.cpp
 +++ b/tools/clang/lib/Driver/ToolChains/Linux.cpp
 @@ -242,13 +242,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
  
-   Distro Distro(D.getVFS());
+   Distro Distro(D.getVFS(), Triple);
  
 -  if (Distro.IsAlpineLinux() || Triple.isAndroid()) {
 +  if (Distro.IsAlpineLinux() || Distro.IsClearLinux() || Triple.isAndroid()) {
@@ -89,7 +89,7 @@ index d900508ad9..01a783e4ec 100644
      ExtraOpts.push_back("--enable-new-dtags");
  
    // The selection of paths to try here is designed to match the patterns which
-@@ -972,8 +972,12 @@ void Linux::AddIAMCUIncludeArgs(const ArgList &DriverArgs,
+@@ -917,8 +917,12 @@ void Linux::AddIAMCUIncludeArgs(const ArgList &DriverArgs,
  }
  
  bool Linux::isPIEDefault() const {
@@ -99,16 +99,16 @@ index d900508ad9..01a783e4ec 100644
 +      getTriple().isMusl() || getSanitizerArgs().requiresPIE())
 +    return true;
 +
-+  Distro Distro(getDriver().getVFS());
++  Distro Distro(getDriver().getVFS(), getTriple());
 +  return Distro.IsClearLinux();
  }
  
  bool Linux::isNoExecStackDefault() const {
 diff --git a/tools/clang/unittests/Driver/DistroTest.cpp b/tools/clang/unittests/Driver/DistroTest.cpp
-index d0c86d1c54..3a7f9226e6 100644
+index 391c0baaadf5..bdb307ed2095 100644
 --- a/tools/clang/unittests/Driver/DistroTest.cpp
 +++ b/tools/clang/unittests/Driver/DistroTest.cpp
-@@ -337,4 +337,20 @@ TEST(DistroTest, DetectGentoo) {
+@@ -340,6 +340,22 @@ TEST(DistroTest, DetectGentoo) {
    ASSERT_TRUE(Gentoo.IsGentoo());
  }
  
@@ -128,7 +128,9 @@ index d0c86d1c54..3a7f9226e6 100644
 +                                       "PRIVACY_POLICY_URL=\"http://www.intel.com/privacy\"\n"));
 +}
 +
- } // end anonymous namespace
+ TEST(DistroTest, DetectWindowsAndCrossCompile) {
+ 
+   class CountingFileSystem : public llvm::vfs::ProxyFileSystem {
 -- 
-2.23.0
+2.26.1
 

@@ -1,8 +1,7 @@
-From 65692498782bc1fbf9ce4c3bb5109e8a553c6c2e Mon Sep 17 00:00:00 2001
+From 829d64d031405fca8216eff68f3c7f6b874e4971 Mon Sep 17 00:00:00 2001
 From: Tom Stellard <tstellar@redhat.com>
 Date: Sat, 29 Apr 2017 02:03:23 +0000
-Subject: [PATCH] CMake: Split static library exports into their own export
- file
+Subject: [llvm] CMake: Split static library exports into their own export file
 
 Summary:
 This is to better support distros which split the static libraries into
@@ -25,16 +24,16 @@ Subscribers: llvm-commits
 
 Differential Revision: https://reviews.llvm.org/D32668
 ---
- cmake/modules/AddLLVM.cmake       | 6 +++++-
- cmake/modules/CMakeLists.txt      | 3 +++
- cmake/modules/LLVMConfig.cmake.in | 2 ++
+ llvm/cmake/modules/AddLLVM.cmake       | 6 +++++-
+ llvm/cmake/modules/CMakeLists.txt      | 3 +++
+ llvm/cmake/modules/LLVMConfig.cmake.in | 2 ++
  3 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/cmake/modules/AddLLVM.cmake b/cmake/modules/AddLLVM.cmake
-index 619e986b8aa..200fc45f36b 100644
---- a/cmake/modules/AddLLVM.cmake
-+++ b/cmake/modules/AddLLVM.cmake
-@@ -691,7 +691,11 @@ macro(add_llvm_library name)
+diff --git llvm/cmake/modules/AddLLVM.cmake llvm/cmake/modules/AddLLVM.cmake
+index fd69786544ac..081b83b9aa8b 100644
+--- llvm/cmake/modules/AddLLVM.cmake
++++ llvm/cmake/modules/AddLLVM.cmake
+@@ -726,7 +726,11 @@ macro(add_llvm_library name)
        if(${name} IN_LIST LLVM_DISTRIBUTION_COMPONENTS OR
            (in_llvm_libs AND "llvm-libraries" IN_LIST LLVM_DISTRIBUTION_COMPONENTS) OR
            NOT LLVM_DISTRIBUTION_COMPONENTS)
@@ -47,10 +46,10 @@ index 619e986b8aa..200fc45f36b 100644
          set_property(GLOBAL PROPERTY LLVM_HAS_EXPORTS True)
        endif()
  
-diff --git a/cmake/modules/CMakeLists.txt b/cmake/modules/CMakeLists.txt
-index 9cf22b436fa..dc982d2e1f1 100644
---- a/cmake/modules/CMakeLists.txt
-+++ b/cmake/modules/CMakeLists.txt
+diff --git llvm/cmake/modules/CMakeLists.txt llvm/cmake/modules/CMakeLists.txt
+index 9cf22b436fa7..dc982d2e1f14 100644
+--- llvm/cmake/modules/CMakeLists.txt
++++ llvm/cmake/modules/CMakeLists.txt
 @@ -105,6 +105,7 @@ set(LLVM_CONFIG_BINARY_DIR "\${LLVM_INSTALL_PREFIX}")
  set(LLVM_CONFIG_TOOLS_BINARY_DIR "\${LLVM_INSTALL_PREFIX}/bin")
  set(LLVM_CONFIG_EXPORTS_FILE "\${LLVM_CMAKE_DIR}/LLVMExports.cmake")
@@ -68,11 +67,11 @@ index 9cf22b436fa..dc982d2e1f1 100644
    endif()
  
    install(FILES
-diff --git a/cmake/modules/LLVMConfig.cmake.in b/cmake/modules/LLVMConfig.cmake.in
-index 536031f790d..6ef54a096e5 100644
---- a/cmake/modules/LLVMConfig.cmake.in
-+++ b/cmake/modules/LLVMConfig.cmake.in
-@@ -89,6 +89,8 @@ if(NOT TARGET LLVMSupport)
+diff --git llvm/cmake/modules/LLVMConfig.cmake.in llvm/cmake/modules/LLVMConfig.cmake.in
+index 082393212b67..a0b3a0ec60e9 100644
+--- llvm/cmake/modules/LLVMConfig.cmake.in
++++ llvm/cmake/modules/LLVMConfig.cmake.in
+@@ -99,6 +99,8 @@ if(NOT TARGET LLVMSupport)
    set(LLVM_EXPORTED_TARGETS "@LLVM_CONFIG_EXPORTS@")
    include("@LLVM_CONFIG_EXPORTS_FILE@")
    @llvm_config_include_buildtree_only_exports@
@@ -82,5 +81,5 @@ index 536031f790d..6ef54a096e5 100644
  
  # By creating intrinsics_gen here, subprojects that depend on LLVM's
 -- 
-2.23.0
+2.26.1
 

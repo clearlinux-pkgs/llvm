@@ -1,7 +1,7 @@
-From de0f9b7380e23e15b1f7e04a90f75eea3a6b9be4 Mon Sep 17 00:00:00 2001
+From c6f49e46b174b46f7b1eaf1778099a486e6a06ce Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Thu, 11 Oct 2018 10:47:38 -0700
-Subject: [cfe] Allow building split libclang libraries with unified LLVM lib
+Subject: [llvm] Allow building split libclang libraries with unified LLVM lib
 
 We use LLVM_BUILD_LLVM_DYLIB to build the llvm libraries as shared, but that
 does not work for clang. We can use BUILD_SHARED_LIBS on clang, but since we
@@ -10,11 +10,11 @@ build them all together, we need to smuggle it in using this patch.
 Source: https://build.opensuse.org/package/view_file/openSUSE:Factory/llvm7/n_clang_allow_BUILD_SHARED_LIBRARY.patch
 Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
 ---
- CMakeLists.txt | 5 +++++
+ clang/CMakeLists.txt | 5 +++++
  1 file changed, 5 insertions(+)
 
 diff --git a/tools/clang/CMakeLists.txt b/tools/clang/CMakeLists.txt
-index 60937aa9db..f9aa4135be 100644
+index 781c3eb7f2f2..572973184fbe 100644
 --- a/tools/clang/CMakeLists.txt
 +++ b/tools/clang/CMakeLists.txt
 @@ -4,6 +4,11 @@ if(POLICY CMP0075)
@@ -30,5 +30,5 @@ index 60937aa9db..f9aa4135be 100644
  # standalone project, using LLVM as an external library:
  if( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )
 -- 
-2.23.0
+2.26.1
 

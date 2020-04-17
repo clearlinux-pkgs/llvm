@@ -1,4 +1,3 @@
-python2-shebangs.patch
 # llvm patches
 llvm-0001-CMake-Split-static-library-exports-into-their-own-ex.patch
 llvm-0002-Improve-physical-core-count-detection.patch
@@ -14,3 +13,7 @@ clang-0004-Add-the-LLVM-major-version-number-to-the-Gold-LTO-pl.patch
 clang-0005-Add-a-couple-more-f-instructions-that-GCC-has-that-C.patch
 
 # SPIRV patches
+
+# OpenMP patches
+openmp-0001-Disable-broken-amdgcn-target.patch
+

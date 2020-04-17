@@ -1,18 +1,18 @@
-From 8b0005c9357c000bd1bf87c4648b42be9ce95e76 Mon Sep 17 00:00:00 2001
+From 241407ff8b9ba95169744e1aa40225c5fd40f2df Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Sun, 10 Mar 2019 18:15:11 +0000
-Subject: [PATCH] Improve physical core count detection
+Subject: [llvm] Improve physical core count detection
 
 Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
 ---
- lib/Support/Host.cpp | 4 +---
+ llvm/lib/Support/Host.cpp | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/lib/Support/Host.cpp b/lib/Support/Host.cpp
-index d491912bdc0..1d1f52e36bc 100644
---- a/lib/Support/Host.cpp
-+++ b/lib/Support/Host.cpp
-@@ -1222,9 +1222,7 @@ static int computeHostNumPhysicalCores() {
+diff --git llvm/lib/Support/Host.cpp llvm/lib/Support/Host.cpp
+index ef38c1c09413..c635f0c4b442 100644
+--- llvm/lib/Support/Host.cpp
++++ llvm/lib/Support/Host.cpp
+@@ -1272,9 +1272,7 @@ static int computeHostNumPhysicalCores() {
    llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> Text =
        llvm::MemoryBuffer::getFileAsStream("/proc/cpuinfo");
    if (std::error_code EC = Text.getError()) {
@@ -24,5 +24,5 @@ index d491912bdc0..1d1f52e36bc 100644
    SmallVector<StringRef, 8> strs;
    (*Text)->getBuffer().split(strs, "\n", /*MaxSplit=*/-1,
 -- 
-2.23.0
+2.26.1
 

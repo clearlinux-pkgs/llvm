@@ -1,18 +1,18 @@
-From 749817bab62bafc77feae9b4b942ccbebeeb06bd Mon Sep 17 00:00:00 2001
+From 260edb41380fcb9b441705058523e3a5abf34b62 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Mon, 26 Aug 2019 15:53:58 +0000
-Subject: [cfe] Add a couple more -f instructions that GCC has that Clang has
+Subject: [llvm] Add a couple more -f instructions that GCC has that Clang has
  to ignore
 
 ---
- include/clang/Driver/Options.td | 4 ++++
- 1 file changed, 4 insertions(+)
+ clang/include/clang/Driver/Options.td | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/tools/clang/include/clang/Driver/Options.td b/tools/clang/include/clang/Driver/Options.td
-index 4ea8bfff09..22c49d0a54 100644
+index 0a60873443fc..9146f1c22871 100644
 --- a/tools/clang/include/clang/Driver/Options.td
 +++ b/tools/clang/include/clang/Driver/Options.td
-@@ -2017,6 +2017,7 @@ def mabi_EQ : Joined<["-"], "mabi=">, Group<m_Group>;
+@@ -2143,6 +2143,7 @@ def mabi_EQ : Joined<["-"], "mabi=">, Group<m_Group>;
  def miamcu : Flag<["-"], "miamcu">, Group<m_Group>, Flags<[DriverOption, CoreOption]>,
    HelpText<"Use Intel MCU ABI">;
  def mno_iamcu : Flag<["-"], "mno-iamcu">, Group<m_Group>, Flags<[DriverOption, CoreOption]>;
@@ -20,15 +20,7 @@ index 4ea8bfff09..22c49d0a54 100644
  def malign_functions_EQ : Joined<["-"], "malign-functions=">, Group<clang_ignored_m_Group>;
  def malign_loops_EQ : Joined<["-"], "malign-loops=">, Group<clang_ignored_m_Group>;
  def malign_jumps_EQ : Joined<["-"], "malign-jumps=">, Group<clang_ignored_m_Group>;
-@@ -3079,6 +3080,7 @@ defm eliminate_unused_debug_types : BooleanFFlag<"eliminate-unused-debug-types">
- defm branch_count_reg : BooleanFFlag<"branch-count-reg">, Group<clang_ignored_gcc_optimization_f_Group>;
- defm default_inline : BooleanFFlag<"default-inline">, Group<clang_ignored_gcc_optimization_f_Group>;
- defm fat_lto_objects : BooleanFFlag<"fat-lto-objects">, Group<clang_ignored_gcc_optimization_f_Group>;
-+defm no_semantic_interposition : BooleanFFlag<"no-semantic-interposition">, Group<clang_ignored_gcc_optimization_f_Group>;
- defm float_store : BooleanFFlag<"float-store">, Group<clang_ignored_gcc_optimization_f_Group>;
- defm friend_injection : BooleanFFlag<"friend-injection">, Group<clang_ignored_f_Group>;
- defm function_attribute_list : BooleanFFlag<"function-attribute-list">, Group<clang_ignored_f_Group>;
-@@ -3129,9 +3131,11 @@ defm strength_reduce :
+@@ -3297,9 +3298,11 @@ defm strength_reduce :
  defm tls_model : BooleanFFlag<"tls-model">, Group<clang_ignored_f_Group>;
  defm tracer : BooleanFFlag<"tracer">, Group<clang_ignored_gcc_optimization_f_Group>;
  defm tree_dce : BooleanFFlag<"tree-dce">, Group<clang_ignored_gcc_optimization_f_Group>;
@@ -41,5 +33,5 @@ index 4ea8bfff09..22c49d0a54 100644
  defm tree_ter : BooleanFFlag<"tree-ter">, Group<clang_ignored_gcc_optimization_f_Group>;
  defm tree_vectorizer_verbose : BooleanFFlag<"tree-vectorizer-verbose">, Group<clang_ignored_f_Group>;
 -- 
-2.23.0
+2.26.1
 

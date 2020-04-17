@@ -1,7 +1,7 @@
-From 01019550fce3516b0007f5c8c8096a173384c47c Mon Sep 17 00:00:00 2001
+From 724f5a301087af4407e0b9a0cb1c401bbce08b06 Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Fri, 5 Apr 2019 10:36:42 -0700
-Subject: [PATCH] Produce a normally-versioned libLLVM
+Subject: [llvm] Produce a normally-versioned libLLVM
 
 This patch is originally from
 https://build.opensuse.org/package/view_file/openSUSE:Factory/llvm7/llvm-normally-versioned-libllvm.patch?expand=1
@@ -35,15 +35,15 @@ https://build.opensuse.org/package/view_file/openSUSE:Factory/llvm7/llvm-normall
 
 Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
 ---
- tools/llvm-config/llvm-config.cpp | 3 +--
- tools/llvm-shlib/CMakeLists.txt   | 2 +-
+ llvm/tools/llvm-config/llvm-config.cpp | 3 +--
+ llvm/tools/llvm-shlib/CMakeLists.txt   | 2 +-
  2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/tools/llvm-config/llvm-config.cpp b/tools/llvm-config/llvm-config.cpp
-index 7ef7c46a262..11766f25447 100644
---- a/tools/llvm-config/llvm-config.cpp
-+++ b/tools/llvm-config/llvm-config.cpp
-@@ -379,7 +379,6 @@ int main(int argc, char **argv) {
+diff --git llvm/tools/llvm-config/llvm-config.cpp llvm/tools/llvm-config/llvm-config.cpp
+index 6c31df3e173b..ec5677dcafa3 100644
+--- llvm/tools/llvm-config/llvm-config.cpp
++++ llvm/tools/llvm-config/llvm-config.cpp
+@@ -382,7 +382,6 @@ int main(int argc, char **argv) {
    } else {
      // default to the unix values:
      SharedExt = "so";
@@ -51,7 +51,7 @@ index 7ef7c46a262..11766f25447 100644
      StaticExt = "a";
      StaticDir = SharedDir = ActiveLibDir;
      StaticPrefix = SharedPrefix = "lib";
-@@ -392,7 +391,7 @@ int main(int argc, char **argv) {
+@@ -395,7 +394,7 @@ int main(int argc, char **argv) {
  
    bool DyLibExists = false;
    const std::string DyLibName =
@@ -60,11 +60,11 @@ index 7ef7c46a262..11766f25447 100644
  
    // If LLVM_LINK_DYLIB is ON, the single shared library will be returned
    // for "--libs", etc, if they exist. This behaviour can be overridden with
-diff --git a/tools/llvm-shlib/CMakeLists.txt b/tools/llvm-shlib/CMakeLists.txt
-index 901f55c99d5..4d7190fb5f1 100644
---- a/tools/llvm-shlib/CMakeLists.txt
-+++ b/tools/llvm-shlib/CMakeLists.txt
-@@ -42,7 +42,7 @@ if(LLVM_BUILD_LLVM_DYLIB)
+diff --git llvm/tools/llvm-shlib/CMakeLists.txt llvm/tools/llvm-shlib/CMakeLists.txt
+index 3eb6db33a435..31314d027527 100644
+--- llvm/tools/llvm-shlib/CMakeLists.txt
++++ llvm/tools/llvm-shlib/CMakeLists.txt
+@@ -30,7 +30,7 @@ if(LLVM_BUILD_LLVM_DYLIB)
    if (LLVM_LINK_LLVM_DYLIB)
      set(INSTALL_WITH_TOOLCHAIN INSTALL_WITH_TOOLCHAIN)
    endif()
@@ -74,5 +74,5 @@ index 901f55c99d5..4d7190fb5f1 100644
    list(REMOVE_DUPLICATES LIB_NAMES)
    if(("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux") OR (MINGW) OR (HAIKU)
 -- 
-2.23.0
+2.26.1
 

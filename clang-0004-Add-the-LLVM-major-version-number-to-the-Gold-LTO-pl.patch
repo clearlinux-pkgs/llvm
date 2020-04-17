@@ -1,14 +1,14 @@
-From 571d24e54fe5927bfd51614d30d28a2af035217e Mon Sep 17 00:00:00 2001
+From e72cf9b32da8013f7f5c9b0969726681ba82a00f Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Wed, 10 Apr 2019 13:11:47 -0700
-Subject: [cfe] Add the LLVM major version number to the Gold LTO plugin
+Subject: [llvm] Add the LLVM major version number to the Gold LTO plugin
 
 ---
- lib/Driver/ToolChains/CommonArgs.cpp | 4 +++-
+ clang/lib/Driver/ToolChains/CommonArgs.cpp | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/clang/lib/Driver/ToolChains/CommonArgs.cpp b/tools/clang/lib/Driver/ToolChains/CommonArgs.cpp
-index 99691cb43d..911d1e21f5 100644
+index 37ec73468570..c81898dc4aed 100644
 --- a/tools/clang/lib/Driver/ToolChains/CommonArgs.cpp
 +++ b/tools/clang/lib/Driver/ToolChains/CommonArgs.cpp
 @@ -368,10 +368,12 @@ void tools::AddGoldPlugin(const ToolChain &ToolChain, const ArgList &Args,
@@ -26,5 +26,5 @@ index 99691cb43d..911d1e21f5 100644
                            Plugin);
    CmdArgs.push_back(Args.MakeArgString(Plugin));
 -- 
-2.23.0
+2.26.1
 

@@ -1,17 +1,17 @@
-From 54a38210b62175c7a9b1da66e8bc95145244c40a Mon Sep 17 00:00:00 2001
+From d066134e896fd1f773b521b14dbdc463014810fc Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Tue, 9 Apr 2019 05:09:34 +0000
-Subject: [PATCH] Allow one more FMA fusion
+Subject: [llvm] Allow one more FMA fusion
 
 ---
- lib/CodeGen/SelectionDAG/DAGCombiner.cpp | 2 +-
+ llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/CodeGen/SelectionDAG/DAGCombiner.cpp b/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
-index 49c922f560f..9b1b48bd72f 100644
---- a/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
-+++ b/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
-@@ -11399,7 +11399,7 @@ SDValue DAGCombiner::visitFADDForFMACombine(SDNode *N) {
+diff --git llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
+index 2476fd26f250..79b0cdd96a7e 100644
+--- llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
++++ llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
+@@ -11539,7 +11539,7 @@ SDValue DAGCombiner::visitFADDForFMACombine(SDNode *N) {
  
    SDNodeFlags Flags = N->getFlags();
    bool CanFuse = Options.UnsafeFPMath || isContractable(N);
@@ -21,5 +21,5 @@ index 49c922f560f..9b1b48bd72f 100644
    // If the addition is not contractable, do not combine.
    if (!AllowFusionGlobally && !isContractable(N))
 -- 
-2.23.0
+2.26.1
 
