@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 10.0.0
-Release  : 116
+Release  : 117
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/llvm-10.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/llvm-10.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v10.0.0/SPIRV-10.0.0.tar.gz
@@ -852,7 +852,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1587084321
+export SOURCE_DATE_EPOCH=1587510773
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -975,7 +975,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1587084321
+export SOURCE_DATE_EPOCH=1587510773
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-LLVM-Translator-10.0.0/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6
@@ -3487,7 +3487,6 @@ popd
 /usr/include/llvm/XRay/Trace.h
 /usr/include/llvm/XRay/XRayRecord.h
 /usr/include/llvm/XRay/YAMLXRayRecord.h
-/usr/lib64/LLVMgold-10.so
 /usr/lib64/cmake/clang/ClangConfig.cmake
 /usr/lib64/cmake/clang/ClangTargets-relwithdebinfo.cmake
 /usr/lib64/cmake/clang/ClangTargets.cmake
@@ -3643,6 +3642,7 @@ popd
 %files extras
 %defattr(-,root,root,-)
 /usr/lib/bfd-plugins/LLVMgold-10.so
+/usr/lib64/LLVMgold-10.so
 /usr/lib64/clang/10.0.0/include/__clang_cuda_builtin_vars.h
 /usr/lib64/clang/10.0.0/include/__clang_cuda_cmath.h
 /usr/lib64/clang/10.0.0/include/__clang_cuda_complex_builtins.h

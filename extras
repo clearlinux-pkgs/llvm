@@ -3,7 +3,7 @@
 /usr/lib64/CheckerDependencyHandlingAnalyzerPlugin.so
 /usr/lib64/CheckerOptionHandlingAnalyzerPlugin.so
 /usr/lib64/LLVMHello.so
-/usr/lib64/LLVMgold-9.so
+/usr/lib64/LLVMgold-10.so
 /usr/lib64/SampleAnalyzerPlugin.so
 /usr/lib64/TestPlugin.so
 /usr/lib64/clang/10.0.0/include/__clang_cuda_builtin_vars.h

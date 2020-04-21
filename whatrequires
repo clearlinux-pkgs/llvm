@@ -2,6 +2,7 @@
 GtkD
 PyNaCl
 cereal
+compat-ldc-soname85
 compat-llvm-soname5
 cups
 darktable
@@ -10,11 +11,12 @@ embree
 intel-graphics-compiler
 itstool
 ldc
+libcxx
 libsodium
 lldb
 llvm
 llvm8
-llvmlite
+llvm9
 mediasdk
 mono
 pyside2-setup
