@@ -16,8 +16,8 @@
 -DBUILD_SHARED_LIBS:BOOL=OFF
 # And make the tools link to it
 -DLLVM_LINK_LLVM_DYLIB:BOOL=ON
-# But we need the tons of libclangXxxx.so.X libraries
--DCLANG_BUILD_SHARED_LIBS:BOOL=ON
+# Ditto for libclang.so and libclang-cpp.so
+-DCLANG_LINK_CLANG_DYLIB:BOOL=ON
 
 # General options
 -DLLVM_BUILD_RUNTIME:BOOL=ON

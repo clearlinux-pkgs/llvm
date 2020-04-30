@@ -1,0 +1,47 @@
+From 4fbdc0ed946c4acbfc3bdd39c609a21e8d2daaad Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Fri, 1 May 2020 10:51:12 -0700
+Subject: [llvm] Don't install Clang static libraries
+
+Origin: https://build.opensuse.org/package/view_file/devel:tools:compiler/llvm10/llvm-do-not-install-static-libraries.patch?expand=1
+---
+ clang/cmake/modules/AddClang.cmake | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/tools/clang/cmake/modules/AddClang.cmake b/tools/clang/cmake/modules/AddClang.cmake
+index 577cc11ab01..e05039791c8 100644
+--- a/tools/clang/cmake/modules/AddClang.cmake
++++ b/tools/clang/cmake/modules/AddClang.cmake
+@@ -111,12 +111,15 @@ macro(add_clang_library name)
+         set_property(GLOBAL PROPERTY CLANG_HAS_EXPORTS True)
+       endif()
+ 
+-      install(TARGETS ${name}
+-        COMPONENT ${name}
+-        ${export_to_clangtargets}
+-        LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-        ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-        RUNTIME DESTINATION bin)
++      if (ARG_SHARED OR ARG_MODULE)
++        install(TARGETS ${name}
++          COMPONENT ${name}
++          ${export_to_clangtargets}
++          LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++          ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++          RUNTIME DESTINATION bin)
++        set_property(GLOBAL APPEND PROPERTY CLANG_EXPORTS ${name})
++      endif()
+ 
+       if (NOT LLVM_ENABLE_IDE)
+         add_llvm_install_targets(install-${name}
+@@ -126,7 +129,6 @@ macro(add_clang_library name)
+ 
+       set_property(GLOBAL APPEND PROPERTY CLANG_LIBS ${name})
+     endif()
+-    set_property(GLOBAL APPEND PROPERTY CLANG_EXPORTS ${name})
+   else()
+     # Add empty "phony" target
+     add_custom_target(${name})
+-- 
+2.26.2
+

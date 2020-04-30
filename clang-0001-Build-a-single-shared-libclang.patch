@@ -1,0 +1,74 @@
+From b8492d979c5a6596e3950f03916bd9beadcad2c8 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Thu, 11 Oct 2018 10:47:38 -0700
+Subject: [llvm] Build a single, shared libclang
+
+Instead of multiple, smaller libraries. This is easier to manage.
+
+Source: https://build.opensuse.org/package/view_file/devel:tools:compiler/llvm10/link-clang-shared.patch?expand=1
+---
+ clang/tools/c-index-test/CMakeLists.txt | 6 ++++++
+ clang/tools/libclang/CMakeLists.txt     | 9 +++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/tools/clang/tools/c-index-test/CMakeLists.txt b/tools/clang/tools/c-index-test/CMakeLists.txt
+index ceef4b08637..e0025959f42 100644
+--- a/tools/clang/tools/c-index-test/CMakeLists.txt
++++ b/tools/clang/tools/c-index-test/CMakeLists.txt
+@@ -18,6 +18,9 @@ if (LLVM_BUILD_STATIC)
+   target_link_libraries(c-index-test
+     PRIVATE
+     libclang_static
++  )
++  clang_target_link_libraries(c-index-test
++    PRIVATE
+     clangCodeGen
+     clangIndex
+   )
+@@ -25,6 +28,9 @@ else()
+   target_link_libraries(c-index-test
+     PRIVATE
+     libclang
++  )
++  clang_target_link_libraries(c-index-test
++    PRIVATE
+     clangAST
+     clangBasic
+     clangCodeGen
+diff --git a/tools/clang/tools/libclang/CMakeLists.txt b/tools/clang/tools/libclang/CMakeLists.txt
+index bd0c945a5e1..c587e21f448 100644
+--- a/tools/clang/tools/libclang/CMakeLists.txt
++++ b/tools/clang/tools/libclang/CMakeLists.txt
+@@ -34,7 +34,7 @@ set(SOURCES
+   ../../include/clang-c/Index.h
+   )
+ 
+-set(LIBS
++set(CLANG_LIB_DEPS
+   clangAST
+   clangBasic
+   clangDriver
+@@ -48,7 +48,7 @@ set(LIBS
+ )
+ 
+ if (CLANG_ENABLE_ARCMT)
+-  list(APPEND LIBS clangARCMigrate)
++  list(APPEND CLANG_LIB_DEPS clangARCMigrate)
+ endif ()
+ 
+ if (TARGET clangTidyPlugin)
+@@ -113,6 +113,11 @@ add_clang_library(libclang ${ENABLE_SHARED} ${ENABLE_STATIC} INSTALL_WITH_TOOLCH
+   Support
+   )
+ 
++clang_target_link_libraries(libclang
++  PRIVATE
++  ${CLANG_LIB_DEPS}
++  )
++
+ if(ENABLE_SHARED)
+   if(WIN32)
+     set_target_properties(libclang
+-- 
+2.26.2
+

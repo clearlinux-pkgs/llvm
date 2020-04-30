@@ -2,7 +2,7 @@
 GtkD
 PyNaCl
 cereal
-compat-ldc-soname85
+compat-ldc-soname90
 compat-llvm-soname5
 cups
 darktable

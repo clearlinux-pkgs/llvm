@@ -8,3 +8,4 @@ libpthread.so.0
 libstdc++.so.6
 libxml2.so.2
 libz.so.1
+libz3.so.4.8
