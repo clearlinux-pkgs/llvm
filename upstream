@@ -1,7 +1,7 @@
-25d07260f3b7bf4f647e115c4a663fdeda130fbd/llvm-10.0.1.src.tar.xz
-5cf0641ec14cf49cd440d2364d1de666ba62f789/SPIRV-10.0.0.tar.gz
-0e61e92b22a620fe7f833fa8b2a56f2db96f7335/clang-10.0.1.src.tar.xz
-26c996da082677aca1016bcf2141dbff01dc7300/clang-tools-extra-10.0.1.src.tar.xz
-ee6077b4728b3c750e476938cead11cea45b49ff/compiler-rt-10.0.1.src.tar.xz
-8581337dba00041c2633f61bfb5be778df83cff7/lld-10.0.1.src.tar.xz
-5c7043bd0c4746a115edb38fe8e587d805b61d12/openmp-10.0.1.src.tar.xz
+89c1aabaca65f00fd03db1b69d65fa64fcb2b812/llvm-11.1.0.src.tar.xz
+feac618e2ad4389429dd1d7ade34cd8949a52d71/clang-11.1.0.src.tar.xz
+4ae426d76168ce33051e7d3ede789f217e8c2013/clang-tools-extra-11.1.0.src.tar.xz
+6bdbab174578e92d6a63f9b24f7dbf6989076106/lld-11.1.0.src.tar.xz
+ac9f88c26b51ee297c7af9cefee91539929482ef/openmp-11.1.0.src.tar.xz
+b7bc25d7184eb9471e8432d9a48fedb454a819c7/compiler-rt-11.1.0.src.tar.xz
+da48ea89549d90bfb44c4ca9d1b192163b2e3184/SPIRV-11.1.0.tar.gz

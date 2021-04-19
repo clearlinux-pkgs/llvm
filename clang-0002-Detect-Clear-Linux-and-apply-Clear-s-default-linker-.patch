@@ -1,4 +1,4 @@
-From e7190b13eb0524cc59b62158dd164c3de1b3807e Mon Sep 17 00:00:00 2001
+From 2ffbde6d613bd1678356f8cf7e26430145c01c93 Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Wed, 10 Oct 2018 19:53:40 -0700
 Subject: [llvm] Detect Clear Linux and apply Clear's default linker options
@@ -14,10 +14,10 @@ Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
  clang/unittests/Driver/DistroTest.cpp | 16 ++++++++++++++++
  4 files changed, 42 insertions(+), 5 deletions(-)
 
-diff --git a/tools/clang/include/clang/Driver/Distro.h b/tools/clang/include/clang/Driver/Distro.h
-index d382cf77a8b2..deb6bcbc869d 100644
---- a/tools/clang/include/clang/Driver/Distro.h
-+++ b/tools/clang/include/clang/Driver/Distro.h
+diff --git llvm-project/tools/clang/include/clang/Driver/Distro.h llvm-project/tools/clang/include/clang/Driver/Distro.h
+index 038d4ce75d80..6253d9d56ef0 100644
+--- llvm-project/tools/clang/include/clang/Driver/Distro.h
++++ llvm-project/tools/clang/include/clang/Driver/Distro.h
 @@ -28,6 +28,7 @@ public:
      // the first and last known member in the family, e.g. IsRedHat().
      AlpineLinux,
@@ -26,7 +26,7 @@ index d382cf77a8b2..deb6bcbc869d 100644
      DebianLenny,
      DebianSqueeze,
      DebianWheezy,
-@@ -130,6 +131,9 @@ public:
+@@ -131,6 +132,9 @@ public:
    bool IsGentoo() const {
      return DistroVal == Gentoo;
    }
@@ -36,11 +36,11 @@ index d382cf77a8b2..deb6bcbc869d 100644
  
    /// @}
  };
-diff --git a/tools/clang/lib/Driver/Distro.cpp b/tools/clang/lib/Driver/Distro.cpp
-index 06707fefc9d0..c854521de747 100644
---- a/tools/clang/lib/Driver/Distro.cpp
-+++ b/tools/clang/lib/Driver/Distro.cpp
-@@ -163,6 +163,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS,
+diff --git llvm-project/tools/clang/lib/Driver/Distro.cpp llvm-project/tools/clang/lib/Driver/Distro.cpp
+index 4d58ad1ae78c..b0f33398fc8e 100644
+--- llvm-project/tools/clang/lib/Driver/Distro.cpp
++++ llvm-project/tools/clang/lib/Driver/Distro.cpp
+@@ -165,6 +165,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS,
    if (VFS.exists("/etc/gentoo-release"))
      return Distro::Gentoo;
  
@@ -60,11 +60,11 @@ index 06707fefc9d0..c854521de747 100644
    return Distro::UnknownDistro;
  }
  
-diff --git a/tools/clang/lib/Driver/ToolChains/Linux.cpp b/tools/clang/lib/Driver/ToolChains/Linux.cpp
-index bff1ab1009be..50c17bb94b42 100644
---- a/tools/clang/lib/Driver/ToolChains/Linux.cpp
-+++ b/tools/clang/lib/Driver/ToolChains/Linux.cpp
-@@ -242,13 +242,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+diff --git llvm-project/tools/clang/lib/Driver/ToolChains/Linux.cpp llvm-project/tools/clang/lib/Driver/ToolChains/Linux.cpp
+index 180350476c38..dce87427bdbb 100644
+--- llvm-project/tools/clang/lib/Driver/ToolChains/Linux.cpp
++++ llvm-project/tools/clang/lib/Driver/ToolChains/Linux.cpp
+@@ -221,13 +221,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
  
    Distro Distro(D.getVFS(), Triple);
  
@@ -80,7 +80,7 @@ index bff1ab1009be..50c17bb94b42 100644
      ExtraOpts.push_back("-z");
      ExtraOpts.push_back("relro");
    }
-@@ -304,7 +304,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+@@ -282,7 +282,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
    ExtraOpts.push_back("--build-id");
  #endif
  
@@ -89,7 +89,7 @@ index bff1ab1009be..50c17bb94b42 100644
      ExtraOpts.push_back("--enable-new-dtags");
  
    // The selection of paths to try here is designed to match the patterns which
-@@ -917,8 +917,12 @@ void Linux::AddIAMCUIncludeArgs(const ArgList &DriverArgs,
+@@ -819,8 +819,12 @@ void Linux::AddIAMCUIncludeArgs(const ArgList &DriverArgs,
  }
  
  bool Linux::isPIEDefault() const {
@@ -104,11 +104,11 @@ index bff1ab1009be..50c17bb94b42 100644
  }
  
  bool Linux::isNoExecStackDefault() const {
-diff --git a/tools/clang/unittests/Driver/DistroTest.cpp b/tools/clang/unittests/Driver/DistroTest.cpp
-index 391c0baaadf5..bdb307ed2095 100644
---- a/tools/clang/unittests/Driver/DistroTest.cpp
-+++ b/tools/clang/unittests/Driver/DistroTest.cpp
-@@ -340,6 +340,22 @@ TEST(DistroTest, DetectGentoo) {
+diff --git llvm-project/tools/clang/unittests/Driver/DistroTest.cpp llvm-project/tools/clang/unittests/Driver/DistroTest.cpp
+index 7c00a8f66be8..318833938f7c 100644
+--- llvm-project/tools/clang/unittests/Driver/DistroTest.cpp
++++ llvm-project/tools/clang/unittests/Driver/DistroTest.cpp
+@@ -342,6 +342,22 @@ TEST(DistroTest, DetectGentoo) {
    ASSERT_TRUE(Gentoo.IsGentoo());
  }
  
@@ -132,5 +132,5 @@ index 391c0baaadf5..bdb307ed2095 100644
  
    class CountingFileSystem : public llvm::vfs::ProxyFileSystem {
 -- 
-2.26.1
+2.31.1
 

@@ -1,0 +1,28 @@
+From ff9fbe47eb26fecfcb082f06dc429a1b14166424 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Wed, 10 Oct 2018 19:32:59 -0700
+Subject: [llvm] Make Clang default to Westmere on Clear Linux
+
+Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
+---
+ clang/lib/Driver/ToolChains/Arch/X86.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git llvm-project/tools/clang/lib/Driver/ToolChains/Arch/X86.cpp llvm-project/tools/clang/lib/Driver/ToolChains/Arch/X86.cpp
+index 6b82abec6f65..1f6c33f29e38 100644
+--- llvm-project/tools/clang/lib/Driver/ToolChains/Arch/X86.cpp
++++ llvm-project/tools/clang/lib/Driver/ToolChains/Arch/X86.cpp
+@@ -101,8 +101,8 @@ const char *x86::getX86TargetCPU(const ArgList &Args,
+   case llvm::Triple::FreeBSD:
+     return "i686";
+   default:
+-    // Fallback to p4.
+-    return "pentium4";
++    // Clear Linux defaults to "westmere"
++    return "westmere";
+   }
+ }
+ 
+-- 
+2.31.1
+

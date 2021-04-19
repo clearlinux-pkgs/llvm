@@ -1,4 +1,4 @@
-From d066134e896fd1f773b521b14dbdc463014810fc Mon Sep 17 00:00:00 2001
+From ed804741f0e6ad6da16ebae153b8e91f3c84bd16 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Tue, 9 Apr 2019 05:09:34 +0000
 Subject: [llvm] Allow one more FMA fusion
@@ -8,18 +8,18 @@ Subject: [llvm] Allow one more FMA fusion
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
-index 2476fd26f250..79b0cdd96a7e 100644
+index ec384d2a7c56..f32523461ad6 100644
 --- llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
 +++ llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
-@@ -11539,7 +11539,7 @@ SDValue DAGCombiner::visitFADDForFMACombine(SDNode *N) {
- 
-   SDNodeFlags Flags = N->getFlags();
+@@ -11995,7 +11995,7 @@ SDValue DAGCombiner::visitFADDForFMACombine(SDNode *N) {
    bool CanFuse = Options.UnsafeFPMath || isContractable(N);
+   bool CanReassociate =
+       Options.UnsafeFPMath || N->getFlags().hasAllowReassociation();
 -  bool AllowFusionGlobally = (Options.AllowFPOpFusion == FPOpFusion::Fast ||
 +  bool AllowFusionGlobally = (Options.AllowFPOpFusion == FPOpFusion::Fast || Options.AllowFPOpFusion == FPOpFusion::Standard || 
                                CanFuse || HasFMAD);
    // If the addition is not contractable, do not combine.
    if (!AllowFusionGlobally && !isContractable(N))
 -- 
-2.26.1
+2.31.1
 

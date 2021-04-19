@@ -1,4 +1,4 @@
-From 241407ff8b9ba95169744e1aa40225c5fd40f2df Mon Sep 17 00:00:00 2001
+From c06a42b7674cf0c77ac0412e06ec0fe22910e3b7 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Sun, 10 Mar 2019 18:15:11 +0000
 Subject: [llvm] Improve physical core count detection
@@ -9,10 +9,10 @@ Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git llvm/lib/Support/Host.cpp llvm/lib/Support/Host.cpp
-index ef38c1c09413..c635f0c4b442 100644
+index 36cecf9b2a16..6128f7df1664 100644
 --- llvm/lib/Support/Host.cpp
 +++ llvm/lib/Support/Host.cpp
-@@ -1272,9 +1272,7 @@ static int computeHostNumPhysicalCores() {
+@@ -1241,9 +1241,7 @@ int computeHostNumPhysicalCores() {
    llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> Text =
        llvm::MemoryBuffer::getFileAsStream("/proc/cpuinfo");
    if (std::error_code EC = Text.getError()) {
@@ -24,5 +24,5 @@ index ef38c1c09413..c635f0c4b442 100644
    SmallVector<StringRef, 8> strs;
    (*Text)->getBuffer().split(strs, "\n", /*MaxSplit=*/-1,
 -- 
-2.26.1
+2.31.1
 

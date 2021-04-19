@@ -1,4 +1,4 @@
-From 963b5533a9ef0f7030691065eb2a13bfe43e175a Mon Sep 17 00:00:00 2001
+From 96083a50ddfa1ddbc9050940c4ce4a86568f49aa Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Tue, 29 Oct 2019 20:14:31 -0700
 Subject: [llvm] Build tablegen component as a shared library
@@ -20,10 +20,10 @@ Source: https://build.opensuse.org/package/view_file/devel:tools:compiler/llvm10
  3 files changed, 9 insertions(+), 2 deletions(-)
 
 diff --git llvm/cmake/modules/AddLLVM.cmake llvm/cmake/modules/AddLLVM.cmake
-index 081b83b9aa8b..7b6d4a5b4d62 100644
+index 74a07117918a..6bf243be0587 100644
 --- llvm/cmake/modules/AddLLVM.cmake
 +++ llvm/cmake/modules/AddLLVM.cmake
-@@ -582,7 +582,7 @@ function(llvm_add_library name)
+@@ -616,7 +616,7 @@ function(llvm_add_library name)
    if(ARG_MODULE AND LLVM_EXPORT_SYMBOLS_FOR_PLUGINS AND ARG_PLUGIN_TOOL AND (WIN32 OR CYGWIN))
      # On DLL platforms symbols are imported from the tool by linking against it.
      set(llvm_libs ${ARG_PLUGIN_TOOL})
@@ -33,10 +33,10 @@ index 081b83b9aa8b..7b6d4a5b4d62 100644
        set(llvm_libs LLVM)
      else()
 diff --git llvm/cmake/modules/TableGen.cmake llvm/cmake/modules/TableGen.cmake
-index 9d2fcd9a793c..10c139915d47 100644
+index 73c1e96d3d9a..6290416044d2 100644
 --- llvm/cmake/modules/TableGen.cmake
 +++ llvm/cmake/modules/TableGen.cmake
-@@ -123,7 +123,8 @@ macro(add_tablegen target project)
+@@ -145,7 +145,8 @@ macro(add_tablegen target project)
      set(LLVM_ENABLE_OBJLIB ON)
    endif()
  
@@ -68,5 +68,5 @@ index 1ece81459520..6a42203046cc 100644
    ${LLVM_MAIN_INCLUDE_DIR}/llvm/TableGen
    )
 -- 
-2.26.1
+2.31.1
 

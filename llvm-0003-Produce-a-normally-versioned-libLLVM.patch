@@ -1,4 +1,4 @@
-From 724f5a301087af4407e0b9a0cb1c401bbce08b06 Mon Sep 17 00:00:00 2001
+From 0c856c35c95b9fe9a8ce4f75121bb4878266260f Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Fri, 5 Apr 2019 10:36:42 -0700
 Subject: [llvm] Produce a normally-versioned libLLVM
@@ -40,10 +40,10 @@ Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
  2 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git llvm/tools/llvm-config/llvm-config.cpp llvm/tools/llvm-config/llvm-config.cpp
-index 6c31df3e173b..ec5677dcafa3 100644
+index 7e74b7c90816..1bcb494d8ac6 100644
 --- llvm/tools/llvm-config/llvm-config.cpp
 +++ llvm/tools/llvm-config/llvm-config.cpp
-@@ -382,7 +382,6 @@ int main(int argc, char **argv) {
+@@ -406,7 +406,6 @@ int main(int argc, char **argv) {
    } else {
      // default to the unix values:
      SharedExt = "so";
@@ -51,7 +51,7 @@ index 6c31df3e173b..ec5677dcafa3 100644
      StaticExt = "a";
      StaticDir = SharedDir = ActiveLibDir;
      StaticPrefix = SharedPrefix = "lib";
-@@ -395,7 +394,7 @@ int main(int argc, char **argv) {
+@@ -419,7 +418,7 @@ int main(int argc, char **argv) {
  
    bool DyLibExists = false;
    const std::string DyLibName =
@@ -61,7 +61,7 @@ index 6c31df3e173b..ec5677dcafa3 100644
    // If LLVM_LINK_DYLIB is ON, the single shared library will be returned
    // for "--libs", etc, if they exist. This behaviour can be overridden with
 diff --git llvm/tools/llvm-shlib/CMakeLists.txt llvm/tools/llvm-shlib/CMakeLists.txt
-index 3eb6db33a435..31314d027527 100644
+index f3a2056f80d3..aa4036ab62db 100644
 --- llvm/tools/llvm-shlib/CMakeLists.txt
 +++ llvm/tools/llvm-shlib/CMakeLists.txt
 @@ -30,7 +30,7 @@ if(LLVM_BUILD_LLVM_DYLIB)
@@ -74,5 +74,5 @@ index 3eb6db33a435..31314d027527 100644
    list(REMOVE_DUPLICATES LIB_NAMES)
    if(("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux") OR (MINGW) OR (HAIKU)
 -- 
-2.26.1
+2.31.1
 

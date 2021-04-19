@@ -1,13 +1,11 @@
 # This file contains recursive sources that require this package
 GtkD
 PyNaCl
-cereal
-compat-ldc-soname90
-compat-llvm-soname5
 cups
 darktable
-emacs
 embree
+graphviz
+intel-gmmlib
 intel-graphics-compiler
 itstool
 ldc
@@ -18,6 +16,7 @@ llvm
 llvm8
 llvm9
 mediasdk
+mesa
 mono
 pyside2-setup
 pytorch
