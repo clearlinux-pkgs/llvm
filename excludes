@@ -4,13 +4,14 @@
 /usr/lib64/TestPlugin.so
 /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
 /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
-/usr/lib64/clang/9.0.0/lib/linux/libclang_rt.asan-i386.so
-/usr/lib64/clang/9.0.0/lib/linux/libclang_rt.scudo-i386.so
-/usr/lib64/clang/9.0.0/lib/linux/libclang_rt.scudo_minimal-i386.so
-/usr/lib64/clang/9.0.0/lib/linux/libclang_rt.ubsan_minimal-i386.so
-/usr/lib64/clang/9.0.0/lib/linux/libclang_rt.ubsan_standalone-i386.so
 
-# Static library, so the .pc files point to nothing
+# Static library, so the .pc file lib points to nothing
+# The headers are in /usr/include so cflags not needed either
 /usr/lib64/pkgconfig/LLVMSPIRVLib.pc
-/usr/lib32/pkgconfig/32LLVMSPIRVLib.pc
-/usr/lib32/pkgconfig/LLVMSPIRVLib.pc
+/usr/lib64/pkgconfig/SPIRV-Headers.pc
+
+# weird invalid symlink
+/usr/lib64/pkgconfig/'32*.pc'
+
+# Extra six.py that ended up getting installed
+/usr/lib/python3.10/site-packages/six.py

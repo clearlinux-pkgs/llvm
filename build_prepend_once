@@ -1,0 +1,36 @@
+#!rpm
+# Bootstrap Clang and the table generators
+# See https://build.opensuse.org/package/view_file/devel:tools:compiler/llvm10/llvm10.spec?expand=1
+pushd llvm
+mkdir clr-bootstrap-build
+pushd clr-bootstrap-build
+CFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS` -fno-integrated-as"
+CXXFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS` -fno-integrated-as"
+%cmake .. \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_SHARED_LIBS:BOOL=OFF \
+    -DCMAKE_C_COMPILER=clang \
+    -DCMAKE_C_FLAGS="$CFLAGS -g0" \
+    -DCMAKE_CXX_COMPILER=clang++ \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS -g0" \
+    -DLLVM_ENABLE_PROJECTS="clang;llvm-tblgen;clang-tblgen" \
+    -DLLVM_BUILD_LLVM_DYLIB:BOOL=OFF \
+    -DLLVM_LINK_LLVM_DYLIB:BOOL=OFF \
+    -DLLVM_ENABLE_ASSERTIONS=OFF \
+    -DLLVM_TARGETS_TO_BUILD=Native \
+    -DCLANG_ENABLE_ARCMT:BOOL=OFF \
+    -DCLANG_ENABLE_STATIC_ANALYZER:BOOL=OFF \
+    -DCMAKE_SKIP_RPATH:BOOL=OFF \
+    -DLLVM_LIBDIR_SUFFIX=64 \
+    -DLLVM_BINUTILS_INCDIR=/usr/include \
+    -DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
+ninja -v
+popd
+export PATH=/usr/lib64/ccache/bin/:${PWD}/clr-bootstrap-build/bin:${PATH}
+export LLVM_AR=${PWD}/clr-bootstrap-build/bin/llvm-ar
+export LLVM_RANLIB=${PWD}/clr-bootstrap-build/bin/llvm-ranlib
+export LLVM_TABLEGEN=${PWD}/clr-bootstrap-build/bin/llvm-tblgen
+export CLANG_TABLEGEN=${PWD}/clr-bootstrap-build/bin/clang-tblgen
+popd

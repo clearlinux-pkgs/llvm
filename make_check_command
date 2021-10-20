@@ -1,1 +1,3 @@
-make test
+pushd llvm/clr-build
+ninja check-all
+popd

@@ -1,4 +1,7 @@
 # This file contains pkgconfig build requirements that get picked up
 # but are undesirable. One entry per line, no whitespace.
+32isl
+32pet
 isl
 pet
+32libedit

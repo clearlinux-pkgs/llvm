@@ -1,7 +1,6 @@
 # -*- sh -*-
 # Rename the tools to have a versioned suffix and symlink back
 pushd %{buildroot}/usr/bin
-mv clang ..
 VERSION=%{version}
 VERSION=${VERSION%%%%.*}
 for f in *; do
@@ -12,13 +11,21 @@ for f in *; do
             ;;
     esac
     if [ -L "$f" ]; then
-        # Retarget the symlink
-        ln -s -f `readlink $f`-$VERSION $f
+        cf=$(readlink $f)
+        case $cf in
+            *-$VERSION)
+                # symlink already points to versioned file
+                continue
+                ;;
+            *)
+                # Retarget the symlink
+                ln -s -f $cf-$VERSION $f
+                ;;
+        esac
     fi
     mv $f $f-$VERSION
     ln -s -f $f-$VERSION $f
 done
-mv ../clang .
 popd
 
 # Ditto for the gold plugin

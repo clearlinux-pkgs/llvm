@@ -1,0 +1,31 @@
+From ac1477c75e77c4607b88ae9ca5d4092f07edaa84 Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Tue, 26 Oct 2021 21:22:24 -0700
+Subject: [PATCH] Add the LLVM major version number to the Gold LTO plugin
+
+Signed-off-by: William Douglas <william.douglas@intel.com>
+---
+ clang/lib/Driver/ToolChains/CommonArgs.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/clang/lib/Driver/ToolChains/CommonArgs.cpp b/clang/lib/Driver/ToolChains/CommonArgs.cpp
+index 0ffe95795..964d8c895 100644
+--- a/clang/lib/Driver/ToolChains/CommonArgs.cpp
++++ b/clang/lib/Driver/ToolChains/CommonArgs.cpp
+@@ -494,10 +494,12 @@ void tools::addLTOOptions(const ToolChain &ToolChain, const ArgList &Args,
+ #else
+     const char *Suffix = ".so";
+ #endif
++#define STRINGIFY(S) STRINGIFY2(S)
++#define STRINGIFY2(S) #S
+ 
+     SmallString<1024> Plugin;
+     llvm::sys::path::native(
+-        Twine(D.Dir) + "/../lib" CLANG_LIBDIR_SUFFIX "/LLVMgold" + Suffix,
++        Twine(D.Dir) + "/../lib" CLANG_LIBDIR_SUFFIX "/LLVMgold-" STRINGIFY(LLVM_VERSION_MAJOR) + Suffix,
+         Plugin);
+     CmdArgs.push_back(Args.MakeArgString(Plugin));
+   }
+-- 
+2.33.0
+

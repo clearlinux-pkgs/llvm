@@ -1,0 +1,77 @@
+From 0c856c35c95b9fe9a8ce4f75121bb4878266260f Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Fri, 5 Apr 2019 10:36:42 -0700
+Subject: [llvm] Produce a normally-versioned libLLVM
+
+This patch is originally from
+https://build.opensuse.org/package/view_file/openSUSE:Factory/llvm7/llvm-normally-versioned-libllvm.patch?expand=1
+
+  Before llvm4, both major and minor version updates of llvm were regularly
+  breaking API. Because of that, the libLLVM library was named in following
+  format: libLLVM-${major}-${minor}.so
+
+    (https://bugs.llvm.org/show_bug.cgi?id=25059)
+    (https://reviews.llvm.org/D13841)
+
+  The package containing this library was called libLLVM${major}_${minor} which
+  follows our guidelines.
+
+  Since llvm4, llvm decided to follow semantic versioning and only break API if
+  the major version was increased. In addition they do not intend to ever have
+  minor version other than 0.
+    (http://blog.llvm.org/2016/12/llvms-new-versioning-scheme.html)
+
+  The package was renamed to libLLVM${major}, which no longer follows the naming
+  guidelines, but since the package contained multiple libraries, it was not
+  detected.
+
+  Since bnc#1049703 the libLLVM${major} package contains only the
+  libLLVM-${major}-${minor}.so library and no others. This triggers the
+  shlib-policy-name-error check in our packaging system.
+
+  Because the reasons for using the libLLVM-${major}-${minor}.so format are no
+  longer valid, lets revert back to libLLVM.so.${major}.${minor}.${version}
+  format. That way the package name matches our guidelines.
+
+Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
+---
+ llvm/tools/llvm-config/llvm-config.cpp | 3 +--
+ llvm/tools/llvm-shlib/CMakeLists.txt   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/llvm/tools/llvm-config/llvm-config.cpp b/llvm/tools/llvm-config/llvm-config.cpp
+index 1a2f04552..4d88d9e5f 100644
+--- a/llvm/tools/llvm-config/llvm-config.cpp
++++ b/llvm/tools/llvm-config/llvm-config.cpp
+@@ -406,7 +406,6 @@ int main(int argc, char **argv) {
+   } else {
+     // default to the unix values:
+     SharedExt = "so";
+-    SharedVersionedExt = LLVM_DYLIB_VERSION ".so";
+     StaticExt = "a";
+     StaticDir = SharedDir = ActiveLibDir;
+     StaticPrefix = SharedPrefix = "lib";
+@@ -419,7 +418,7 @@ int main(int argc, char **argv) {
+ 
+   bool DyLibExists = false;
+   const std::string DyLibName =
+-      (SharedPrefix + "LLVM-" + SharedVersionedExt).str();
++      (SharedPrefix + "LLVM." + SharedExt).str();
+ 
+   // If LLVM_LINK_DYLIB is ON, the single shared library will be returned
+   // for "--libs", etc, if they exist. This behaviour can be overridden with
+diff --git a/llvm/tools/llvm-shlib/CMakeLists.txt b/llvm/tools/llvm-shlib/CMakeLists.txt
+index 76b9a25cb..3ba15abf3 100644
+--- a/llvm/tools/llvm-shlib/CMakeLists.txt
++++ b/llvm/tools/llvm-shlib/CMakeLists.txt
+@@ -30,7 +30,7 @@ if(LLVM_BUILD_LLVM_DYLIB)
+   if (LLVM_LINK_LLVM_DYLIB)
+     set(INSTALL_WITH_TOOLCHAIN INSTALL_WITH_TOOLCHAIN)
+   endif()
+-  add_llvm_library(LLVM SHARED DISABLE_LLVM_LINK_LLVM_DYLIB SONAME ${INSTALL_WITH_TOOLCHAIN} ${SOURCES})
++  add_llvm_library(LLVM SHARED DISABLE_LLVM_LINK_LLVM_DYLIB ${INSTALL_WITH_TOOLCHAIN} ${SOURCES})
+ 
+   list(REMOVE_DUPLICATES LIB_NAMES)
+   if(("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux") OR (MINGW) OR (HAIKU)
+-- 
+2.31.1

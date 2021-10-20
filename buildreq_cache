@@ -1,0 +1,12 @@
+13.0.0
+pypi(absl_py)
+pypi(graphviz)
+pypi(humanize)
+pypi(matplotlib)
+pypi(numpy)
+pypi(pandas)
+pypi(psutil)
+pypi(pybind11)
+pypi(pyyaml)
+pypi(scipy)
+pypi(seaborn)

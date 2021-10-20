@@ -1,17 +1,13 @@
 # llvm patches
-llvm-0001-CMake-Split-static-library-exports-into-their-own-ex.patch
-llvm-0002-Improve-physical-core-count-detection.patch
-llvm-0003-Produce-a-normally-versioned-libLLVM.patch
-llvm-0004-Allow-one-more-FMA-fusion.patch
-llvm-0005-Build-tablegen-component-as-a-shared-library.patch
+llvm-0001-Improve-physical-core-count-detection.patch
+llvm-0002-Produce-a-normally-versioned-libLLVM.patch
+llvm-0003-Allow-one-more-FMA-fusion.patch
 
 # clang patches
-clang-0001-Build-a-single-shared-libclang.patch
-clang-0002-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
-clang-0003-Don-t-install-Clang-static-libraries.patch
-clang-0004-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
-clang-0005-Add-the-LLVM-major-version-number-to-the-Gold-LTO-pl.patch
-clang-0006-Add-a-couple-more-f-instructions-that-GCC-has-that-C.patch
+clang-0001-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
+clang-0002-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
+clang-0003-Add-the-LLVM-major-version-number-to-the-Gold-LTO-pl.patch
+clang-0004-Add-a-couple-more-f-instructions-that-GCC-has-that-C.patch
 
 # SPIRV patches
 
