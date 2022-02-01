@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 13.0.0
-Release  : 138
+Release  : 139
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/92f21c9b214178ce67cf1e31a00a33312590403a.tar.gz
@@ -247,8 +247,8 @@ cp -r %{_builddir}/SPIRV-Headers-92f21c9b214178ce67cf1e31a00a33312590403a/* %{_b
 pushd llvm
 mkdir clr-bootstrap-build
 pushd clr-bootstrap-build
-CFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS` -fno-integrated-as"
-CXXFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS` -fno-integrated-as"
+CFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types//' <<<$CFLAGS` -fno-integrated-as"
+CXXFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types//' <<<$CXXFLAGS` -fno-integrated-as"
 %cmake .. \
 -G Ninja \
 -DCMAKE_BUILD_TYPE=Release \
@@ -282,7 +282,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1638926860
+export SOURCE_DATE_EPOCH=1643756870
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -396,7 +396,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1638926860
+export SOURCE_DATE_EPOCH=1643756870
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-92f21c9b214178ce67cf1e31a00a33312590403a/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03

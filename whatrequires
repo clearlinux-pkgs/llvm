@@ -1,11 +1,11 @@
 # This file contains recursive sources that require this package
 GtkD
-PyNaCl
 blender
 compat-protobuf-soname23
 cups
 darktable
 embree
+gnuplot
 graphviz
 intel-gmmlib
 intel-ipsec-mb
@@ -22,7 +22,7 @@ llvm9
 mediasdk
 mono
 protobuf
+pypi-pynacl
 pyside2-setup
-pytorch
 suricata
 v4l-utils
