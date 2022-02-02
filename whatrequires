@@ -14,9 +14,9 @@ ldc
 libclc
 libcxx
 libsodium
-lldb
 llvm
 llvm10
+llvm11
 llvm8
 llvm9
 mediasdk

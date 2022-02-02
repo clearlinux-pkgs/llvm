@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 13.0.0
-Release  : 139
+Release  : 140
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/92f21c9b214178ce67cf1e31a00a33312590403a.tar.gz
@@ -282,7 +282,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1643756870
+export SOURCE_DATE_EPOCH=1643841405
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -321,7 +321,7 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 -DLLVM_REQUIRES_RTTI:BOOL=ON \
 -DLLVM_TABLEGEN=$LLVM_TABLEGEN \
 -DCLANG_TABLEGEN=$CLANG_TABLEGEN \
--DLLVM_ENABLE_PROJECTS="libunwind;lld;lldb;clang;clang-tools-extra;compiler-rt;openmp;polly;mler;" \
+-DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;openmp;polly;mler;" \
 -DLLVM_LIBDIR_SUFFIX=64 \
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
@@ -377,7 +377,7 @@ export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 -DLLVM_REQUIRES_RTTI:BOOL=ON \
 -DLLVM_TABLEGEN=$LLVM_TABLEGEN \
 -DCLANG_TABLEGEN=$CLANG_TABLEGEN \
--DLLVM_ENABLE_PROJECTS="libunwind;lld;lldb;clang;clang-tools-extra;compiler-rt;openmp;polly;mler;" \
+-DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;openmp;polly;mler;" \
 -DLLVM_LIBDIR_SUFFIX=64 \
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
@@ -396,7 +396,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1643756870
+export SOURCE_DATE_EPOCH=1643841405
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-92f21c9b214178ce67cf1e31a00a33312590403a/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03
@@ -4672,7 +4672,6 @@ popd
 /usr/lib64/libomptarget.rtl.cuda.so
 /usr/lib64/libomptarget.rtl.x86_64.so
 /usr/lib64/libomptarget.so
-/usr/lib64/libunwind.so
 
 %files dev32
 %defattr(-,root,root,-)
@@ -4754,8 +4753,6 @@ popd
 /usr/lib64/liblldb.so.13
 /usr/lib64/liblldb.so.13.0.0
 /usr/lib64/liblldbIntelFeatures.so.13
-/usr/lib64/libunwind.so.1
-/usr/lib64/libunwind.so.1.0
 
 %files lib32
 %defattr(-,root,root,-)
@@ -5071,7 +5068,6 @@ popd
 /usr/lib64/liblldReaderWriter.a
 /usr/lib64/liblldWasm.a
 /usr/lib64/liblldYAML.a
-/usr/lib64/libunwind.a
 
 %files staticdev32
 %defattr(-,root,root,-)
