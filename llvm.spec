@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 13.0.0
-Release  : 140
+Release  : 141
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/92f21c9b214178ce67cf1e31a00a33312590403a.tar.gz
@@ -282,7 +282,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1643841405
+export SOURCE_DATE_EPOCH=1643853025
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -396,7 +396,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1643841405
+export SOURCE_DATE_EPOCH=1643853025
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-92f21c9b214178ce67cf1e31a00a33312590403a/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03
@@ -494,6 +494,7 @@ popd
 # Ditto for the gold plugin
 pushd %{buildroot}/usr/lib64
 mv LLVMgold.so LLVMgold-$VERSION.so
+ln -s LLVMgold-$VERSION.so LLVMgold.so
 mkdir -p ../lib/bfd-plugins
 ln -s ../../lib64/LLVMgold-$VERSION.so ../lib/bfd-plugins
 popd
@@ -4434,6 +4435,7 @@ popd
 /usr/lib32/clang/13.0.0/include/xtestintrin.h
 /usr/lib64/LLVMPolly.so
 /usr/lib64/LLVMgold-13.so
+/usr/lib64/LLVMgold.so
 /usr/lib64/clang/13.0.0/include/__clang_cuda_builtin_vars.h
 /usr/lib64/clang/13.0.0/include/__clang_cuda_cmath.h
 /usr/lib64/clang/13.0.0/include/__clang_cuda_complex_builtins.h

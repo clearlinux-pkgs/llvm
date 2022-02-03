@@ -31,6 +31,7 @@ popd
 # Ditto for the gold plugin
 pushd %{buildroot}/usr/lib64
 mv LLVMgold.so LLVMgold-$VERSION.so
+ln -s LLVMgold-$VERSION.so LLVMgold.so
 mkdir -p ../lib/bfd-plugins
 ln -s ../../lib64/LLVMgold-$VERSION.so ../lib/bfd-plugins
 popd
