@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 13.0.0
-Release  : 141
+Release  : 142
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/92f21c9b214178ce67cf1e31a00a33312590403a.tar.gz
