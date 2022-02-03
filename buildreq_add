@@ -17,3 +17,4 @@ zlib-dev
 zlib-dev32
 ninja
 rsync
+pypi(pybind11)

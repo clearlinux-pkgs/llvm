@@ -60,7 +60,7 @@ BuildRequires : pkgconfig(32libffi)
 BuildRequires : pkgconfig(libedit)
 BuildRequires : pkgconfig(libffi)
 BuildRequires : protobuf-dev
-BuildRequires : pybind11-python3
+BuildRequires : pypi(pybind11)
 BuildRequires : pypi(absl_py)
 BuildRequires : pypi(flit)
 BuildRequires : pypi(graphviz)
