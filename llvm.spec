@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 13.0.0
-Release  : 142
+Release  : 143
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/llvm-project-13.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/92f21c9b214178ce67cf1e31a00a33312590403a.tar.gz
@@ -60,7 +60,6 @@ BuildRequires : pkgconfig(32libffi)
 BuildRequires : pkgconfig(libedit)
 BuildRequires : pkgconfig(libffi)
 BuildRequires : protobuf-dev
-BuildRequires : pypi(pybind11)
 BuildRequires : pypi(absl_py)
 BuildRequires : pypi(flit)
 BuildRequires : pypi(graphviz)
@@ -282,7 +281,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1643853025
+export SOURCE_DATE_EPOCH=1644287894
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -396,7 +395,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1643853025
+export SOURCE_DATE_EPOCH=1644287894
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-92f21c9b214178ce67cf1e31a00a33312590403a/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03
@@ -462,6 +461,10 @@ rm -f %{buildroot}*/usr/lib64/pkgconfig/SPIRV-Headers.pc
 rm -f %{buildroot}*/usr/lib64/pkgconfig/'32*.pc'
 rm -f %{buildroot}*/usr/lib/python3.10/site-packages/six.py
 ## install_append content
+# remove libomptarget.rtl.amdgpu.so for now
+# it is built using rpath and wants to be in the wrong path
+rm -f %{buildroot}/usr/lib/libomptarget.rtl.amdgpu.so
+
 # Rename the tools to have a versioned suffix and symlink back
 pushd %{buildroot}/usr/bin
 VERSION=%{version}
@@ -4273,7 +4276,6 @@ popd
 /usr/include/spirv/unified1/spirv.lua
 /usr/include/spirv/unified1/spirv.py
 /usr/include/spirv/unified1/spv.d
-/usr/lib/libomptarget.rtl.amdgpu.so
 /usr/lib32/clang/13.0.0/include/__clang_cuda_builtin_vars.h
 /usr/lib32/clang/13.0.0/include/__clang_cuda_cmath.h
 /usr/lib32/clang/13.0.0/include/__clang_cuda_complex_builtins.h

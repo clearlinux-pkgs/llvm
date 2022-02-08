@@ -1,6 +1,6 @@
 # This file contains recursive sources that require this package
-GtkD
 blender
+cereal
 compat-protobuf-soname23
 cups
 darktable
@@ -10,13 +10,13 @@ graphviz
 intel-gmmlib
 intel-ipsec-mb
 itstool
-ldc
 libclc
 libcxx
 libsodium
 llvm
 llvm10
 llvm11
+llvm12
 llvm8
 llvm9
 mediasdk
