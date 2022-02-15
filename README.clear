@@ -1,0 +1,7 @@
+* update howto
+
+1) build new version
+2) build against itself with updated version
+3) build new package of previous version with updated version
+4) build bcc with updated version
+5) build mesa with udpated version
