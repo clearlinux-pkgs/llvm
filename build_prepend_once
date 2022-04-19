@@ -4,8 +4,8 @@
 pushd llvm
 mkdir clr-bootstrap-build
 pushd clr-bootstrap-build
-CFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types//' <<<$CFLAGS` -fno-integrated-as"
-CXXFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types//' <<<$CXXFLAGS` -fno-integrated-as"
+CFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CFLAGS` -fno-integrated-as"
+CXXFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CXXFLAGS` -fno-integrated-as"
 %cmake .. \
     -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
@@ -14,7 +14,7 @@ CXXFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-un
     -DCMAKE_C_FLAGS="$CFLAGS -g0" \
     -DCMAKE_CXX_COMPILER=clang++ \
     -DCMAKE_CXX_FLAGS="$CXXFLAGS -g0" \
-    -DLLVM_ENABLE_PROJECTS="clang;llvm-tblgen;clang-tblgen" \
+    -DLLVM_ENABLE_PROJECTS="clang" \
     -DLLVM_BUILD_LLVM_DYLIB:BOOL=OFF \
     -DLLVM_LINK_LLVM_DYLIB:BOOL=OFF \
     -DLLVM_ENABLE_ASSERTIONS=OFF \

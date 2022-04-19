@@ -14,11 +14,8 @@ libclc
 libcxx
 libsodium
 llvm
-llvm10
 llvm11
 llvm12
-llvm8
-llvm9
 mediasdk
 mono
 protobuf

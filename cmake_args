@@ -1,8 +1,8 @@
 # -*- sh -*-
 -G Ninja
 # Remove linker flags and -Wp,-D_FORTIFY_SOURCE=2 from CFLAGS & CXXFLAGS
--DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS`"
--DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS`"
+-DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CFLAGS`"
+-DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CXXFLAGS`"
 
 # Enable build-IDs, or RPM will complain:
 #  *** ERROR: No build ID note found in /builddir/build/BUILDROOT/llvm-7.0.0-73.x86_64/usr/bin/llvm-lto
@@ -11,6 +11,10 @@
 -DCMAKE_MODULE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1"
 -DCMAKE_SHARED_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1"
 -DENABLE_LINKER_BUILD_ID=ON
+
+# Default to -fPIE and -pie on Linux
+# this also allows us to drop a clear linux specific hunk of patch
+-DCLANG_DEFAULT_PIE_ON_LINUX=ON
 
 # Disable the tons of libraries from LLVM.
 # We only need libLLVM.so.X
@@ -31,7 +35,7 @@
 -DCLANG_TABLEGEN=$CLANG_TABLEGEN
 
 # Distro choices
--DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;openmp;polly;mler;"
+-DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;openmp;polly"
 -DLLVM_LIBDIR_SUFFIX=64
 -DLLVM_BINUTILS_INCDIR=/usr/include
 -DLLVM_HOST_TRIPLE="x86_64-generic-linux"

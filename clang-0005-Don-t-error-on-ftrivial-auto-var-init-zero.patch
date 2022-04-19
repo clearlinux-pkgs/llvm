@@ -1,0 +1,30 @@
+From c8dd317671c24b1339e62b09043b7777e03020ce Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Tue, 19 Apr 2022 13:03:55 -0700
+Subject: [PATCH 1/2] Don't error on -ftrivial-auto-var-init=zero
+
+See https://reviews.llvm.org/D64742 as clang is not fully inclined to
+enable this option (especially for C++). For Clear Linux we want to be
+using this flag without the extra option so just disable the error.
+
+Signed-off-by: William Douglas <william.douglas@intel.com>
+---
+ clang/lib/Driver/ToolChains/Clang.cpp | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/clang/lib/Driver/ToolChains/Clang.cpp b/clang/lib/Driver/ToolChains/Clang.cpp
+index f2f18e901..b7d56d952 100644
+--- a/clang/lib/Driver/ToolChains/Clang.cpp
++++ b/clang/lib/Driver/ToolChains/Clang.cpp
+@@ -3348,8 +3348,6 @@ static void RenderTrivialAutoVarInitOptions(const Driver &D,
+     }
+ 
+   if (!TrivialAutoVarInit.empty()) {
+-    if (TrivialAutoVarInit == "zero" && !Args.hasArg(options::OPT_enable_trivial_var_init_zero))
+-      D.Diag(diag::err_drv_trivial_auto_var_init_zero_disabled);
+     CmdArgs.push_back(
+         Args.MakeArgString("-ftrivial-auto-var-init=" + TrivialAutoVarInit));
+   }
+-- 
+2.35.1
+

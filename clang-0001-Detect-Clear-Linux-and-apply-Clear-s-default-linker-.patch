@@ -1,6 +1,6 @@
-From f94fd6bdc91cf5dd0c32520eb0ea57e14b5a3906 Mon Sep 17 00:00:00 2001
+From ff6b0a6802593d8e4bbaf54aee5e276096452022 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
-Date: Tue, 26 Oct 2021 21:20:15 -0700
+Date: Tue, 19 Apr 2022 10:46:48 -0700
 Subject: [PATCH] Detect Clear Linux and apply Clear's default linker options
 
 Enum placed at the end to avoid Binary Compatibility break when
@@ -10,12 +10,12 @@ Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
 ---
  clang/include/clang/Driver/Distro.h   |  4 ++++
  clang/lib/Driver/Distro.cpp           | 13 +++++++++++++
- clang/lib/Driver/ToolChains/Linux.cpp | 14 +++++++++-----
+ clang/lib/Driver/ToolChains/Linux.cpp |  6 +++---
  clang/unittests/Driver/DistroTest.cpp | 16 ++++++++++++++++
- 4 files changed, 42 insertions(+), 5 deletions(-)
+ 4 files changed, 36 insertions(+), 3 deletions(-)
 
 diff --git a/clang/include/clang/Driver/Distro.h b/clang/include/clang/Driver/Distro.h
-index 0d2a09396..720665343 100644
+index 2723f75e8..0de94bda4 100644
 --- a/clang/include/clang/Driver/Distro.h
 +++ b/clang/include/clang/Driver/Distro.h
 @@ -30,6 +30,7 @@ public:
@@ -26,9 +26,9 @@ index 0d2a09396..720665343 100644
      DebianLenny,
      DebianSqueeze,
      DebianWheezy,
-@@ -125,6 +126,9 @@ public:
+@@ -127,6 +128,9 @@ public:
    bool IsUbuntu() const {
-     return DistroVal >= UbuntuHardy && DistroVal <= UbuntuImpish;
+     return DistroVal >= UbuntuHardy && DistroVal <= UbuntuJammy;
    }
 +  bool IsClearLinux() const {
 +    return DistroVal == ClearLinux;
@@ -37,10 +37,10 @@ index 0d2a09396..720665343 100644
    bool IsAlpineLinux() const { return DistroVal == AlpineLinux; }
  
 diff --git a/clang/lib/Driver/Distro.cpp b/clang/lib/Driver/Distro.cpp
-index c4cf4e48b..807fb57a0 100644
+index 5ac38c34d..a2260cd05 100644
 --- a/clang/lib/Driver/Distro.cpp
 +++ b/clang/lib/Driver/Distro.cpp
-@@ -193,6 +193,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
+@@ -197,6 +197,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
    if (VFS.exists("/etc/gentoo-release"))
      return Distro::Gentoo;
  
@@ -61,7 +61,7 @@ index c4cf4e48b..807fb57a0 100644
  }
  
 diff --git a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains/Linux.cpp
-index c9360fc67..db80cfea3 100644
+index f85c04df4..dbc1a9ba4 100644
 --- a/clang/lib/Driver/ToolChains/Linux.cpp
 +++ b/clang/lib/Driver/ToolChains/Linux.cpp
 @@ -188,13 +188,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
@@ -80,7 +80,7 @@ index c9360fc67..db80cfea3 100644
      ExtraOpts.push_back("-z");
      ExtraOpts.push_back("relro");
    }
-@@ -249,7 +249,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+@@ -248,7 +248,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
    ExtraOpts.push_back("--build-id");
  #endif
  
@@ -89,21 +89,6 @@ index c9360fc67..db80cfea3 100644
      ExtraOpts.push_back("--enable-new-dtags");
  
    // The selection of paths to try here is designed to match the patterns which
-@@ -652,8 +652,12 @@ void Linux::AddIAMCUIncludeArgs(const ArgList &DriverArgs,
- }
- 
- bool Linux::isPIEDefault() const {
--  return (getTriple().isAndroid() && !getTriple().isAndroidVersionLT(16)) ||
--          getTriple().isMusl() || getSanitizerArgs().requiresPIE();
-+  if ((getTriple().isAndroid() && !getTriple().isAndroidVersionLT(16)) ||
-+      getTriple().isMusl() || getSanitizerArgs().requiresPIE())
-+    return true;
-+
-+  Distro Distro(getDriver().getVFS(), getTriple());
-+  return Distro.IsClearLinux();
- }
- 
- bool Linux::IsAArch64OutlineAtomicsDefault(const ArgList &Args) const {
 diff --git a/clang/unittests/Driver/DistroTest.cpp b/clang/unittests/Driver/DistroTest.cpp
 index b6e4ca9be..11a5f871b 100644
 --- a/clang/unittests/Driver/DistroTest.cpp
@@ -132,5 +117,5 @@ index b6e4ca9be..11a5f871b 100644
  
    class CountingFileSystem : public llvm::vfs::ProxyFileSystem {
 -- 
-2.33.0
+2.35.1
 
