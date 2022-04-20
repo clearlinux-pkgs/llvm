@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 14.0.1
-Release  : 145
+Release  : 146
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.1/llvm-project-14.0.1.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.1/llvm-project-14.0.1.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.211.0.tar.gz
@@ -154,6 +154,30 @@ Requires: llvm-dev = %{version}-%{release}
 dev32 components for the llvm package.
 
 
+%package extras-libclang
+Summary: extras-libclang components for the llvm package.
+Group: Default
+
+%description extras-libclang
+extras-libclang components for the llvm package.
+
+
+%package extras-libclang-cpp
+Summary: extras-libclang-cpp components for the llvm package.
+Group: Default
+
+%description extras-libclang-cpp
+extras-libclang-cpp components for the llvm package.
+
+
+%package extras-libllvm
+Summary: extras-libllvm components for the llvm package.
+Group: Default
+
+%description extras-libllvm
+extras-libllvm components for the llvm package.
+
+
 %package lib
 Summary: lib components for the llvm package.
 Group: Libraries
@@ -293,8 +317,8 @@ cp -r %{_builddir}/SPIRV-Headers-sdk-1.3.211.0/* %{_builddir}/llvm-project-14.0.
 pushd llvm
 mkdir clr-bootstrap-build
 pushd clr-bootstrap-build
-CFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CFLAGS` -fno-integrated-as"
-CXXFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CXXFLAGS` -fno-integrated-as"
+CFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types//' <<<$CFLAGS` -fno-integrated-as"
+CXXFLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//; s/-feliminate-unused-debug-types//' <<<$CXXFLAGS` -fno-integrated-as"
 %cmake .. \
 -G Ninja \
 -DCMAKE_BUILD_TYPE=Release \
@@ -328,7 +352,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1650410076
+export SOURCE_DATE_EPOCH=1650480065
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -350,8 +374,8 @@ export FCFLAGS="$FFLAGS -fno-lto "
 export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
 %cmake .. -G Ninja \
--DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CFLAGS`" \
--DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CXXFLAGS`" \
+-DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS`" \
+-DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS`" \
 -DCMAKE_EXE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
 -DCMAKE_MODULE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
 -DCMAKE_SHARED_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
@@ -407,8 +431,8 @@ export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 %cmake -DLIB_INSTALL_DIR:PATH=/usr/lib32 -DCMAKE_INSTALL_LIBDIR=/usr/lib32 -DLIB_SUFFIX=32 .. -G Ninja \
--DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CFLAGS`" \
--DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CXXFLAGS`" \
+-DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS`" \
+-DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS`" \
 -DCMAKE_EXE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
 -DCMAKE_MODULE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
 -DCMAKE_SHARED_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1" \
@@ -444,7 +468,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1650410076
+export SOURCE_DATE_EPOCH=1650480065
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.211.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03
@@ -4900,6 +4924,18 @@ popd
 /usr/lib32/pkgconfig/LLVMSPIRVLib.pc
 /usr/lib32/pkgconfig/SPIRV-Headers.pc
 
+%files extras-libclang
+%defattr(-,root,root,-)
+/usr/lib64/libclang.so.14.0.1
+
+%files extras-libclang-cpp
+%defattr(-,root,root,-)
+/usr/lib64/libclang-cpp.so.14
+
+%files extras-libllvm
+%defattr(-,root,root,-)
+/usr/lib64/libLLVM.so.14
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib/bfd-plugins/LLVMgold-14.so
@@ -4920,12 +4956,9 @@ popd
 /usr/lib64/clang/14.0.1/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
 /usr/lib64/clang/14.0.1/lib/linux/libclang_rt.ubsan_standalone-i386.so
 /usr/lib64/clang/14.0.1/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
-/usr/lib64/libLLVM.so.14
 /usr/lib64/libLTO.so.14
 /usr/lib64/libRemarks.so.14
-/usr/lib64/libclang-cpp.so.14
 /usr/lib64/libclang.so.13
-/usr/lib64/libclang.so.14.0.1
 /usr/lib64/liblldb.so.14
 /usr/lib64/liblldb.so.14.0.1
 /usr/lib64/liblldbIntelFeatures.so.14

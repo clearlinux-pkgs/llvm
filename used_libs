@@ -1,5 +1,8 @@
 ld-linux-x86-64.so.2
+libLLVM.so.14
 libc.so.6
+libclang-cpp.so.14
+libclang.so.13
 libedit.so.0
 libelf.so.1
 libffi.so.7
