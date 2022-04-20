@@ -1,8 +1,8 @@
 # -*- sh -*-
 -G Ninja
 # Remove linker flags and -Wp,-D_FORTIFY_SOURCE=2 from CFLAGS & CXXFLAGS
--DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS`"
--DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS`"
+-DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CFLAGS`"
+-DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2// ; s/-mrelax-cmpxchg-loop// ; s/-ftrivial-auto-var-init=zero//' <<<$CXXFLAGS`"
 
 # Enable build-IDs, or RPM will complain:
 #  *** ERROR: No build ID note found in /builddir/build/BUILDROOT/llvm-7.0.0-73.x86_64/usr/bin/llvm-lto
