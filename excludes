@@ -15,3 +15,7 @@
 
 # Extra six.py that ended up getting installed
 /usr/lib/python3.10/site-packages/six.py
+
+# For some reason libclang.so.13 is a symlink to the 14 so delete it
+/usr/lib64/libclang.so.13
+/usr/lib32/libclang.so.13

@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 14.0.1
-Release  : 148
+Release  : 150
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.1/llvm-project-14.0.1.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.1/llvm-project-14.0.1.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.211.0.tar.gz
@@ -352,7 +352,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1650480065
+export SOURCE_DATE_EPOCH=1650521817
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -468,7 +468,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1650480065
+export SOURCE_DATE_EPOCH=1650521817
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.211.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03
@@ -534,6 +534,8 @@ rm -f %{buildroot}*/usr/lib64/pkgconfig/LLVMSPIRVLib.pc
 rm -f %{buildroot}*/usr/lib64/pkgconfig/SPIRV-Headers.pc
 rm -f %{buildroot}*/usr/lib64/pkgconfig/'32*.pc'
 rm -f %{buildroot}*/usr/lib/python3.10/site-packages/six.py
+rm -f %{buildroot}*/usr/lib64/libclang.so.13
+rm -f %{buildroot}*/usr/lib32/libclang.so.13
 ## install_append content
 # remove libomptarget.rtl.amdgpu.so for now
 # it is built using rpath and wants to be in the wrong path
@@ -4958,7 +4960,6 @@ popd
 /usr/lib64/clang/14.0.1/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
 /usr/lib64/libLTO.so.14
 /usr/lib64/libRemarks.so.14
-/usr/lib64/libclang.so.13
 /usr/lib64/liblldb.so.14
 /usr/lib64/liblldb.so.14.0.1
 /usr/lib64/liblldbIntelFeatures.so.14
@@ -4969,7 +4970,6 @@ popd
 /usr/lib32/libLTO.so.14
 /usr/lib32/libRemarks.so.14
 /usr/lib32/libclang-cpp.so.14
-/usr/lib32/libclang.so.13
 /usr/lib32/libclang.so.14.0.1
 
 %files libexec

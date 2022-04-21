@@ -16,6 +16,7 @@ libsodium
 llvm
 llvm11
 llvm12
+llvm13
 mediasdk
 mono
 protobuf
