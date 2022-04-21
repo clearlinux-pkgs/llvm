@@ -1,0 +1,11 @@
+--- llvm-project-14.0.1.src/clang/tools/libclang/CMakeLists.txt~	2022-04-11 23:44:22.000000000 +0000
++++ llvm-project-14.0.1.src/clang/tools/libclang/CMakeLists.txt	2022-04-21 14:54:38.201875497 +0000
+@@ -2,7 +2,7 @@
+ # ABI, and when it is updated, it should be updated to the current
+ # LLVM_VERSION_MAJOR.
+ # Please also see clang/tools/libclang/libclang.map
+-set(CLANG_SONAME 13)
++set(CLANG_SONAME 14)
+ 
+ set(SOURCES
+   ARCMigrate.cpp

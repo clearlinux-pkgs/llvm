@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 14.0.1
-Release  : 150
+Release  : 151
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.1/llvm-project-14.0.1.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.1/llvm-project-14.0.1.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.211.0.tar.gz
@@ -104,6 +104,7 @@ Patch5: clang-0002-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
 Patch6: clang-0003-Add-the-LLVM-major-version-number-to-the-Gold-LTO-pl.patch
 Patch7: clang-0004-Add-a-couple-more-f-instructions-that-GCC-has-that-C.patch
 Patch8: clang-0005-Don-t-error-on-ftrivial-auto-var-init-zero.patch
+Patch9: clang-soname.patch
 
 %description
 Polly - Polyhedral optimizations for LLVM
@@ -309,6 +310,7 @@ cp -r %{_builddir}/SPIRV-Headers-sdk-1.3.211.0/* %{_builddir}/llvm-project-14.0.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 %build
 ## build_prepend_once content
@@ -352,7 +354,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1650521817
+export SOURCE_DATE_EPOCH=1650563959
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -468,7 +470,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1650521817
+export SOURCE_DATE_EPOCH=1650563959
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.211.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03
@@ -4960,6 +4962,7 @@ popd
 /usr/lib64/clang/14.0.1/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
 /usr/lib64/libLTO.so.14
 /usr/lib64/libRemarks.so.14
+/usr/lib64/libclang.so.14
 /usr/lib64/liblldb.so.14
 /usr/lib64/liblldb.so.14.0.1
 /usr/lib64/liblldbIntelFeatures.so.14
@@ -4970,6 +4973,7 @@ popd
 /usr/lib32/libLTO.so.14
 /usr/lib32/libRemarks.so.14
 /usr/lib32/libclang-cpp.so.14
+/usr/lib32/libclang.so.14
 /usr/lib32/libclang.so.14.0.1
 
 %files libexec

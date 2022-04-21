@@ -13,3 +13,4 @@ clang-0005-Don-t-error-on-ftrivial-auto-var-init-zero.patch
 # SPIRV patches
 
 # OpenMP patches
+clang-soname.patch
