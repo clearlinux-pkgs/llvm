@@ -22,6 +22,7 @@ mono
 protobuf
 pypi-pynacl
 pyside2-setup
+rustc
 suricata
 v4l-utils
 vlc
