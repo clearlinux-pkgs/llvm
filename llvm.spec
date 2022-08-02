@@ -4931,22 +4931,22 @@ popd
 %files lib
 %defattr(-,root,root,-)
 /usr/lib/bfd-plugins/LLVMgold-14.so
-/usr/lib64/clang/14.0.4/lib/linux/libclang_rt.asan-i386.so
+%exclude /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.asan-i386.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.asan-x86_64.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.dyndd-x86_64.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.hwasan-x86_64.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.hwasan_aliases-x86_64.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.memprof-x86_64.so
-/usr/lib64/clang/14.0.4/lib/linux/libclang_rt.scudo-i386.so
+%exclude /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.scudo-i386.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.scudo-x86_64.so
-/usr/lib64/clang/14.0.4/lib/linux/libclang_rt.scudo_minimal-i386.so
+%exclude /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.scudo_minimal-i386.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.scudo_minimal-x86_64.so
-/usr/lib64/clang/14.0.4/lib/linux/libclang_rt.scudo_standalone-i386.so
+%exclude /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.scudo_standalone-i386.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.scudo_standalone-x86_64.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.tsan-x86_64.so
-/usr/lib64/clang/14.0.4/lib/linux/libclang_rt.ubsan_minimal-i386.so
+%exclude /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.ubsan_minimal-i386.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
-/usr/lib64/clang/14.0.4/lib/linux/libclang_rt.ubsan_standalone-i386.so
+%exclude /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.ubsan_standalone-i386.so
 /usr/lib64/clang/14.0.4/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
 /usr/lib64/libLTO.so.14
 /usr/lib64/libRemarks.so.14
