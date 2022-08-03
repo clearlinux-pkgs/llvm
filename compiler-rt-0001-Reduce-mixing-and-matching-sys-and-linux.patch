@@ -1,0 +1,29 @@
+From d4248af6c8894480d72c4d4e00e01652951ee0a7 Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Wed, 3 Aug 2022 22:26:42 +0000
+Subject: [PATCH] Reduce mixing and matching sys and linux
+
+Currently a duplicate enum is showing up and breaking llvm builds, fix
+with a switch to consolidate includes for linux for mount.h.
+
+Signed-off-by: William Douglas <william.douglas@intel.com>
+---
+ .../lib/sanitizer_common/sanitizer_platform_limits_posix.cpp    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp b/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
+index 32b8f47ed..33b3bba6a 100644
+--- a/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
++++ b/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
+@@ -60,7 +60,7 @@
+ #endif
+ 
+ #if !SANITIZER_ANDROID
+-#include <sys/mount.h>
++#include <linux/mount.h>
+ #include <sys/timeb.h>
+ #include <utmpx.h>
+ #endif
+-- 
+2.36.1
+

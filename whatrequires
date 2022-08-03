@@ -1,7 +1,6 @@
 # This file contains recursive sources that require this package
 blender
 cereal
-compat-protobuf-soname23
 cups
 darktable
 embree
@@ -24,5 +23,6 @@ pypi-pynacl
 pyside2-setup
 rustc
 suricata
+systemd
 v4l-utils
 vlc

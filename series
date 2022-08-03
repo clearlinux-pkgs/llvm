@@ -14,3 +14,6 @@ clang-0005-Don-t-error-on-ftrivial-auto-var-init-zero.patch
 
 # OpenMP patches
 clang-soname.patch
+
+# compiler-rt patches
+compiler-rt-0001-Reduce-mixing-and-matching-sys-and-linux.patch
