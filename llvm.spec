@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 14.0.6
-Release  : 154
+Release  : 155
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/llvm-project-14.0.6.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/llvm-project-14.0.6.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.211.0.tar.gz
@@ -350,7 +350,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1659570328
+export SOURCE_DATE_EPOCH=1660077935
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -466,43 +466,43 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1659570328
+export SOURCE_DATE_EPOCH=1660077935
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.211.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03
 cp %{_builddir}/SPIRV-LLVM-Translator-e95eb30ace4954a3a7e8e17a3cc22f7382d4a47e/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6
-cp %{_builddir}/llvm-project-14.0.6.src/bolt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
-cp %{_builddir}/llvm-project-14.0.6.src/clang-tools-extra/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
-cp %{_builddir}/llvm-project-14.0.6.src/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
-cp %{_builddir}/llvm-project-14.0.6.src/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7
-cp %{_builddir}/llvm-project-14.0.6.src/compiler-rt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/f4359b9da55a3b9e4d9513eb79cacf125fb49e7b
-cp %{_builddir}/llvm-project-14.0.6.src/cross-project-tests/debuginfo-tests/dexter/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
-cp %{_builddir}/llvm-project-14.0.6.src/flang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/85c0f2884378413881b4d3e27fc24b220f71889b
-cp %{_builddir}/llvm-project-14.0.6.src/libc/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
-cp %{_builddir}/llvm-project-14.0.6.src/libclc/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8737af83de0d40386dca9a4abe2b6faa83cb4750
-cp %{_builddir}/llvm-project-14.0.6.src/libcxx/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/7b75a5471af8b3d49e60df0a5d72f95ea8214231
-cp %{_builddir}/llvm-project-14.0.6.src/libcxxabi/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/11156021d878bfcbdf2563b4f65db32b4d9f92a3
-cp %{_builddir}/llvm-project-14.0.6.src/libunwind/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/d79062af10a33188d4a74d976323845a2cf9023d
-cp %{_builddir}/llvm-project-14.0.6.src/lld/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/6b655b0685aa7ee33fa1e02103b3bf22ed06e099
-cp %{_builddir}/llvm-project-14.0.6.src/lldb/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8af372ad1edbed2cfaf0e79d25f7136ec6e55b47
-cp %{_builddir}/llvm-project-14.0.6.src/lldb/third_party/Python/module/pexpect-4.6/LICENSE %{buildroot}/usr/share/package-licenses/llvm/5a99e7077ee89ba92fb3f584855e8970096cd5dc
-cp %{_builddir}/llvm-project-14.0.6.src/lldb/third_party/Python/module/ptyprocess-0.6.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/db1f866b29c6a191752c7c5924b7572cdbc47c34
-cp %{_builddir}/llvm-project-14.0.6.src/lldb/third_party/Python/module/six/LICENSE %{buildroot}/usr/share/package-licenses/llvm/f226af67862c0c7a0e921e24672a3a1375691e3e
-cp %{_builddir}/llvm-project-14.0.6.src/llvm/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
-cp %{_builddir}/llvm-project-14.0.6.src/llvm/test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/c01c212bdf3925189f673e2081b44094023860ea
-cp %{_builddir}/llvm-project-14.0.6.src/llvm/tools/msbuild/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7
-cp %{_builddir}/llvm-project-14.0.6.src/llvm/utils/lit/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
-cp %{_builddir}/llvm-project-14.0.6.src/llvm/utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304
-cp %{_builddir}/llvm-project-14.0.6.src/llvm/utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304
-cp %{_builddir}/llvm-project-14.0.6.src/mlir/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/85c0f2884378413881b4d3e27fc24b220f71889b
-cp %{_builddir}/llvm-project-14.0.6.src/openmp/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/e3cccabb67bd491a643d32a7d2b65b49836e626d
-cp %{_builddir}/llvm-project-14.0.6.src/openmp/runtime/src/thirdparty/ittnotify/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/59a8ba331dede4d94bd654ac645e8d27463662f4
-cp %{_builddir}/llvm-project-14.0.6.src/polly/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8d3b142938f83e7045951089b52676a5605eee37
-cp %{_builddir}/llvm-project-14.0.6.src/polly/lib/External/isl/LICENSE %{buildroot}/usr/share/package-licenses/llvm/45c2429b5881295597e96c81fc50f7b8a42e769f
-cp %{_builddir}/llvm-project-14.0.6.src/polly/lib/External/isl/imath/LICENSE %{buildroot}/usr/share/package-licenses/llvm/385649e7c18da3a07cfbd6679eebd0bca1c698c9
-cp %{_builddir}/llvm-project-14.0.6.src/polly/tools/GPURuntime/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/ce27417c74ca5ad6d0b5c96ede8ff82e4d87900f
-cp %{_builddir}/llvm-project-14.0.6.src/pstl/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/72c865be698cefc46549ed61e279f98432364fca
-cp %{_builddir}/llvm-project-14.0.6.src/third-party/benchmark/LICENSE %{buildroot}/usr/share/package-licenses/llvm/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/llvm-project-%{version}.src/bolt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
+cp %{_builddir}/llvm-project-%{version}.src/clang-tools-extra/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
+cp %{_builddir}/llvm-project-%{version}.src/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
+cp %{_builddir}/llvm-project-%{version}.src/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7
+cp %{_builddir}/llvm-project-%{version}.src/compiler-rt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/f4359b9da55a3b9e4d9513eb79cacf125fb49e7b
+cp %{_builddir}/llvm-project-%{version}.src/cross-project-tests/debuginfo-tests/dexter/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
+cp %{_builddir}/llvm-project-%{version}.src/flang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/85c0f2884378413881b4d3e27fc24b220f71889b
+cp %{_builddir}/llvm-project-%{version}.src/libc/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
+cp %{_builddir}/llvm-project-%{version}.src/libclc/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8737af83de0d40386dca9a4abe2b6faa83cb4750
+cp %{_builddir}/llvm-project-%{version}.src/libcxx/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/7b75a5471af8b3d49e60df0a5d72f95ea8214231
+cp %{_builddir}/llvm-project-%{version}.src/libcxxabi/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/11156021d878bfcbdf2563b4f65db32b4d9f92a3
+cp %{_builddir}/llvm-project-%{version}.src/libunwind/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/d79062af10a33188d4a74d976323845a2cf9023d
+cp %{_builddir}/llvm-project-%{version}.src/lld/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/6b655b0685aa7ee33fa1e02103b3bf22ed06e099
+cp %{_builddir}/llvm-project-%{version}.src/lldb/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8af372ad1edbed2cfaf0e79d25f7136ec6e55b47
+cp %{_builddir}/llvm-project-%{version}.src/lldb/third_party/Python/module/pexpect-4.6/LICENSE %{buildroot}/usr/share/package-licenses/llvm/5a99e7077ee89ba92fb3f584855e8970096cd5dc
+cp %{_builddir}/llvm-project-%{version}.src/lldb/third_party/Python/module/ptyprocess-0.6.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/db1f866b29c6a191752c7c5924b7572cdbc47c34
+cp %{_builddir}/llvm-project-%{version}.src/lldb/third_party/Python/module/six/LICENSE %{buildroot}/usr/share/package-licenses/llvm/f226af67862c0c7a0e921e24672a3a1375691e3e
+cp %{_builddir}/llvm-project-%{version}.src/llvm/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
+cp %{_builddir}/llvm-project-%{version}.src/llvm/test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/c01c212bdf3925189f673e2081b44094023860ea
+cp %{_builddir}/llvm-project-%{version}.src/llvm/tools/msbuild/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7
+cp %{_builddir}/llvm-project-%{version}.src/llvm/utils/lit/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
+cp %{_builddir}/llvm-project-%{version}.src/llvm/utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304
+cp %{_builddir}/llvm-project-%{version}.src/llvm/utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304
+cp %{_builddir}/llvm-project-%{version}.src/mlir/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/85c0f2884378413881b4d3e27fc24b220f71889b
+cp %{_builddir}/llvm-project-%{version}.src/openmp/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/e3cccabb67bd491a643d32a7d2b65b49836e626d
+cp %{_builddir}/llvm-project-%{version}.src/openmp/runtime/src/thirdparty/ittnotify/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/59a8ba331dede4d94bd654ac645e8d27463662f4
+cp %{_builddir}/llvm-project-%{version}.src/polly/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8d3b142938f83e7045951089b52676a5605eee37
+cp %{_builddir}/llvm-project-%{version}.src/polly/lib/External/isl/LICENSE %{buildroot}/usr/share/package-licenses/llvm/45c2429b5881295597e96c81fc50f7b8a42e769f
+cp %{_builddir}/llvm-project-%{version}.src/polly/lib/External/isl/imath/LICENSE %{buildroot}/usr/share/package-licenses/llvm/385649e7c18da3a07cfbd6679eebd0bca1c698c9
+cp %{_builddir}/llvm-project-%{version}.src/polly/tools/GPURuntime/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/ce27417c74ca5ad6d0b5c96ede8ff82e4d87900f
+cp %{_builddir}/llvm-project-%{version}.src/pstl/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/72c865be698cefc46549ed61e279f98432364fca
+cp %{_builddir}/llvm-project-%{version}.src/third-party/benchmark/LICENSE %{buildroot}/usr/share/package-licenses/llvm/2b8b815229aa8a61e483fb4ba0588b8b6c491890
 pushd llvm
 pushd clr-build32
 %ninja_install32
@@ -576,6 +576,9 @@ ln -s LLVMgold-$VERSION.so LLVMgold.so
 mkdir -p ../lib/bfd-plugins
 ln -s ../../lib64/LLVMgold-$VERSION.so ../lib/bfd-plugins
 popd
+
+# delete some unused 32 bit stuff
+rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 ## install_append end
 
 %files
@@ -610,36 +613,23 @@ popd
 /usr/lib64/clang/14.0.6/include/openmp_wrappers/complex
 /usr/lib64/clang/14.0.6/include/openmp_wrappers/new
 /usr/lib64/clang/14.0.6/include/profile/InstrProfData.inc
-/usr/lib64/clang/14.0.6/lib/linux/clang_rt.crtbegin-i386.o
 /usr/lib64/clang/14.0.6/lib/linux/clang_rt.crtbegin-x86_64.o
-/usr/lib64/clang/14.0.6/lib/linux/clang_rt.crtend-i386.o
 /usr/lib64/clang/14.0.6/lib/linux/clang_rt.crtend-x86_64.o
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan-i386.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan-preinit-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan-preinit-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan-x86_64.a.syms
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan_cxx-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan_cxx-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan_cxx-x86_64.a.syms
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan_static-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan_static-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.builtins-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.builtins-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.cfi-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.cfi-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.cfi_diag-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.cfi_diag-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.dd-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.dfsan-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.dfsan-x86_64.a.syms
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.fuzzer-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.fuzzer-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.fuzzer_interceptors-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.fuzzer_interceptors-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.fuzzer_no_main-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.fuzzer_no_main-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.gwp_asan-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.gwp_asan-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.hwasan-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.hwasan-x86_64.a.syms
@@ -649,7 +639,6 @@ popd
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.hwasan_aliases_cxx-x86_64.a.syms
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.hwasan_cxx-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.hwasan_cxx-x86_64.a.syms
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.lsan-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.lsan-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.memprof-preinit-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.memprof-x86_64.a
@@ -661,37 +650,24 @@ popd
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.msan_cxx-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.msan_cxx-x86_64.a.syms
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.orc-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.profile-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.profile-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.safestack-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.safestack-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_cxx-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_cxx-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_cxx_minimal-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_cxx_minimal-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_minimal-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_minimal-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_standalone-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_standalone-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_standalone_cxx-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_standalone_cxx-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.stats-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.stats-x86_64.a
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.stats_client-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.stats_client-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.tsan-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.tsan-x86_64.a.syms
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.tsan_cxx-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.tsan_cxx-x86_64.a.syms
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_minimal-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_minimal-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_minimal-x86_64.a.syms
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_standalone-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_standalone-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_standalone-x86_64.a.syms
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_standalone_cxx-i386.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_standalone_cxx-x86_64.a.syms
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.xray-basic-x86_64.a
@@ -4936,22 +4912,16 @@ popd
 %files lib
 %defattr(-,root,root,-)
 /usr/lib/bfd-plugins/LLVMgold-14.so
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan-i386.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.asan-x86_64.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.dyndd-x86_64.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.hwasan-x86_64.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.hwasan_aliases-x86_64.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.memprof-x86_64.so
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo-i386.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo-x86_64.so
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_minimal-i386.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_minimal-x86_64.so
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_standalone-i386.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.scudo_standalone-x86_64.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.tsan-x86_64.so
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_minimal-i386.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_minimal-x86_64.so
-/usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_standalone-i386.so
 /usr/lib64/clang/14.0.6/lib/linux/libclang_rt.ubsan_standalone-x86_64.so
 /usr/lib64/libLTO.so.14
 /usr/lib64/libRemarks.so.14
