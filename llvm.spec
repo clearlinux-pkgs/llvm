@@ -7,11 +7,11 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 14.0.6
-Release  : 155
+Release  : 156
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/llvm-project-14.0.6.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/llvm-project-14.0.6.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.211.0.tar.gz
-Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/e95eb30ace4954a3a7e8e17a3cc22f7382d4a47e.tar.gz
+Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/tags/v14.0.0.tar.gz
 Source3  : https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/llvm-project-14.0.6.src.tar.xz.sig
 Summary  : Google microbenchmark framework
 Group    : Development/Tools
@@ -289,12 +289,12 @@ staticdev32 components for the llvm package.
 %prep
 %setup -q -n llvm-project-14.0.6.src
 cd %{_builddir}
-tar xf %{_sourcedir}/e95eb30ace4954a3a7e8e17a3cc22f7382d4a47e.tar.gz
+tar xf %{_sourcedir}/v14.0.0.tar.gz
 cd %{_builddir}
 tar xf %{_sourcedir}/sdk-1.3.211.0.tar.gz
 cd %{_builddir}/llvm-project-14.0.6.src
 mkdir -p llvm/projects/SPIRV-LLVM-Translator
-cp -r %{_builddir}/SPIRV-LLVM-Translator-e95eb30ace4954a3a7e8e17a3cc22f7382d4a47e/* %{_builddir}/llvm-project-14.0.6.src/llvm/projects/SPIRV-LLVM-Translator
+cp -r %{_builddir}/SPIRV-LLVM-Translator-14.0.0/* %{_builddir}/llvm-project-14.0.6.src/llvm/projects/SPIRV-LLVM-Translator
 mkdir -p llvm/projects/SPIRV-Headers
 cp -r %{_builddir}/SPIRV-Headers-sdk-1.3.211.0/* %{_builddir}/llvm-project-14.0.6.src/llvm/projects/SPIRV-Headers
 %patch1 -p1
@@ -350,7 +350,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1660077935
+export SOURCE_DATE_EPOCH=1661390459
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -466,43 +466,43 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1660077935
+export SOURCE_DATE_EPOCH=1661390459
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
-cp %{_builddir}/SPIRV-Headers-sdk-1.3.211.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03
-cp %{_builddir}/SPIRV-LLVM-Translator-e95eb30ace4954a3a7e8e17a3cc22f7382d4a47e/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6
-cp %{_builddir}/llvm-project-%{version}.src/bolt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
-cp %{_builddir}/llvm-project-%{version}.src/clang-tools-extra/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
-cp %{_builddir}/llvm-project-%{version}.src/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
-cp %{_builddir}/llvm-project-%{version}.src/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7
-cp %{_builddir}/llvm-project-%{version}.src/compiler-rt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/f4359b9da55a3b9e4d9513eb79cacf125fb49e7b
-cp %{_builddir}/llvm-project-%{version}.src/cross-project-tests/debuginfo-tests/dexter/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
-cp %{_builddir}/llvm-project-%{version}.src/flang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/85c0f2884378413881b4d3e27fc24b220f71889b
-cp %{_builddir}/llvm-project-%{version}.src/libc/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f
-cp %{_builddir}/llvm-project-%{version}.src/libclc/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8737af83de0d40386dca9a4abe2b6faa83cb4750
-cp %{_builddir}/llvm-project-%{version}.src/libcxx/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/7b75a5471af8b3d49e60df0a5d72f95ea8214231
-cp %{_builddir}/llvm-project-%{version}.src/libcxxabi/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/11156021d878bfcbdf2563b4f65db32b4d9f92a3
-cp %{_builddir}/llvm-project-%{version}.src/libunwind/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/d79062af10a33188d4a74d976323845a2cf9023d
-cp %{_builddir}/llvm-project-%{version}.src/lld/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/6b655b0685aa7ee33fa1e02103b3bf22ed06e099
-cp %{_builddir}/llvm-project-%{version}.src/lldb/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8af372ad1edbed2cfaf0e79d25f7136ec6e55b47
-cp %{_builddir}/llvm-project-%{version}.src/lldb/third_party/Python/module/pexpect-4.6/LICENSE %{buildroot}/usr/share/package-licenses/llvm/5a99e7077ee89ba92fb3f584855e8970096cd5dc
-cp %{_builddir}/llvm-project-%{version}.src/lldb/third_party/Python/module/ptyprocess-0.6.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/db1f866b29c6a191752c7c5924b7572cdbc47c34
-cp %{_builddir}/llvm-project-%{version}.src/lldb/third_party/Python/module/six/LICENSE %{buildroot}/usr/share/package-licenses/llvm/f226af67862c0c7a0e921e24672a3a1375691e3e
-cp %{_builddir}/llvm-project-%{version}.src/llvm/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
-cp %{_builddir}/llvm-project-%{version}.src/llvm/test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/c01c212bdf3925189f673e2081b44094023860ea
-cp %{_builddir}/llvm-project-%{version}.src/llvm/tools/msbuild/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7
-cp %{_builddir}/llvm-project-%{version}.src/llvm/utils/lit/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd
-cp %{_builddir}/llvm-project-%{version}.src/llvm/utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304
-cp %{_builddir}/llvm-project-%{version}.src/llvm/utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304
-cp %{_builddir}/llvm-project-%{version}.src/mlir/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/85c0f2884378413881b4d3e27fc24b220f71889b
-cp %{_builddir}/llvm-project-%{version}.src/openmp/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/e3cccabb67bd491a643d32a7d2b65b49836e626d
-cp %{_builddir}/llvm-project-%{version}.src/openmp/runtime/src/thirdparty/ittnotify/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/59a8ba331dede4d94bd654ac645e8d27463662f4
-cp %{_builddir}/llvm-project-%{version}.src/polly/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8d3b142938f83e7045951089b52676a5605eee37
-cp %{_builddir}/llvm-project-%{version}.src/polly/lib/External/isl/LICENSE %{buildroot}/usr/share/package-licenses/llvm/45c2429b5881295597e96c81fc50f7b8a42e769f
-cp %{_builddir}/llvm-project-%{version}.src/polly/lib/External/isl/imath/LICENSE %{buildroot}/usr/share/package-licenses/llvm/385649e7c18da3a07cfbd6679eebd0bca1c698c9
-cp %{_builddir}/llvm-project-%{version}.src/polly/tools/GPURuntime/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/ce27417c74ca5ad6d0b5c96ede8ff82e4d87900f
-cp %{_builddir}/llvm-project-%{version}.src/pstl/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/72c865be698cefc46549ed61e279f98432364fca
-cp %{_builddir}/llvm-project-%{version}.src/third-party/benchmark/LICENSE %{buildroot}/usr/share/package-licenses/llvm/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/SPIRV-Headers-sdk-1.3.211.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
+cp %{_builddir}/SPIRV-LLVM-Translator-14.0.0/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6 || :
+cp %{_builddir}/llvm-project-%{version}.src/bolt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
+cp %{_builddir}/llvm-project-%{version}.src/clang-tools-extra/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f || :
+cp %{_builddir}/llvm-project-%{version}.src/clang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f || :
+cp %{_builddir}/llvm-project-%{version}.src/clang/tools/clang-format-vs/ClangFormat/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7 || :
+cp %{_builddir}/llvm-project-%{version}.src/compiler-rt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/f4359b9da55a3b9e4d9513eb79cacf125fb49e7b || :
+cp %{_builddir}/llvm-project-%{version}.src/cross-project-tests/debuginfo-tests/dexter/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
+cp %{_builddir}/llvm-project-%{version}.src/flang/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/85c0f2884378413881b4d3e27fc24b220f71889b || :
+cp %{_builddir}/llvm-project-%{version}.src/libc/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f || :
+cp %{_builddir}/llvm-project-%{version}.src/libclc/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8737af83de0d40386dca9a4abe2b6faa83cb4750 || :
+cp %{_builddir}/llvm-project-%{version}.src/libcxx/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/7b75a5471af8b3d49e60df0a5d72f95ea8214231 || :
+cp %{_builddir}/llvm-project-%{version}.src/libcxxabi/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/11156021d878bfcbdf2563b4f65db32b4d9f92a3 || :
+cp %{_builddir}/llvm-project-%{version}.src/libunwind/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/d79062af10a33188d4a74d976323845a2cf9023d || :
+cp %{_builddir}/llvm-project-%{version}.src/lld/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/6b655b0685aa7ee33fa1e02103b3bf22ed06e099 || :
+cp %{_builddir}/llvm-project-%{version}.src/lldb/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8af372ad1edbed2cfaf0e79d25f7136ec6e55b47 || :
+cp %{_builddir}/llvm-project-%{version}.src/lldb/third_party/Python/module/pexpect-4.6/LICENSE %{buildroot}/usr/share/package-licenses/llvm/5a99e7077ee89ba92fb3f584855e8970096cd5dc || :
+cp %{_builddir}/llvm-project-%{version}.src/lldb/third_party/Python/module/ptyprocess-0.6.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/db1f866b29c6a191752c7c5924b7572cdbc47c34 || :
+cp %{_builddir}/llvm-project-%{version}.src/lldb/third_party/Python/module/six/LICENSE %{buildroot}/usr/share/package-licenses/llvm/f226af67862c0c7a0e921e24672a3a1375691e3e || :
+cp %{_builddir}/llvm-project-%{version}.src/llvm/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
+cp %{_builddir}/llvm-project-%{version}.src/llvm/test/YAMLParser/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/c01c212bdf3925189f673e2081b44094023860ea || :
+cp %{_builddir}/llvm-project-%{version}.src/llvm/tools/msbuild/license.txt %{buildroot}/usr/share/package-licenses/llvm/b5d4ab4d1191e592c03310adfbe90d99a46bf9d7 || :
+cp %{_builddir}/llvm-project-%{version}.src/llvm/utils/lit/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
+cp %{_builddir}/llvm-project-%{version}.src/llvm/utils/unittest/googlemock/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304 || :
+cp %{_builddir}/llvm-project-%{version}.src/llvm/utils/unittest/googletest/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/5a2314153eadadc69258a9429104cd11804ea304 || :
+cp %{_builddir}/llvm-project-%{version}.src/mlir/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/85c0f2884378413881b4d3e27fc24b220f71889b || :
+cp %{_builddir}/llvm-project-%{version}.src/openmp/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/e3cccabb67bd491a643d32a7d2b65b49836e626d || :
+cp %{_builddir}/llvm-project-%{version}.src/openmp/runtime/src/thirdparty/ittnotify/LICENSE.txt %{buildroot}/usr/share/package-licenses/llvm/59a8ba331dede4d94bd654ac645e8d27463662f4 || :
+cp %{_builddir}/llvm-project-%{version}.src/polly/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8d3b142938f83e7045951089b52676a5605eee37 || :
+cp %{_builddir}/llvm-project-%{version}.src/polly/lib/External/isl/LICENSE %{buildroot}/usr/share/package-licenses/llvm/45c2429b5881295597e96c81fc50f7b8a42e769f || :
+cp %{_builddir}/llvm-project-%{version}.src/polly/lib/External/isl/imath/LICENSE %{buildroot}/usr/share/package-licenses/llvm/385649e7c18da3a07cfbd6679eebd0bca1c698c9 || :
+cp %{_builddir}/llvm-project-%{version}.src/polly/tools/GPURuntime/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/ce27417c74ca5ad6d0b5c96ede8ff82e4d87900f || :
+cp %{_builddir}/llvm-project-%{version}.src/pstl/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/72c865be698cefc46549ed61e279f98432364fca || :
+cp %{_builddir}/llvm-project-%{version}.src/third-party/benchmark/LICENSE %{buildroot}/usr/share/package-licenses/llvm/2b8b815229aa8a61e483fb4ba0588b8b6c491890 || :
 pushd llvm
 pushd clr-build32
 %ninja_install32
