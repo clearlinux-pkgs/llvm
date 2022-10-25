@@ -531,7 +531,7 @@ rm -f %{buildroot}*/usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
 rm -f %{buildroot}*/usr/lib64/pkgconfig/LLVMSPIRVLib.pc
 rm -f %{buildroot}*/usr/lib64/pkgconfig/SPIRV-Headers.pc
 rm -f %{buildroot}*/usr/lib64/pkgconfig/'32*.pc'
-rm -f %{buildroot}*/usr/lib/python3.10/site-packages/six.py
+rm -f %{buildroot}*/usr/lib/python3.11/site-packages/six.py
 rm -f %{buildroot}*/usr/lib64/libclang.so.13
 rm -f %{buildroot}*/usr/lib32/libclang.so.13
 rm -f %{buildroot}*/usr/lib64/clang/14.0.4/lib/linux/*-i386.so
