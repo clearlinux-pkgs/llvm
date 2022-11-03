@@ -1,12 +1,10 @@
-From ff6b0a6802593d8e4bbaf54aee5e276096452022 Mon Sep 17 00:00:00 2001
+From 23567e7820b32103cb11810a05a4fd6feef76062 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
-Date: Tue, 19 Apr 2022 10:46:48 -0700
+Date: Thu, 3 Nov 2022 18:09:55 +0000
 Subject: [PATCH] Detect Clear Linux and apply Clear's default linker options
 
 Enum placed at the end to avoid Binary Compatibility break when
 backporting this patch.
-
-Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
 ---
  clang/include/clang/Driver/Distro.h   |  4 ++++
  clang/lib/Driver/Distro.cpp           | 13 +++++++++++++
@@ -15,7 +13,7 @@ Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
  4 files changed, 36 insertions(+), 3 deletions(-)
 
 diff --git a/clang/include/clang/Driver/Distro.h b/clang/include/clang/Driver/Distro.h
-index 2723f75e8..0de94bda4 100644
+index 01d66b30b..1104f0cc6 100644
 --- a/clang/include/clang/Driver/Distro.h
 +++ b/clang/include/clang/Driver/Distro.h
 @@ -30,6 +30,7 @@ public:
@@ -26,9 +24,9 @@ index 2723f75e8..0de94bda4 100644
      DebianLenny,
      DebianSqueeze,
      DebianWheezy,
-@@ -127,6 +128,9 @@ public:
+@@ -129,6 +130,9 @@ public:
    bool IsUbuntu() const {
-     return DistroVal >= UbuntuHardy && DistroVal <= UbuntuJammy;
+     return DistroVal >= UbuntuHardy && DistroVal <= UbuntuKinetic;
    }
 +  bool IsClearLinux() const {
 +    return DistroVal == ClearLinux;
@@ -37,10 +35,10 @@ index 2723f75e8..0de94bda4 100644
    bool IsAlpineLinux() const { return DistroVal == AlpineLinux; }
  
 diff --git a/clang/lib/Driver/Distro.cpp b/clang/lib/Driver/Distro.cpp
-index 5ac38c34d..a2260cd05 100644
+index 189866727..1c00563c3 100644
 --- a/clang/lib/Driver/Distro.cpp
 +++ b/clang/lib/Driver/Distro.cpp
-@@ -197,6 +197,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
+@@ -200,6 +200,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
    if (VFS.exists("/etc/gentoo-release"))
      return Distro::Gentoo;
  
@@ -61,10 +59,10 @@ index 5ac38c34d..a2260cd05 100644
  }
  
 diff --git a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains/Linux.cpp
-index f85c04df4..dbc1a9ba4 100644
+index ceb1a982c..0c7cdf854 100644
 --- a/clang/lib/Driver/ToolChains/Linux.cpp
 +++ b/clang/lib/Driver/ToolChains/Linux.cpp
-@@ -188,13 +188,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+@@ -190,13 +190,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
  
    Distro Distro(D.getVFS(), Triple);
  
@@ -80,7 +78,7 @@ index f85c04df4..dbc1a9ba4 100644
      ExtraOpts.push_back("-z");
      ExtraOpts.push_back("relro");
    }
-@@ -248,7 +248,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+@@ -254,7 +254,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
    ExtraOpts.push_back("--build-id");
  #endif
  
@@ -90,7 +88,7 @@ index f85c04df4..dbc1a9ba4 100644
  
    // The selection of paths to try here is designed to match the patterns which
 diff --git a/clang/unittests/Driver/DistroTest.cpp b/clang/unittests/Driver/DistroTest.cpp
-index b6e4ca9be..11a5f871b 100644
+index ebf75dc7c..05faec9b5 100644
 --- a/clang/unittests/Driver/DistroTest.cpp
 +++ b/clang/unittests/Driver/DistroTest.cpp
 @@ -340,6 +340,22 @@ TEST(DistroTest, DetectGentoo) {
@@ -117,5 +115,5 @@ index b6e4ca9be..11a5f871b 100644
  
    class CountingFileSystem : public llvm::vfs::ProxyFileSystem {
 -- 
-2.35.1
+2.38.1
 

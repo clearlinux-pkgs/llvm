@@ -12,8 +12,6 @@ clang-0005-Don-t-error-on-ftrivial-auto-var-init-zero.patch
 
 # SPIRV patches
 
-# OpenMP patches
-clang-soname.patch
-
 # compiler-rt patches
 compiler-rt-0001-Reduce-mixing-and-matching-sys-and-linux.patch
+compiler-rt-0002-Add-missing-header-for-linux.patch

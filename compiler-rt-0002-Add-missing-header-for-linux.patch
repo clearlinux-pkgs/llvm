@@ -1,0 +1,24 @@
+From 61c7dd165535333990e0773a2c7cbea5bc910d91 Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Thu, 3 Nov 2022 20:39:35 +0000
+Subject: [PATCH] Add missing header for linux
+
+---
+ .../lib/sanitizer_common/sanitizer_platform_limits_posix.cpp     | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp b/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
+index 88ae14be7..3980bd0a8 100644
+--- a/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
++++ b/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
+@@ -73,6 +73,7 @@
+ #include <sys/vt.h>
+ #include <linux/cdrom.h>
+ #include <linux/fd.h>
++#include <linux/fs.h>
+ #if SANITIZER_ANDROID
+ #include <linux/fs.h>
+ #endif
+-- 
+2.38.1
+

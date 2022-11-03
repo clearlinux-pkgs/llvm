@@ -1,8 +1,4 @@
 # -*- sh -*-
-# remove libomptarget.rtl.amdgpu.so for now
-# it is built using rpath and wants to be in the wrong path
-rm -f %{buildroot}/usr/lib/libomptarget.rtl.amdgpu.so
-
 # Rename the tools to have a versioned suffix and symlink back
 pushd %{buildroot}/usr/bin
 VERSION=%{version}

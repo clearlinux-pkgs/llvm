@@ -1,6 +1,7 @@
 # This file contains recursive sources that require this package
 blender
 cereal
+compat-protobuf-soname29
 cups
 darktable
 embree
@@ -17,7 +18,6 @@ llvm12
 llvm13
 mediasdk
 mono
-protobuf
 pypi-pynacl
 pyside2-setup
 rustc
