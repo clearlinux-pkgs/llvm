@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 15.0.6
-Release  : 161
+Release  : 162
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/llvm-project-15.0.6.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/llvm-project-15.0.6.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.231.1.tar.gz
@@ -96,9 +96,6 @@ BuildRequires : swig
 BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
-# Suppress stripping binaries
-%define __strip /bin/true
-%define debug_package %{nil}
 Patch1: llvm-0001-Improve-physical-core-count-detection.patch
 Patch2: llvm-0002-Produce-a-normally-versioned-libLLVM.patch
 Patch3: llvm-0003-Allow-one-more-FMA-fusion.patch
@@ -335,7 +332,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1673469512
+export SOURCE_DATE_EPOCH=1673481640
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -451,7 +448,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1673469512
+export SOURCE_DATE_EPOCH=1673481640
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.231.1/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
