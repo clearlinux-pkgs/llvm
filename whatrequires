@@ -21,6 +21,7 @@ mediasdk
 mono
 pypi-pynacl
 pyside2-setup
+pytorch
 rustc
 suricata
 systemd
