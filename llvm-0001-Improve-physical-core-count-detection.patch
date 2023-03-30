@@ -1,18 +1,21 @@
-From a5594b40776a1e13260efef3924a68d56f026be6 Mon Sep 17 00:00:00 2001
+From 583e5448b3839ceccfd295a7d60fd8fdc350bacd Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
-Date: Tue, 26 Oct 2021 21:08:11 -0700
-Subject: [PATCH] Improve physical core count detection
+Date: Wed, 29 Mar 2023 15:25:29 -0700
+Subject: [PATCH 1/9] Improve physical core count detection
 
-Signed-off-by: Thiago Macieira <thiago.macieira@intel.com>
+Avoid erroring out when there is a problem reading /proc/cpuinfo and
+instead just return 1.
+
+Signed-off-by: William Douglas <william.douglas@intel.com>
 ---
- llvm/lib/Support/Host.cpp | 4 +---
+ llvm/lib/Support/Unix/Threading.inc | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/llvm/lib/Support/Host.cpp b/llvm/lib/Support/Host.cpp
-index f873ff06f..d046b0243 100644
---- a/llvm/lib/Support/Host.cpp
-+++ b/llvm/lib/Support/Host.cpp
-@@ -1372,9 +1372,7 @@ int computeHostNumPhysicalCores() {
+diff --git a/llvm/lib/Support/Unix/Threading.inc b/llvm/lib/Support/Unix/Threading.inc
+index 819748db4..bc219926c 100644
+--- a/llvm/lib/Support/Unix/Threading.inc
++++ b/llvm/lib/Support/Unix/Threading.inc
+@@ -340,9 +340,7 @@ static int computeHostNumPhysicalCores() {
    llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> Text =
        llvm::MemoryBuffer::getFileAsStream("/proc/cpuinfo");
    if (std::error_code EC = Text.getError()) {
@@ -24,5 +27,5 @@ index f873ff06f..d046b0243 100644
    SmallVector<StringRef, 8> strs;
    (*Text)->getBuffer().split(strs, "\n", /*MaxSplit=*/-1,
 -- 
-2.33.0
+2.40.0
 

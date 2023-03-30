@@ -1,0 +1,41 @@
+From 996f54bf1197631d18d5533f185a8768daad177e Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Tue, 26 Oct 2021 21:23:59 -0700
+Subject: [PATCH 7/9] Add -f instructions that GCC has that Clang must ignore
+
+Signed-off-by: William Douglas <william.douglas@intel.com>
+---
+ clang/include/clang/Driver/Options.td | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/clang/include/clang/Driver/Options.td b/clang/include/clang/Driver/Options.td
+index 652c15afc..7e521b3be 100644
+--- a/clang/include/clang/Driver/Options.td
++++ b/clang/include/clang/Driver/Options.td
+@@ -3382,6 +3382,7 @@ def mabi_EQ : Joined<["-"], "mabi=">, Group<m_Group>;
+ def miamcu : Flag<["-"], "miamcu">, Group<m_Group>, Flags<[NoXarchOption, CoreOption]>,
+   HelpText<"Use Intel MCU ABI">;
+ def mno_iamcu : Flag<["-"], "mno-iamcu">, Group<m_Group>, Flags<[NoXarchOption, CoreOption]>;
++def malign_data_EQ : Joined<["-"], "malign-data=">, Group<clang_ignored_m_Group>;
+ def malign_functions_EQ : Joined<["-"], "malign-functions=">, Group<clang_ignored_m_Group>;
+ def malign_loops_EQ : Joined<["-"], "malign-loops=">, Group<clang_ignored_m_Group>;
+ def malign_jumps_EQ : Joined<["-"], "malign-jumps=">, Group<clang_ignored_m_Group>;
+@@ -3875,6 +3876,7 @@ def mregparm_EQ : Joined<["-"], "mregparm=">, Group<m_Group>;
+ def mrelax_all : Flag<["-"], "mrelax-all">, Group<m_Group>, Flags<[CC1Option,CC1AsOption]>,
+   HelpText<"(integrated-as) Relax all machine instructions">,
+   MarshallingInfoFlag<CodeGenOpts<"RelaxAll">>;
++def mrelax_cmpxchg_loop : Flag<["-"], "mrelax-cmpxchg-loop">, Group<clang_ignored_m_Group>;
+ def mincremental_linker_compatible : Flag<["-"], "mincremental-linker-compatible">, Group<m_Group>,
+   Flags<[CC1Option,CC1AsOption]>,
+   HelpText<"(integrated-as) Emit an object file which can be used with an incremental linker">,
+@@ -4908,6 +4910,7 @@ defm strength_reduce :
+ defm tls_model : BooleanFFlag<"tls-model">, Group<clang_ignored_f_Group>;
+ defm tracer : BooleanFFlag<"tracer">, Group<clang_ignored_gcc_optimization_f_Group>;
+ defm tree_dce : BooleanFFlag<"tree-dce">, Group<clang_ignored_gcc_optimization_f_Group>;
++defm tree_loop_distribute_patterns : BooleanFFlag<"tree-loop-distribute-patterns">, Group<clang_ignored_gcc_optimization_f_Group>;
+ defm tree_salias : BooleanFFlag<"tree-salias">, Group<clang_ignored_f_Group>;
+ defm tree_ter : BooleanFFlag<"tree-ter">, Group<clang_ignored_gcc_optimization_f_Group>;
+ defm tree_vectorizer_verbose : BooleanFFlag<"tree-vectorizer-verbose">, Group<clang_ignored_f_Group>;
+-- 
+2.40.0
+

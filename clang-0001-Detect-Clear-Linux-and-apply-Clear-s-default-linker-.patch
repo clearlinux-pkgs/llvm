@@ -1,19 +1,22 @@
-From 23567e7820b32103cb11810a05a4fd6feef76062 Mon Sep 17 00:00:00 2001
+From f4f319d0a7922924f205940b7a3dee7575e97dbc Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
-Date: Thu, 3 Nov 2022 18:09:55 +0000
-Subject: [PATCH] Detect Clear Linux and apply Clear's default linker options
+Date: Thu, 30 Mar 2023 11:30:47 -0700
+Subject: [PATCH 4/9] Detect Clear Linux and apply Clear's default linker
+ options
 
 Enum placed at the end to avoid Binary Compatibility break when
 backporting this patch.
+
+Signed-off-by: William Douglas <william.douglas@intel.com>
 ---
  clang/include/clang/Driver/Distro.h   |  4 ++++
  clang/lib/Driver/Distro.cpp           | 13 +++++++++++++
- clang/lib/Driver/ToolChains/Linux.cpp |  6 +++---
+ clang/lib/Driver/ToolChains/Linux.cpp |  4 ++--
  clang/unittests/Driver/DistroTest.cpp | 16 ++++++++++++++++
- 4 files changed, 36 insertions(+), 3 deletions(-)
+ 4 files changed, 35 insertions(+), 2 deletions(-)
 
 diff --git a/clang/include/clang/Driver/Distro.h b/clang/include/clang/Driver/Distro.h
-index 01d66b30b..1104f0cc6 100644
+index 1aaf93ddb..2ce93e0b4 100644
 --- a/clang/include/clang/Driver/Distro.h
 +++ b/clang/include/clang/Driver/Distro.h
 @@ -30,6 +30,7 @@ public:
@@ -24,9 +27,9 @@ index 01d66b30b..1104f0cc6 100644
      DebianLenny,
      DebianSqueeze,
      DebianWheezy,
-@@ -129,6 +130,9 @@ public:
+@@ -130,6 +131,9 @@ public:
    bool IsUbuntu() const {
-     return DistroVal >= UbuntuHardy && DistroVal <= UbuntuKinetic;
+     return DistroVal >= UbuntuHardy && DistroVal <= UbuntuLunar;
    }
 +  bool IsClearLinux() const {
 +    return DistroVal == ClearLinux;
@@ -35,10 +38,10 @@ index 01d66b30b..1104f0cc6 100644
    bool IsAlpineLinux() const { return DistroVal == AlpineLinux; }
  
 diff --git a/clang/lib/Driver/Distro.cpp b/clang/lib/Driver/Distro.cpp
-index 189866727..1c00563c3 100644
+index 87a0c5a58..d557eb79d 100644
 --- a/clang/lib/Driver/Distro.cpp
 +++ b/clang/lib/Driver/Distro.cpp
-@@ -200,6 +200,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
+@@ -201,6 +201,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
    if (VFS.exists("/etc/gentoo-release"))
      return Distro::Gentoo;
  
@@ -59,10 +62,10 @@ index 189866727..1c00563c3 100644
  }
  
 diff --git a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains/Linux.cpp
-index ceb1a982c..0c7cdf854 100644
+index c6fb290ff..420c26a77 100644
 --- a/clang/lib/Driver/ToolChains/Linux.cpp
 +++ b/clang/lib/Driver/ToolChains/Linux.cpp
-@@ -190,13 +190,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+@@ -191,13 +191,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
  
    Distro Distro(D.getVFS(), Triple);
  
@@ -78,15 +81,6 @@ index ceb1a982c..0c7cdf854 100644
      ExtraOpts.push_back("-z");
      ExtraOpts.push_back("relro");
    }
-@@ -254,7 +254,7 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
-   ExtraOpts.push_back("--build-id");
- #endif
- 
--  if (IsAndroid || Distro.IsOpenSUSE())
-+  if (IsAndroid || Distro.IsOpenSUSE() || Distro.IsClearLinux())
-     ExtraOpts.push_back("--enable-new-dtags");
- 
-   // The selection of paths to try here is designed to match the patterns which
 diff --git a/clang/unittests/Driver/DistroTest.cpp b/clang/unittests/Driver/DistroTest.cpp
 index ebf75dc7c..05faec9b5 100644
 --- a/clang/unittests/Driver/DistroTest.cpp
@@ -115,5 +109,5 @@ index ebf75dc7c..05faec9b5 100644
  
    class CountingFileSystem : public llvm::vfs::ProxyFileSystem {
 -- 
-2.38.1
+2.40.0
 
