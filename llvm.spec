@@ -8,7 +8,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 16.0.0
-Release  : 164
+Release  : 165
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.243.0.tar.gz
@@ -23,6 +23,9 @@ Requires: llvm-lib = %{version}-%{release}
 Requires: llvm-libexec = %{version}-%{release}
 Requires: llvm-license = %{version}-%{release}
 Requires: llvm-man = %{version}-%{release}
+Requires: llvm-python = %{version}-%{release}
+Requires: llvm-python3 = %{version}-%{release}
+BuildRequires : SPIRV-Tools
 BuildRequires : Sphinx
 BuildRequires : Vulkan-Headers-dev Vulkan-Loader-dev Vulkan-Tools
 BuildRequires : Z3-dev
@@ -60,6 +63,7 @@ BuildRequires : protobuf-dev
 BuildRequires : pypi(pybind11)
 BuildRequires : python3-dev
 BuildRequires : rsync
+BuildRequires : swig
 BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
@@ -168,6 +172,24 @@ Group: Default
 man components for the llvm package.
 
 
+%package python
+Summary: python components for the llvm package.
+Group: Default
+Requires: llvm-python3 = %{version}-%{release}
+
+%description python
+python components for the llvm package.
+
+
+%package python3
+Summary: python3 components for the llvm package.
+Group: Default
+Requires: python3-core
+
+%description python3
+python3 components for the llvm package.
+
+
 %package staticdev
 Summary: staticdev components for the llvm package.
 Group: Default
@@ -249,7 +271,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1680214285
+export SOURCE_DATE_EPOCH=1680226709
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -365,7 +387,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1680214285
+export SOURCE_DATE_EPOCH=1680226709
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
@@ -5194,6 +5216,13 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 %files man
 %defattr(0644,root,root,0755)
 /usr/share/man/man1/scan-build.1
+
+%files python
+%defattr(-,root,root,-)
+
+%files python3
+%defattr(-,root,root,-)
+/usr/lib/python3*/*
 
 %files staticdev
 %defattr(-,root,root,-)
