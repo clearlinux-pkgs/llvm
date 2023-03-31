@@ -8,7 +8,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 16.0.0
-Release  : 165
+Release  : 166
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.243.0.tar.gz
@@ -124,6 +124,30 @@ Requires: llvm-dev = %{version}-%{release}
 
 %description dev32
 dev32 components for the llvm package.
+
+
+%package extras-libclang
+Summary: extras-libclang components for the llvm package.
+Group: Default
+
+%description extras-libclang
+extras-libclang components for the llvm package.
+
+
+%package extras-libclang-cpp
+Summary: extras-libclang-cpp components for the llvm package.
+Group: Default
+
+%description extras-libclang-cpp
+extras-libclang-cpp components for the llvm package.
+
+
+%package extras-libllvm
+Summary: extras-libllvm components for the llvm package.
+Group: Default
+
+%description extras-libllvm
+extras-libllvm components for the llvm package.
 
 
 %package lib
@@ -271,7 +295,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1680226709
+export SOURCE_DATE_EPOCH=1680284959
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -387,7 +411,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1680226709
+export SOURCE_DATE_EPOCH=1680284959
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
@@ -5132,6 +5156,18 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib32/pkgconfig/LLVMSPIRVLib.pc
 /usr/lib32/pkgconfig/SPIRV-Headers.pc
 
+%files extras-libclang
+%defattr(-,root,root,-)
+/usr/lib64/libclang.so.16.0.0
+
+%files extras-libclang-cpp
+%defattr(-,root,root,-)
+/usr/lib64/libclang-cpp.so.16
+
+%files extras-libllvm
+%defattr(-,root,root,-)
+/usr/lib64/libLLVM.so.16
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib/bfd-plugins/LLVMgold-16.so
@@ -5148,12 +5184,9 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/clang/16/lib/x86_64-generic-linux/libclang_rt.tsan.so
 /usr/lib64/clang/16/lib/x86_64-generic-linux/libclang_rt.ubsan_minimal.so
 /usr/lib64/clang/16/lib/x86_64-generic-linux/libclang_rt.ubsan_standalone.so
-/usr/lib64/libLLVM.so.16
 /usr/lib64/libLTO.so.16
 /usr/lib64/libRemarks.so.16
-/usr/lib64/libclang-cpp.so.16
 /usr/lib64/libclang.so.16
-/usr/lib64/libclang.so.16.0.0
 /usr/lib64/liblldb.so.16
 /usr/lib64/liblldb.so.16.0.0
 /usr/lib64/liblldbIntelFeatures.so.16
