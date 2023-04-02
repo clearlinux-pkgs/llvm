@@ -8,7 +8,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 16.0.0
-Release  : 166
+Release  : 167
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.243.0.tar.gz
