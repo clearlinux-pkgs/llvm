@@ -1,9 +1,6 @@
 ld-linux-x86-64.so.2
-libLLVM.so.16
 libSPIRV-Tools.so
 libc.so.6
-libclang-cpp.so.16
-libclang.so.16
 libedit.so.0
 libffi.so.7
 libgcc_s.so.1

@@ -8,7 +8,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 16.0.0
-Release  : 167
+Release  : 169
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.243.0.tar.gz
@@ -68,14 +68,12 @@ BuildRequires : valgrind-dev
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
 Patch1: llvm-0001-Improve-physical-core-count-detection.patch
-Patch2: llvm-0002-Produce-a-normally-versioned-libLLVM.patch
-Patch3: llvm-0003-Allow-one-more-FMA-fusion.patch
-Patch4: clang-0001-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
-Patch5: clang-0002-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
-Patch6: clang-0003-Add-the-LLVM-major-version-number-to-the-Gold-LTO-pl.patch
-Patch7: clang-0004-Add-f-instructions-that-GCC-has-that-Clang-must-igno.patch
-Patch8: compiler-rt-0001-Reduce-mixing-and-matching-sys-and-linux.patch
-Patch9: compiler-rt-0002-Add-missing-header-for-linux.patch
+Patch2: llvm-0003-Allow-one-more-FMA-fusion.patch
+Patch3: clang-0001-Detect-Clear-Linux-and-apply-Clear-s-default-linker-.patch
+Patch4: clang-0002-Make-Clang-default-to-Westmere-on-Clear-Linux.patch
+Patch5: clang-0004-Add-f-instructions-that-GCC-has-that-Clang-must-igno.patch
+Patch6: compiler-rt-0001-Reduce-mixing-and-matching-sys-and-linux.patch
+Patch7: compiler-rt-0002-Add-missing-header-for-linux.patch
 
 %description
 Polly - Polyhedral optimizations for LLVM
@@ -124,30 +122,6 @@ Requires: llvm-dev = %{version}-%{release}
 
 %description dev32
 dev32 components for the llvm package.
-
-
-%package extras-libclang
-Summary: extras-libclang components for the llvm package.
-Group: Default
-
-%description extras-libclang
-extras-libclang components for the llvm package.
-
-
-%package extras-libclang-cpp
-Summary: extras-libclang-cpp components for the llvm package.
-Group: Default
-
-%description extras-libclang-cpp
-extras-libclang-cpp components for the llvm package.
-
-
-%package extras-libllvm
-Summary: extras-libllvm components for the llvm package.
-Group: Default
-
-%description extras-libllvm
-extras-libllvm components for the llvm package.
 
 
 %package lib
@@ -250,8 +224,6 @@ cp -r %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/* %{_builddir}/llvm-project-16.0.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
-%patch9 -p1
 
 %build
 ## build_prepend_once content
@@ -295,7 +267,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1680284959
+export SOURCE_DATE_EPOCH=1680554947
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -411,7 +383,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1680284959
+export SOURCE_DATE_EPOCH=1680554947
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
@@ -5079,6 +5051,8 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/cmake/polly/PollyConfig.cmake
 /usr/lib64/cmake/polly/PollyConfigVersion.cmake
 /usr/lib64/cmake/polly/PollyExports-all.cmake
+/usr/lib64/libLLVM-16.0.0.so
+/usr/lib64/libLLVM-16.so
 /usr/lib64/libLLVM.so
 /usr/lib64/libLTO.so
 /usr/lib64/libRemarks.so
@@ -5146,6 +5120,8 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib32/cmake/llvm/UseLibtool.cmake
 /usr/lib32/cmake/llvm/VersionFromVCS.cmake
 /usr/lib32/cmake/llvm/llvm-driver-template.cpp.in
+/usr/lib32/libLLVM-16.0.0.so
+/usr/lib32/libLLVM-16.so
 /usr/lib32/libLLVM.so
 /usr/lib32/libLTO.so
 /usr/lib32/libRemarks.so
@@ -5155,18 +5131,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib32/pkgconfig/32SPIRV-Headers.pc
 /usr/lib32/pkgconfig/LLVMSPIRVLib.pc
 /usr/lib32/pkgconfig/SPIRV-Headers.pc
-
-%files extras-libclang
-%defattr(-,root,root,-)
-/usr/lib64/libclang.so.16.0.0
-
-%files extras-libclang-cpp
-%defattr(-,root,root,-)
-/usr/lib64/libclang-cpp.so.16
-
-%files extras-libllvm
-%defattr(-,root,root,-)
-/usr/lib64/libLLVM.so.16
 
 %files lib
 %defattr(-,root,root,-)
@@ -5186,7 +5150,9 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/clang/16/lib/x86_64-generic-linux/libclang_rt.ubsan_standalone.so
 /usr/lib64/libLTO.so.16
 /usr/lib64/libRemarks.so.16
+/usr/lib64/libclang-cpp.so.16
 /usr/lib64/libclang.so.16
+/usr/lib64/libclang.so.16.0.0
 /usr/lib64/liblldb.so.16
 /usr/lib64/liblldb.so.16.0.0
 /usr/lib64/liblldbIntelFeatures.so.16
@@ -5200,7 +5166,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 
 %files lib32
 %defattr(-,root,root,-)
-/usr/lib32/libLLVM.so.16
 /usr/lib32/libLTO.so.16
 /usr/lib32/libRemarks.so.16
 /usr/lib32/libclang-cpp.so.16
