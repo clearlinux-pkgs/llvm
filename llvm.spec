@@ -7,13 +7,13 @@
 #
 %define keepstatic 1
 Name     : llvm
-Version  : 16.0.0
-Release  : 169
-URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
-Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz
+Version  : 16.0.1
+Release  : 170
+URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.1/llvm-project-16.0.1.src.tar.xz
+Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.1/llvm-project-16.0.1.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.243.0.tar.gz
 Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/tags/v16.0.0.tar.gz
-Source3  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/llvm-project-16.0.0.src.tar.xz.sig
+Source3  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.1/llvm-project-16.0.1.src.tar.xz.sig
 Summary  : Google microbenchmark framework
 Group    : Development/Tools
 License  : Apache-2.0 BSD-3-Clause ISC MIT MPL-2.0 NCSA
@@ -207,16 +207,16 @@ staticdev32 components for the llvm package.
 
 
 %prep
-%setup -q -n llvm-project-16.0.0.src
+%setup -q -n llvm-project-16.0.1.src
 cd %{_builddir}
 tar xf %{_sourcedir}/v16.0.0.tar.gz
 cd %{_builddir}
 tar xf %{_sourcedir}/sdk-1.3.243.0.tar.gz
-cd %{_builddir}/llvm-project-16.0.0.src
+cd %{_builddir}/llvm-project-16.0.1.src
 mkdir -p llvm/projects/SPIRV-LLVM-Translator
-cp -r %{_builddir}/SPIRV-LLVM-Translator-16.0.0/* %{_builddir}/llvm-project-16.0.0.src/llvm/projects/SPIRV-LLVM-Translator
+cp -r %{_builddir}/SPIRV-LLVM-Translator-16.0.0/* %{_builddir}/llvm-project-16.0.1.src/llvm/projects/SPIRV-LLVM-Translator
 mkdir -p llvm/projects/SPIRV-Headers
-cp -r %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/* %{_builddir}/llvm-project-16.0.0.src/llvm/projects/SPIRV-Headers
+cp -r %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/* %{_builddir}/llvm-project-16.0.1.src/llvm/projects/SPIRV-Headers
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -267,7 +267,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1680554947
+export SOURCE_DATE_EPOCH=1680717752
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -383,11 +383,11 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1680554947
+export SOURCE_DATE_EPOCH=1680717752
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
-cp %{_builddir}/SPIRV-LLVM-Translator-%{version}/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6 || :
+cp %{_builddir}/SPIRV-LLVM-Translator-16.0.0/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6 || :
 cp %{_builddir}/llvm-project-%{version}.src/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
 cp %{_builddir}/llvm-project-%{version}.src/bolt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
 cp %{_builddir}/llvm-project-%{version}.src/clang-tools-extra/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f || :
@@ -5051,7 +5051,7 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/cmake/polly/PollyConfig.cmake
 /usr/lib64/cmake/polly/PollyConfigVersion.cmake
 /usr/lib64/cmake/polly/PollyExports-all.cmake
-/usr/lib64/libLLVM-16.0.0.so
+/usr/lib64/libLLVM-16.0.1.so
 /usr/lib64/libLLVM-16.so
 /usr/lib64/libLLVM.so
 /usr/lib64/libLTO.so
@@ -5120,7 +5120,7 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib32/cmake/llvm/UseLibtool.cmake
 /usr/lib32/cmake/llvm/VersionFromVCS.cmake
 /usr/lib32/cmake/llvm/llvm-driver-template.cpp.in
-/usr/lib32/libLLVM-16.0.0.so
+/usr/lib32/libLLVM-16.0.1.so
 /usr/lib32/libLLVM-16.so
 /usr/lib32/libLLVM.so
 /usr/lib32/libLTO.so
@@ -5152,9 +5152,9 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/libRemarks.so.16
 /usr/lib64/libclang-cpp.so.16
 /usr/lib64/libclang.so.16
-/usr/lib64/libclang.so.16.0.0
+/usr/lib64/libclang.so.16.0.1
 /usr/lib64/liblldb.so.16
-/usr/lib64/liblldb.so.16.0.0
+/usr/lib64/liblldb.so.16.0.1
 /usr/lib64/liblldbIntelFeatures.so.16
 /usr/lib64/libomptarget.rtl.amdgpu.nextgen.so.16
 /usr/lib64/libomptarget.rtl.amdgpu.so.16
@@ -5170,7 +5170,7 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib32/libRemarks.so.16
 /usr/lib32/libclang-cpp.so.16
 /usr/lib32/libclang.so.16
-/usr/lib32/libclang.so.16.0.0
+/usr/lib32/libclang.so.16.0.1
 
 %files libexec
 %defattr(-,root,root,-)

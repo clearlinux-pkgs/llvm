@@ -15,8 +15,8 @@ libsodium
 llvm
 llvm11
 llvm12
-llvm13
 llvm14
+llvm15
 mediasdk
 mono
 pypi-pynacl
