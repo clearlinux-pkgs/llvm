@@ -8,7 +8,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 16.0.1
-Release  : 170
+Release  : 171
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.1/llvm-project-16.0.1.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.1/llvm-project-16.0.1.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.243.0.tar.gz
@@ -267,7 +267,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1680717752
+export SOURCE_DATE_EPOCH=1682969902
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -383,7 +383,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1680717752
+export SOURCE_DATE_EPOCH=1682969902
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
@@ -4789,9 +4789,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib32/clang/16/include/xsaveoptintrin.h
 /usr/lib32/clang/16/include/xsavesintrin.h
 /usr/lib32/clang/16/include/xtestintrin.h
-/usr/lib64/LLVMPolly.so
-/usr/lib64/LLVMgold-16.so
-/usr/lib64/LLVMgold.so
 /usr/lib64/clang/16/include/__clang_cuda_builtin_vars.h
 /usr/lib64/clang/16/include/__clang_cuda_cmath.h
 /usr/lib64/clang/16/include/__clang_cuda_complex_builtins.h
@@ -5051,30 +5048,9 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/cmake/polly/PollyConfig.cmake
 /usr/lib64/cmake/polly/PollyConfigVersion.cmake
 /usr/lib64/cmake/polly/PollyExports-all.cmake
-/usr/lib64/libLLVM-16.0.1.so
-/usr/lib64/libLLVM-16.so
-/usr/lib64/libLLVM.so
-/usr/lib64/libLTO.so
-/usr/lib64/libRemarks.so
-/usr/lib64/libarcher.so
-/usr/lib64/libclang-cpp.so
-/usr/lib64/libclang.so
-/usr/lib64/libiomp5.so
-/usr/lib64/liblldb.so
-/usr/lib64/liblldbIntelFeatures.so
-/usr/lib64/libomp.so
-/usr/lib64/libompd.so
-/usr/lib64/libomptarget.rtl.amdgpu.nextgen.so
-/usr/lib64/libomptarget.rtl.amdgpu.so
-/usr/lib64/libomptarget.rtl.cuda.nextgen.so
-/usr/lib64/libomptarget.rtl.cuda.so
-/usr/lib64/libomptarget.rtl.x86_64.nextgen.so
-/usr/lib64/libomptarget.rtl.x86_64.so
-/usr/lib64/libomptarget.so
 
 %files dev32
 %defattr(-,root,root,-)
-/usr/lib32/LLVMgold.so
 /usr/lib32/cmake/clang/AddClang.cmake
 /usr/lib32/cmake/clang/ClangConfig.cmake
 /usr/lib32/cmake/clang/ClangConfigVersion.cmake
@@ -5120,13 +5096,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib32/cmake/llvm/UseLibtool.cmake
 /usr/lib32/cmake/llvm/VersionFromVCS.cmake
 /usr/lib32/cmake/llvm/llvm-driver-template.cpp.in
-/usr/lib32/libLLVM-16.0.1.so
-/usr/lib32/libLLVM-16.so
-/usr/lib32/libLLVM.so
-/usr/lib32/libLTO.so
-/usr/lib32/libRemarks.so
-/usr/lib32/libclang-cpp.so
-/usr/lib32/libclang.so
 /usr/lib32/pkgconfig/32LLVMSPIRVLib.pc
 /usr/lib32/pkgconfig/32SPIRV-Headers.pc
 /usr/lib32/pkgconfig/LLVMSPIRVLib.pc
@@ -5135,6 +5104,9 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 %files lib
 %defattr(-,root,root,-)
 /usr/lib/bfd-plugins/LLVMgold-16.so
+/usr/lib64/LLVMPolly.so
+/usr/lib64/LLVMgold-16.so
+/usr/lib64/LLVMgold.so
 /usr/lib64/clang/16/lib/i386-generic-linux/libclang_rt.asan.so
 /usr/lib64/clang/16/lib/i386-generic-linux/libclang_rt.scudo_standalone.so
 /usr/lib64/clang/16/lib/i386-generic-linux/libclang_rt.ubsan_minimal.so
@@ -5148,27 +5120,55 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/clang/16/lib/x86_64-generic-linux/libclang_rt.tsan.so
 /usr/lib64/clang/16/lib/x86_64-generic-linux/libclang_rt.ubsan_minimal.so
 /usr/lib64/clang/16/lib/x86_64-generic-linux/libclang_rt.ubsan_standalone.so
+/usr/lib64/libLLVM-16.0.1.so
+/usr/lib64/libLLVM-16.so
+/usr/lib64/libLLVM.so
+/usr/lib64/libLTO.so
 /usr/lib64/libLTO.so.16
+/usr/lib64/libRemarks.so
 /usr/lib64/libRemarks.so.16
+/usr/lib64/libarcher.so
+/usr/lib64/libclang-cpp.so
 /usr/lib64/libclang-cpp.so.16
+/usr/lib64/libclang.so
 /usr/lib64/libclang.so.16
 /usr/lib64/libclang.so.16.0.1
+/usr/lib64/libiomp5.so
+/usr/lib64/liblldb.so
 /usr/lib64/liblldb.so.16
 /usr/lib64/liblldb.so.16.0.1
+/usr/lib64/liblldbIntelFeatures.so
 /usr/lib64/liblldbIntelFeatures.so.16
+/usr/lib64/libomp.so
+/usr/lib64/libompd.so
+/usr/lib64/libomptarget.rtl.amdgpu.nextgen.so
 /usr/lib64/libomptarget.rtl.amdgpu.nextgen.so.16
+/usr/lib64/libomptarget.rtl.amdgpu.so
 /usr/lib64/libomptarget.rtl.amdgpu.so.16
+/usr/lib64/libomptarget.rtl.cuda.nextgen.so
 /usr/lib64/libomptarget.rtl.cuda.nextgen.so.16
+/usr/lib64/libomptarget.rtl.cuda.so
 /usr/lib64/libomptarget.rtl.cuda.so.16
+/usr/lib64/libomptarget.rtl.x86_64.nextgen.so
 /usr/lib64/libomptarget.rtl.x86_64.nextgen.so.16
+/usr/lib64/libomptarget.rtl.x86_64.so
 /usr/lib64/libomptarget.rtl.x86_64.so.16
+/usr/lib64/libomptarget.so
 /usr/lib64/libomptarget.so.16
 
 %files lib32
 %defattr(-,root,root,-)
+/usr/lib32/LLVMgold.so
+/usr/lib32/libLLVM-16.0.1.so
+/usr/lib32/libLLVM-16.so
+/usr/lib32/libLLVM.so
+/usr/lib32/libLTO.so
 /usr/lib32/libLTO.so.16
+/usr/lib32/libRemarks.so
 /usr/lib32/libRemarks.so.16
+/usr/lib32/libclang-cpp.so
 /usr/lib32/libclang-cpp.so.16
+/usr/lib32/libclang.so
 /usr/lib32/libclang.so.16
 /usr/lib32/libclang.so.16.0.1
 
