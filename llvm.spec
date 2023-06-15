@@ -8,10 +8,10 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 16.0.1
-Release  : 171
+Release  : 172
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.1/llvm-project-16.0.1.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.1/llvm-project-16.0.1.src.tar.xz
-Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/sdk-1.3.243.0.tar.gz
+Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/sdk-1.3.250.0/SPIRV-Headers-sdk-1.3.250.0.tar.gz
 Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/tags/v16.0.0.tar.gz
 Source3  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.1/llvm-project-16.0.1.src.tar.xz.sig
 Summary  : Google microbenchmark framework
@@ -211,19 +211,19 @@ staticdev32 components for the llvm package.
 cd %{_builddir}
 tar xf %{_sourcedir}/v16.0.0.tar.gz
 cd %{_builddir}
-tar xf %{_sourcedir}/sdk-1.3.243.0.tar.gz
+tar xf %{_sourcedir}/SPIRV-Headers-sdk-1.3.250.0.tar.gz
 cd %{_builddir}/llvm-project-16.0.1.src
 mkdir -p llvm/projects/SPIRV-LLVM-Translator
 cp -r %{_builddir}/SPIRV-LLVM-Translator-16.0.0/* %{_builddir}/llvm-project-16.0.1.src/llvm/projects/SPIRV-LLVM-Translator
 mkdir -p llvm/projects/SPIRV-Headers
-cp -r %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/* %{_builddir}/llvm-project-16.0.1.src/llvm/projects/SPIRV-Headers
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
+cp -r %{_builddir}/SPIRV-Headers-sdk-1.3.250.0/* %{_builddir}/llvm-project-16.0.1.src/llvm/projects/SPIRV-Headers
+%patch -P 1 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
+%patch -P 4 -p1
+%patch -P 5 -p1
+%patch -P 6 -p1
+%patch -P 7 -p1
 
 %build
 ## build_prepend_once content
@@ -267,7 +267,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1682969902
+export SOURCE_DATE_EPOCH=1686854613
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -383,10 +383,10 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1682969902
+export SOURCE_DATE_EPOCH=1686854613
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
-cp %{_builddir}/SPIRV-Headers-sdk-1.3.243.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
+cp %{_builddir}/SPIRV-Headers-sdk-1.3.250.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
 cp %{_builddir}/SPIRV-LLVM-Translator-16.0.0/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6 || :
 cp %{_builddir}/llvm-project-%{version}.src/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
 cp %{_builddir}/llvm-project-%{version}.src/bolt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
@@ -949,7 +949,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/share/clang/clang-tidy-diff.py
 /usr/share/clang/index.js
 /usr/share/clang/run-find-all-symbols.py
-/usr/share/cmake/*
 /usr/share/gdb/python/ompd/__init__.py
 /usr/share/gdb/python/ompd/frame_filter.py
 /usr/share/gdb/python/ompd/ompd.py
@@ -4536,77 +4535,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/include/polly/isl/vec.h
 /usr/include/polly/isl/version.h
 /usr/include/polly/isl/vertices.h
-/usr/include/spirv/1.0/GLSL.std.450.h
-/usr/include/spirv/1.0/OpenCL.std.h
-/usr/include/spirv/1.0/extinst.glsl.std.450.grammar.json
-/usr/include/spirv/1.0/extinst.opencl.std.100.grammar.json
-/usr/include/spirv/1.0/spirv.core.grammar.json
-/usr/include/spirv/1.0/spirv.cs
-/usr/include/spirv/1.0/spirv.h
-/usr/include/spirv/1.0/spirv.hpp
-/usr/include/spirv/1.0/spirv.hpp11
-/usr/include/spirv/1.0/spirv.json
-/usr/include/spirv/1.0/spirv.lua
-/usr/include/spirv/1.0/spirv.py
-/usr/include/spirv/1.1/GLSL.std.450.h
-/usr/include/spirv/1.1/OpenCL.std.h
-/usr/include/spirv/1.1/extinst.glsl.std.450.grammar.json
-/usr/include/spirv/1.1/extinst.opencl.std.100.grammar.json
-/usr/include/spirv/1.1/spirv.core.grammar.json
-/usr/include/spirv/1.1/spirv.cs
-/usr/include/spirv/1.1/spirv.h
-/usr/include/spirv/1.1/spirv.hpp
-/usr/include/spirv/1.1/spirv.hpp11
-/usr/include/spirv/1.1/spirv.json
-/usr/include/spirv/1.1/spirv.lua
-/usr/include/spirv/1.1/spirv.py
-/usr/include/spirv/1.2/GLSL.std.450.h
-/usr/include/spirv/1.2/OpenCL.std.h
-/usr/include/spirv/1.2/extinst.glsl.std.450.grammar.json
-/usr/include/spirv/1.2/extinst.opencl.std.100.grammar.json
-/usr/include/spirv/1.2/spirv.core.grammar.json
-/usr/include/spirv/1.2/spirv.cs
-/usr/include/spirv/1.2/spirv.h
-/usr/include/spirv/1.2/spirv.hpp
-/usr/include/spirv/1.2/spirv.hpp11
-/usr/include/spirv/1.2/spirv.json
-/usr/include/spirv/1.2/spirv.lua
-/usr/include/spirv/1.2/spirv.py
-/usr/include/spirv/spir-v.xml
-/usr/include/spirv/unified1/AMD_gcn_shader.h
-/usr/include/spirv/unified1/AMD_shader_ballot.h
-/usr/include/spirv/unified1/AMD_shader_explicit_vertex_parameter.h
-/usr/include/spirv/unified1/AMD_shader_trinary_minmax.h
-/usr/include/spirv/unified1/DebugInfo.h
-/usr/include/spirv/unified1/GLSL.std.450.h
-/usr/include/spirv/unified1/NonSemanticClspvReflection.h
-/usr/include/spirv/unified1/NonSemanticDebugBreak.h
-/usr/include/spirv/unified1/NonSemanticDebugPrintf.h
-/usr/include/spirv/unified1/NonSemanticShaderDebugInfo100.h
-/usr/include/spirv/unified1/OpenCL.std.h
-/usr/include/spirv/unified1/OpenCLDebugInfo100.h
-/usr/include/spirv/unified1/extinst.debuginfo.grammar.json
-/usr/include/spirv/unified1/extinst.glsl.std.450.grammar.json
-/usr/include/spirv/unified1/extinst.nonsemantic.clspvreflection.grammar.json
-/usr/include/spirv/unified1/extinst.nonsemantic.debugbreak.grammar.json
-/usr/include/spirv/unified1/extinst.nonsemantic.debugprintf.grammar.json
-/usr/include/spirv/unified1/extinst.nonsemantic.shader.debuginfo.100.grammar.json
-/usr/include/spirv/unified1/extinst.opencl.debuginfo.100.grammar.json
-/usr/include/spirv/unified1/extinst.opencl.std.100.grammar.json
-/usr/include/spirv/unified1/extinst.spv-amd-gcn-shader.grammar.json
-/usr/include/spirv/unified1/extinst.spv-amd-shader-ballot.grammar.json
-/usr/include/spirv/unified1/extinst.spv-amd-shader-explicit-vertex-parameter.grammar.json
-/usr/include/spirv/unified1/extinst.spv-amd-shader-trinary-minmax.grammar.json
-/usr/include/spirv/unified1/spirv.bf
-/usr/include/spirv/unified1/spirv.core.grammar.json
-/usr/include/spirv/unified1/spirv.cs
-/usr/include/spirv/unified1/spirv.h
-/usr/include/spirv/unified1/spirv.hpp
-/usr/include/spirv/unified1/spirv.hpp11
-/usr/include/spirv/unified1/spirv.json
-/usr/include/spirv/unified1/spirv.lua
-/usr/include/spirv/unified1/spirv.py
-/usr/include/spirv/unified1/spv.d
 /usr/lib32/clang/16/include/__clang_cuda_builtin_vars.h
 /usr/lib32/clang/16/include/__clang_cuda_cmath.h
 /usr/lib32/clang/16/include/__clang_cuda_complex_builtins.h
@@ -5097,9 +5025,7 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib32/cmake/llvm/VersionFromVCS.cmake
 /usr/lib32/cmake/llvm/llvm-driver-template.cpp.in
 /usr/lib32/pkgconfig/32LLVMSPIRVLib.pc
-/usr/lib32/pkgconfig/32SPIRV-Headers.pc
 /usr/lib32/pkgconfig/LLVMSPIRVLib.pc
-/usr/lib32/pkgconfig/SPIRV-Headers.pc
 
 %files lib
 %defattr(-,root,root,-)
