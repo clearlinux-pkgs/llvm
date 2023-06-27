@@ -5,11 +5,6 @@
 /usr/lib64/cmake/llvm/LLVMStaticExports.cmake
 /usr/lib64/cmake/llvm/LLVMStaticExports-relwithdebinfo.cmake
 
-# Static library, so the .pc file lib points to nothing
-# The headers are in /usr/include so cflags not needed either
-/usr/lib64/pkgconfig/LLVMSPIRVLib.pc
-/usr/lib64/pkgconfig/SPIRV-Headers.pc
-
 # weird invalid symlink
 /usr/lib64/pkgconfig/'32*.pc'
 
