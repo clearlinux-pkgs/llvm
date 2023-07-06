@@ -1,0 +1,1 @@
+llvm-staticdev = %{version}-%{release}
