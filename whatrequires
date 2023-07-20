@@ -13,8 +13,6 @@ libclc
 libcxx
 libsodium
 llvm
-llvm11
-llvm12
 llvm14
 llvm15
 mediasdk
