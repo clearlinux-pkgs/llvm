@@ -8,7 +8,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 16.0.6
-Release  : 177
+Release  : 178
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.6/llvm-project-16.0.6.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.6/llvm-project-16.0.6.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/sdk-1.3.250.0/SPIRV-Headers-sdk-1.3.250.0.tar.gz
@@ -269,7 +269,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1689817844
+export SOURCE_DATE_EPOCH=1692754532
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -385,7 +385,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1689817844
+export SOURCE_DATE_EPOCH=1692754532
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.250.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
@@ -454,6 +454,10 @@ rm -f %{buildroot}*/usr/lib64/libclang.so.13
 rm -f %{buildroot}*/usr/lib32/libclang.so.13
 rm -f %{buildroot}*/usr/lib64/clang/14.0.4/lib/linux/*-i386.so
 ## install_append content
+# Install the FileCheck tool
+pushd llvm/clr-build
+install -m755 ./bin/FileCheck -t %{buildroot}/usr/bin/
+popd
 # Rename the tools to have a versioned suffix and symlink back
 pushd %{buildroot}/usr/bin
 VERSION=%{version}
@@ -670,6 +674,8 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 
 %files bin
 %defattr(-,root,root,-)
+/usr/bin/FileCheck
+/usr/bin/FileCheck-16
 /usr/bin/amdgpu-arch
 /usr/bin/amdgpu-arch-16
 /usr/bin/analyze-build

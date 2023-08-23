@@ -1,4 +1,8 @@
 # -*- sh -*-
+# Install the FileCheck tool
+pushd llvm/clr-build
+install -m755 ./bin/FileCheck -t %{buildroot}/usr/bin/
+popd
 # Rename the tools to have a versioned suffix and symlink back
 pushd %{buildroot}/usr/bin
 VERSION=%{version}
