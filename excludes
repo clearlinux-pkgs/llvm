@@ -16,3 +16,7 @@
 /usr/lib32/libclang.so.13
 # delete bunch of 32 ibt gunk
 /usr/lib64/clang/14.0.4/lib/linux/*-i386.so
+
+# Unsure what this does but it segfaults, maybe 17 will be happier
+/usr/bin/llvm-omp-kernel-replay
+/usr/bin/llvm-omp-kernel-replay-16
