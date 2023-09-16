@@ -8,7 +8,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 16.0.6
-Release  : 179
+Release  : 180
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.6/llvm-project-16.0.6.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.6/llvm-project-16.0.6.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/sdk-1.3.250.0/SPIRV-Headers-sdk-1.3.250.0.tar.gz
@@ -269,7 +269,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1694112728
+export SOURCE_DATE_EPOCH=1694823103
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -309,7 +309,7 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 -DLLVM_REQUIRES_RTTI:BOOL=ON \
 -DLLVM_TABLEGEN=$LLVM_TABLEGEN \
 -DCLANG_TABLEGEN=$CLANG_TABLEGEN \
--DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;openmp;polly" \
+-DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;polly" \
 -DLLVM_LIBDIR_SUFFIX=64 \
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
@@ -366,7 +366,7 @@ export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 -DLLVM_REQUIRES_RTTI:BOOL=ON \
 -DLLVM_TABLEGEN=$LLVM_TABLEGEN \
 -DCLANG_TABLEGEN=$CLANG_TABLEGEN \
--DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;openmp;polly" \
+-DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;polly" \
 -DLLVM_LIBDIR_SUFFIX=64 \
 -DLLVM_BINUTILS_INCDIR=/usr/include \
 -DLLVM_HOST_TRIPLE="x86_64-generic-linux" \
@@ -385,7 +385,7 @@ popd
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1694112728
+export SOURCE_DATE_EPOCH=1694823103
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-sdk-1.3.250.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/9a84200f47e09abfbde1a6b25028460451b23d03 || :
@@ -453,8 +453,6 @@ rm -f %{buildroot}*/usr/lib/python3.11/site-packages/six.py
 rm -f %{buildroot}*/usr/lib64/libclang.so.13
 rm -f %{buildroot}*/usr/lib32/libclang.so.13
 rm -f %{buildroot}*/usr/lib64/clang/14.0.4/lib/linux/*-i386.so
-rm -f %{buildroot}*/usr/bin/llvm-omp-kernel-replay
-rm -f %{buildroot}*/usr/bin/llvm-omp-kernel-replay-16
 ## install_append content
 # Install the FileCheck tool
 pushd llvm/clr-build
@@ -624,44 +622,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/libear/__init__.py
 /usr/lib64/libear/config.h.in
 /usr/lib64/libear/ear.c
-/usr/lib64/libomptarget-amdgpu-gfx1010.bc
-/usr/lib64/libomptarget-amdgpu-gfx1030.bc
-/usr/lib64/libomptarget-amdgpu-gfx1031.bc
-/usr/lib64/libomptarget-amdgpu-gfx1032.bc
-/usr/lib64/libomptarget-amdgpu-gfx1033.bc
-/usr/lib64/libomptarget-amdgpu-gfx1034.bc
-/usr/lib64/libomptarget-amdgpu-gfx1035.bc
-/usr/lib64/libomptarget-amdgpu-gfx1036.bc
-/usr/lib64/libomptarget-amdgpu-gfx1100.bc
-/usr/lib64/libomptarget-amdgpu-gfx1101.bc
-/usr/lib64/libomptarget-amdgpu-gfx1102.bc
-/usr/lib64/libomptarget-amdgpu-gfx1103.bc
-/usr/lib64/libomptarget-amdgpu-gfx700.bc
-/usr/lib64/libomptarget-amdgpu-gfx701.bc
-/usr/lib64/libomptarget-amdgpu-gfx801.bc
-/usr/lib64/libomptarget-amdgpu-gfx803.bc
-/usr/lib64/libomptarget-amdgpu-gfx900.bc
-/usr/lib64/libomptarget-amdgpu-gfx902.bc
-/usr/lib64/libomptarget-amdgpu-gfx906.bc
-/usr/lib64/libomptarget-amdgpu-gfx908.bc
-/usr/lib64/libomptarget-amdgpu-gfx90a.bc
-/usr/lib64/libomptarget-amdgpu-gfx90c.bc
-/usr/lib64/libomptarget-amdgpu-gfx940.bc
-/usr/lib64/libomptarget-nvptx-sm_35.bc
-/usr/lib64/libomptarget-nvptx-sm_37.bc
-/usr/lib64/libomptarget-nvptx-sm_50.bc
-/usr/lib64/libomptarget-nvptx-sm_52.bc
-/usr/lib64/libomptarget-nvptx-sm_53.bc
-/usr/lib64/libomptarget-nvptx-sm_60.bc
-/usr/lib64/libomptarget-nvptx-sm_61.bc
-/usr/lib64/libomptarget-nvptx-sm_62.bc
-/usr/lib64/libomptarget-nvptx-sm_70.bc
-/usr/lib64/libomptarget-nvptx-sm_72.bc
-/usr/lib64/libomptarget-nvptx-sm_75.bc
-/usr/lib64/libomptarget-nvptx-sm_80.bc
-/usr/lib64/libomptarget-nvptx-sm_86.bc
-/usr/lib64/libomptarget-nvptx-sm_89.bc
-/usr/lib64/libomptarget-nvptx-sm_90.bc
 /usr/lib64/libscanbuild/__init__.py
 /usr/lib64/libscanbuild/analyze.py
 /usr/lib64/libscanbuild/arguments.py
@@ -858,8 +818,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/bin/llvm-objcopy-16
 /usr/bin/llvm-objdump
 /usr/bin/llvm-objdump-16
-/usr/bin/llvm-omp-device-info
-/usr/bin/llvm-omp-device-info-16
 /usr/bin/llvm-opt-report
 /usr/bin/llvm-opt-report-16
 /usr/bin/llvm-otool
@@ -955,13 +913,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/share/clang/clang-tidy-diff.py
 /usr/share/clang/index.js
 /usr/share/clang/run-find-all-symbols.py
-/usr/share/gdb/python/ompd/__init__.py
-/usr/share/gdb/python/ompd/frame_filter.py
-/usr/share/gdb/python/ompd/ompd.py
-/usr/share/gdb/python/ompd/ompdModule.so
-/usr/share/gdb/python/ompd/ompd_address_space.py
-/usr/share/gdb/python/ompd/ompd_callbacks.py
-/usr/share/gdb/python/ompd/ompd_handles.py
 /usr/share/opt-viewer/opt-diff.py
 /usr/share/opt-viewer/opt-stats.py
 /usr/share/opt-viewer/opt-viewer.py
@@ -4837,10 +4788,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/clang/16/include/msa.h
 /usr/lib64/clang/16/include/mwaitxintrin.h
 /usr/lib64/clang/16/include/nmmintrin.h
-/usr/lib64/clang/16/include/omp-tools.h
-/usr/lib64/clang/16/include/omp.h
-/usr/lib64/clang/16/include/ompt-multiplex.h
-/usr/lib64/clang/16/include/ompt.h
 /usr/lib64/clang/16/include/opencl-c-base.h
 /usr/lib64/clang/16/include/opencl-c.h
 /usr/lib64/clang/16/include/openmp_wrappers/__clang_openmp_device_functions.h
@@ -4978,7 +4925,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/cmake/llvm/UseLibtool.cmake
 /usr/lib64/cmake/llvm/VersionFromVCS.cmake
 /usr/lib64/cmake/llvm/llvm-driver-template.cpp.in
-/usr/lib64/cmake/openmp/FindOpenMPTarget.cmake
 /usr/lib64/cmake/polly/PollyConfig.cmake
 /usr/lib64/cmake/polly/PollyConfigVersion.cmake
 /usr/lib64/cmake/polly/PollyExports-all.cmake
@@ -5060,34 +5006,16 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/libLTO.so.16
 /usr/lib64/libRemarks.so
 /usr/lib64/libRemarks.so.16
-/usr/lib64/libarcher.so
 /usr/lib64/libclang-cpp.so
 /usr/lib64/libclang-cpp.so.16
 /usr/lib64/libclang.so
 /usr/lib64/libclang.so.16
 /usr/lib64/libclang.so.16.0.6
-/usr/lib64/libiomp5.so
 /usr/lib64/liblldb.so
 /usr/lib64/liblldb.so.16
 /usr/lib64/liblldb.so.16.0.6
 /usr/lib64/liblldbIntelFeatures.so
 /usr/lib64/liblldbIntelFeatures.so.16
-/usr/lib64/libomp.so
-/usr/lib64/libompd.so
-/usr/lib64/libomptarget.rtl.amdgpu.nextgen.so
-/usr/lib64/libomptarget.rtl.amdgpu.nextgen.so.16
-/usr/lib64/libomptarget.rtl.amdgpu.so
-/usr/lib64/libomptarget.rtl.amdgpu.so.16
-/usr/lib64/libomptarget.rtl.cuda.nextgen.so
-/usr/lib64/libomptarget.rtl.cuda.nextgen.so.16
-/usr/lib64/libomptarget.rtl.cuda.so
-/usr/lib64/libomptarget.rtl.cuda.so.16
-/usr/lib64/libomptarget.rtl.x86_64.nextgen.so
-/usr/lib64/libomptarget.rtl.x86_64.nextgen.so.16
-/usr/lib64/libomptarget.rtl.x86_64.so
-/usr/lib64/libomptarget.rtl.x86_64.so.16
-/usr/lib64/libomptarget.so
-/usr/lib64/libomptarget.so.16
 
 %files lib32
 %defattr(-,root,root,-)
@@ -5344,7 +5272,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/libLLVMipo.a
 /usr/lib64/libPolly.a
 /usr/lib64/libPollyISL.a
-/usr/lib64/libarcher_static.a
 /usr/lib64/libclangAPINotes.a
 /usr/lib64/libclangARCMigrate.a
 /usr/lib64/libclangAST.a
@@ -5439,7 +5366,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/liblldMachO.a
 /usr/lib64/liblldMinGW.a
 /usr/lib64/liblldWasm.a
-/usr/lib64/libomptarget.devicertl.a
 
 %files staticdev32
 %defattr(-,root,root,-)

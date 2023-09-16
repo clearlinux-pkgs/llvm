@@ -35,7 +35,7 @@
 -DCLANG_TABLEGEN=$CLANG_TABLEGEN
 
 # Distro choices
--DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;openmp;polly"
+-DLLVM_ENABLE_PROJECTS="lld;lldb;clang;clang-tools-extra;compiler-rt;polly"
 -DLLVM_LIBDIR_SUFFIX=64
 -DLLVM_BINUTILS_INCDIR=/usr/include
 -DLLVM_HOST_TRIPLE="x86_64-generic-linux"
