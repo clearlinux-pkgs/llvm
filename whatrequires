@@ -1,5 +1,4 @@
 # This file contains recursive sources that require this package
-blender
 cereal
 compat-protobuf-soname29
 darktable
@@ -18,7 +17,6 @@ llvm15
 mediasdk
 mono
 pypi-pynacl
-pyside2-setup
 pytorch
 rustc
 suricata
