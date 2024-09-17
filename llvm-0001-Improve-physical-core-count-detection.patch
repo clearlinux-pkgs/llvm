@@ -1,4 +1,4 @@
-From b9580f62225f5ad2e3d0ca5b3ff1788591479325 Mon Sep 17 00:00:00 2001
+From ef53971ae9adc4f5569f9e90edefd5cf2c103097 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
 Date: Wed, 29 Mar 2023 15:25:29 -0700
 Subject: [PATCH 1/7] Improve physical core count detection
@@ -12,7 +12,7 @@ Signed-off-by: William Douglas <william.douglas@intel.com>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/llvm/lib/Support/Unix/Threading.inc b/llvm/lib/Support/Unix/Threading.inc
-index 819748db4..bc219926c 100644
+index 55e7dcfa4..3b51b8381 100644
 --- a/llvm/lib/Support/Unix/Threading.inc
 +++ b/llvm/lib/Support/Unix/Threading.inc
 @@ -340,9 +340,7 @@ static int computeHostNumPhysicalCores() {
@@ -27,5 +27,5 @@ index 819748db4..bc219926c 100644
    SmallVector<StringRef, 8> strs;
    (*Text)->getBuffer().split(strs, "\n", /*MaxSplit=*/-1,
 -- 
-2.42.1
+2.46.0
 

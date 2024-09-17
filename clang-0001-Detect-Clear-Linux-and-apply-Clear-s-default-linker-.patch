@@ -1,6 +1,6 @@
-From 724d5838baea04d201a401d2626c0ca74a75356a Mon Sep 17 00:00:00 2001
+From 69b4c2076382b7c7e12bc6573d21b2401567f5c4 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
-Date: Wed, 15 Nov 2023 11:27:25 -0800
+Date: Tue, 17 Sep 2024 09:49:49 -0700
 Subject: [PATCH 3/7] Apply Clear's default linker options
 
 Add detection for Clear Linux and apply correct linker options when
@@ -15,7 +15,7 @@ Signed-off-by: William Douglas <william.douglas@intel.com>
  4 files changed, 35 insertions(+), 2 deletions(-)
 
 diff --git a/clang/include/clang/Driver/Distro.h b/clang/include/clang/Driver/Distro.h
-index 8291f6575..8a5c30d74 100644
+index a8de94163..3a21cc970 100644
 --- a/clang/include/clang/Driver/Distro.h
 +++ b/clang/include/clang/Driver/Distro.h
 @@ -30,6 +30,7 @@ public:
@@ -26,9 +26,9 @@ index 8291f6575..8a5c30d74 100644
      DebianLenny,
      DebianSqueeze,
      DebianWheezy,
-@@ -131,6 +132,9 @@ public:
+@@ -132,6 +133,9 @@ public:
    bool IsUbuntu() const {
-     return DistroVal >= UbuntuHardy && DistroVal <= UbuntuMantic;
+     return DistroVal >= UbuntuHardy && DistroVal <= UbuntuNoble;
    }
 +  bool IsClearLinux() const {
 +    return DistroVal == ClearLinux;
@@ -37,10 +37,10 @@ index 8291f6575..8a5c30d74 100644
    bool IsAlpineLinux() const { return DistroVal == AlpineLinux; }
  
 diff --git a/clang/lib/Driver/Distro.cpp b/clang/lib/Driver/Distro.cpp
-index 6e0087565..84f8f659e 100644
+index a7e7f169d..15821ee6b 100644
 --- a/clang/lib/Driver/Distro.cpp
 +++ b/clang/lib/Driver/Distro.cpp
-@@ -203,6 +203,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
+@@ -204,6 +204,19 @@ static Distro::DistroType DetectDistro(llvm::vfs::FileSystem &VFS) {
    if (VFS.exists("/etc/gentoo-release"))
      return Distro::Gentoo;
  
@@ -61,10 +61,10 @@ index 6e0087565..84f8f659e 100644
  }
  
 diff --git a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains/Linux.cpp
-index 1ba222bf8..6fc238721 100644
+index 4300a2bdf..e4634095c 100644
 --- a/clang/lib/Driver/ToolChains/Linux.cpp
 +++ b/clang/lib/Driver/ToolChains/Linux.cpp
-@@ -222,13 +222,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
+@@ -226,13 +226,13 @@ Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
  
    Distro Distro(D.getVFS(), Triple);
  
@@ -108,5 +108,5 @@ index 43efc0dd8..6eedbc55b 100644
  
    class CountingFileSystem : public llvm::vfs::ProxyFileSystem {
 -- 
-2.42.1
+2.46.0
 

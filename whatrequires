@@ -1,4 +1,5 @@
 # This file contains recursive sources that require this package
+LyX
 SDL2_image
 blender
 cereal
@@ -7,7 +8,8 @@ darktable
 embree
 gnuplot
 graphviz
-gspell
+grisbi
+grpc
 intel-ipsec-mb
 itstool
 libclc
