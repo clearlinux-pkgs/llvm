@@ -41,4 +41,4 @@ ln -s ../../lib64/LLVMgold-$VERSION.so ../lib/bfd-plugins
 popd
 
 # delete some unused 32 bit stuff
-rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
+rm -rf %{buildroot}/usr/lib64/clang/*/lib/i386*

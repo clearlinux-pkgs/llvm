@@ -10,7 +10,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 19.1.0
-Release  : 191
+Release  : 192
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.0/llvm-project-19.1.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.0/llvm-project-19.1.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-1.3.290.0.tar.gz
@@ -280,7 +280,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1727305048
+export SOURCE_DATE_EPOCH=1727316588
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -427,7 +427,7 @@ FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS"
 FCFLAGS="$CLEAR_INTERMEDIATE_FCFLAGS"
 ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
 LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
-export SOURCE_DATE_EPOCH=1727305048
+export SOURCE_DATE_EPOCH=1727316588
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-vulkan-sdk-1.3.290.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/438253baaf6fa525f43a0afff2da8be3d7442b75 || :
@@ -540,7 +540,7 @@ ln -s ../../lib64/LLVMgold-$VERSION.so ../lib/bfd-plugins
 popd
 
 # delete some unused 32 bit stuff
-rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
+rm -rf %{buildroot}/usr/lib64/clang/*/lib/i386*
 ## install_append end
 
 %files
@@ -579,29 +579,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/clang/19/include/openmp_wrappers/complex
 /usr/lib64/clang/19/include/openmp_wrappers/new
 /usr/lib64/clang/19/include/profile/InstrProfData.inc
-/usr/lib64/clang/19/lib/i386-generic-linux/clang_rt.crtbegin.o
-/usr/lib64/clang/19/lib/i386-generic-linux/clang_rt.crtend.o
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.asan-preinit.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.asan.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.asan_cxx.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.asan_static.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.builtins.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.cfi.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.cfi_diag.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.fuzzer.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.fuzzer_interceptors.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.fuzzer_no_main.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.gwp_asan.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.lsan.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.profile.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.safestack.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.scudo_standalone.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.scudo_standalone_cxx.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.stats.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.stats_client.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.ubsan_minimal.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.ubsan_standalone.a
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.ubsan_standalone_cxx.a
 /usr/lib64/clang/19/lib/x86_64-generic-linux/clang_rt.crtbegin.o
 /usr/lib64/clang/19/lib/x86_64-generic-linux/clang_rt.crtend.o
 /usr/lib64/clang/19/lib/x86_64-generic-linux/libclang_rt.asan-preinit.a
@@ -5451,10 +5428,6 @@ rm -rf %{buildroot}/usr/lib64/clang/*/lib/linux/*-i386*
 /usr/lib64/LLVMPolly.so
 /usr/lib64/LLVMgold-19.so
 /usr/lib64/LLVMgold.so
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.asan.so
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.scudo_standalone.so
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.ubsan_minimal.so
-/usr/lib64/clang/19/lib/i386-generic-linux/libclang_rt.ubsan_standalone.so
 /usr/lib64/clang/19/lib/x86_64-generic-linux/libclang_rt.asan.so
 /usr/lib64/clang/19/lib/x86_64-generic-linux/libclang_rt.dyndd.so
 /usr/lib64/clang/19/lib/x86_64-generic-linux/libclang_rt.hwasan.so

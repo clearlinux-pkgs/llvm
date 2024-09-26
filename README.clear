@@ -4,4 +4,4 @@
 2) build against itself with updated version
 3) build new package of previous version with updated version
 4) build bcc with updated version
-5) build mesa with udpated version
+5) build mesa with udpated version (disable 32bit support then re-enable)
