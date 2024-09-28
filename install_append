@@ -42,3 +42,8 @@ popd
 
 # delete some unused 32 bit stuff
 rm -rf %{buildroot}/usr/lib64/clang/*/lib/i386*
+
+# migrate libear and libscanbuild python bits to the correct locations
+site_pkgs=$(python -c 'import site; print(site.getsitepackages()[0])')
+mkdir -p %{buildroot}/"${site_pkgs}"
+mv %{buildroot}/usr/lib/{libear,libscanbuild} %{buildroot}/"${site_pkgs}"/
