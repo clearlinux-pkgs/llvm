@@ -9,13 +9,13 @@
 #
 %define keepstatic 1
 Name     : llvm
-Version  : 19.1.0
-Release  : 193
-URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.0/llvm-project-19.1.0.src.tar.xz
-Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.0/llvm-project-19.1.0.src.tar.xz
+Version  : 19.1.1
+Release  : 194
+URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.1/llvm-project-19.1.1.src.tar.xz
+Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.1/llvm-project-19.1.1.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-1.3.290.0.tar.gz
 Source2  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/refs/tags/v19.1.0.tar.gz
-Source3  : https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.0/llvm-project-19.1.0.src.tar.xz.sig
+Source3  : https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.1/llvm-project-19.1.1.src.tar.xz.sig
 Source4  : 44F2485E45D59042.pkey
 Summary  : Library requirements of the OpenCL C programming language
 Group    : Development/Tools
@@ -217,16 +217,16 @@ chmod 700 .gnupg
 gpg --homedir .gnupg --import %{SOURCE4}
 gpg --homedir .gnupg --status-fd 1 --verify %{SOURCE3} %{SOURCE0} > gpg.status
 grep -E '^\[GNUPG:\] (GOODSIG|EXPKEYSIG) 44F2485E45D59042' gpg.status
-%setup -q -n llvm-project-19.1.0.src
+%setup -q -n llvm-project-19.1.1.src
 cd %{_builddir}
 tar xf %{_sourcedir}/v19.1.0.tar.gz
 cd %{_builddir}
 tar xf %{_sourcedir}/vulkan-sdk-1.3.290.0.tar.gz
-cd %{_builddir}/llvm-project-19.1.0.src
+cd %{_builddir}/llvm-project-19.1.1.src
 mkdir -p llvm/projects/SPIRV-LLVM-Translator
-cp -r %{_builddir}/SPIRV-LLVM-Translator-19.1.0/* %{_builddir}/llvm-project-19.1.0.src/llvm/projects/SPIRV-LLVM-Translator
+cp -r %{_builddir}/SPIRV-LLVM-Translator-19.1.0/* %{_builddir}/llvm-project-19.1.1.src/llvm/projects/SPIRV-LLVM-Translator
 mkdir -p llvm/projects/SPIRV-Headers
-cp -r %{_builddir}/SPIRV-Headers-vulkan-sdk-1.3.290.0/* %{_builddir}/llvm-project-19.1.0.src/llvm/projects/SPIRV-Headers
+cp -r %{_builddir}/SPIRV-Headers-vulkan-sdk-1.3.290.0/* %{_builddir}/llvm-project-19.1.1.src/llvm/projects/SPIRV-Headers
 %patch -P 1 -p1
 %patch -P 2 -p1
 %patch -P 3 -p1
@@ -235,7 +235,7 @@ cp -r %{_builddir}/SPIRV-Headers-vulkan-sdk-1.3.290.0/* %{_builddir}/llvm-projec
 %patch -P 6 -p1
 %patch -P 7 -p1
 pushd ..
-cp -a llvm-project-19.1.0.src build32
+cp -a llvm-project-19.1.1.src build32
 popd
 
 %build
@@ -280,7 +280,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1727484934
+export SOURCE_DATE_EPOCH=1728544713
 unset LD_AS_NEEDED
 pushd llvm
 mkdir -p clr-build
@@ -427,11 +427,11 @@ FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS"
 FCFLAGS="$CLEAR_INTERMEDIATE_FCFLAGS"
 ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
 LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
-export SOURCE_DATE_EPOCH=1727484934
+export SOURCE_DATE_EPOCH=1728544713
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm
 cp %{_builddir}/SPIRV-Headers-vulkan-sdk-1.3.290.0/LICENSE %{buildroot}/usr/share/package-licenses/llvm/438253baaf6fa525f43a0afff2da8be3d7442b75 || :
-cp %{_builddir}/SPIRV-LLVM-Translator-%{version}/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6 || :
+cp %{_builddir}/SPIRV-LLVM-Translator-19.1.0/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/8f178caf2a2d6e6c711a30da69077572df356cf6 || :
 cp %{_builddir}/llvm-project-%{version}.src/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
 cp %{_builddir}/llvm-project-%{version}.src/bolt/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/af07f365643f841c69797e9059b66f0bd847f1cd || :
 cp %{_builddir}/llvm-project-%{version}.src/clang-tools-extra/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm/a1691103171dc1d21cfa85f1d4809a16b9f1367f || :
@@ -5440,10 +5440,10 @@ mv %{buildroot}/usr/lib/{libear,libscanbuild} %{buildroot}/"${site_pkgs}"/
 /usr/lib64/libclang-cpp.so.19.1
 /usr/lib64/libclang.so
 /usr/lib64/libclang.so.19.1
-/usr/lib64/libclang.so.19.1.0
+/usr/lib64/libclang.so.19.1.1
 /usr/lib64/liblldb.so
 /usr/lib64/liblldb.so.19.1
-/usr/lib64/liblldb.so.19.1.0
+/usr/lib64/liblldb.so.19.1.1
 /usr/lib64/liblldbIntelFeatures.so
 /usr/lib64/liblldbIntelFeatures.so.19.1
 /usr/lib64/x86_64-generic-linux/libarcher.so
@@ -5466,7 +5466,7 @@ mv %{buildroot}/usr/lib/{libear,libscanbuild} %{buildroot}/"${site_pkgs}"/
 /usr/lib32/libclang-cpp.so.19.1
 /usr/lib32/libclang.so
 /usr/lib32/libclang.so.19.1
-/usr/lib32/libclang.so.19.1.0
+/usr/lib32/libclang.so.19.1.1
 
 %files libexec
 %defattr(-,root,root,-)

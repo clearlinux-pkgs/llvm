@@ -3,6 +3,7 @@ LyX
 SDL2_image
 blender
 cereal
+compat-grpc-soname66
 compat-protobuf-soname29
 darktable
 embree
