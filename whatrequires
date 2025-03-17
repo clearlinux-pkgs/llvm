@@ -7,6 +7,7 @@ compat-grpc-soname66
 compat-protobuf-soname29
 darktable
 embree
+gettext
 gnuplot
 graphviz
 grisbi
@@ -26,9 +27,9 @@ mediasdk
 mono
 pypi-pynacl
 pytorch
+redumper
 rustc
 suricata
 syncthing
 systemd
 v4l-utils
-vlc

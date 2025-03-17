@@ -1,4 +1,4 @@
-From 269c3c3ed2d1667ac0674e4483018a84a392a2ef Mon Sep 17 00:00:00 2001
+From 12b6210f4cf5505863ff7f0f7589a2025271f3d0 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
 Date: Thu, 3 Nov 2022 20:39:35 +0000
 Subject: [PATCH 7/7] Add missing header for linux
@@ -8,7 +8,7 @@ Subject: [PATCH 7/7] Add missing header for linux
  1 file changed, 1 insertion(+)
 
 diff --git a/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp b/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
-index dbf931cb4..9ee51f6dd 100644
+index 646bd47fa..d3f5bc026 100644
 --- a/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
 +++ b/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
 @@ -74,6 +74,7 @@
@@ -20,5 +20,5 @@ index dbf931cb4..9ee51f6dd 100644
  #include <linux/fs.h>
  #endif
 -- 
-2.46.0
+2.47.1
 

@@ -1,4 +1,4 @@
-From 6e7c5c86b39728af34addc30aaabcb42ad93d6f6 Mon Sep 17 00:00:00 2001
+From a91e3c9d73b6e2cb31ac165790c8a254d2773d32 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
 Date: Wed, 3 Aug 2022 22:26:42 +0000
 Subject: [PATCH 6/7] Reduce mixing and matching sys and linux
@@ -12,7 +12,7 @@ Signed-off-by: William Douglas <william.douglas@intel.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp b/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
-index 6d61d276d..dbf931cb4 100644
+index a5311d266..646bd47fa 100644
 --- a/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
 +++ b/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp
 @@ -61,7 +61,7 @@
@@ -25,5 +25,5 @@ index 6d61d276d..dbf931cb4 100644
  #include <utmpx.h>
  #endif
 -- 
-2.46.0
+2.47.1
 
