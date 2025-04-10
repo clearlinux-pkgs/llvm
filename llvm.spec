@@ -10,7 +10,7 @@
 %define keepstatic 1
 Name     : llvm
 Version  : 20.1.0
-Release  : 199
+Release  : 200
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.0/llvm-project-20.1.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.0/llvm-project-20.1.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-1.4.309.0.tar.gz
